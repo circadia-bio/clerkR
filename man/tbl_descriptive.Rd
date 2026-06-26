@@ -28,7 +28,7 @@ summarised without a comparison column.}
 include. Defaults to all columns except \code{group}.}
 
 \item{domains}{A named list mapping variable names to domain/section labels,
-e.g. \code{list("Metabolic" = c("hdl", "glucose"), "Anthropometric" = c("bmi", "waist"))}. Variables not mentioned are placed in an unlabelled
+e.g. \code{list("Metabolic" = c("hdl", "glucose"), "Anthropometric" = c("bmi", "waist"))}. Variables not mentioned are placed in an "Other"
 section.}
 
 \item{log_vars}{Character vector of variable names that were log-transformed
@@ -50,8 +50,8 @@ group columns (default \code{TRUE}).}
 \item{output}{Character string specifying the render target. One of
 \code{"gt"} (default, for Word/PDF via \code{gt}), \code{"html"} (interactive
 \code{reactable}), or \code{"latex"} (LaTeX via \code{gt::as_latex()}). This value is
-stored on the returned object and used by \code{render()} to dispatch to the
-correct renderer automatically.}
+stored on the returned object and used by \code{clerk_render()} to dispatch to
+the correct renderer automatically.}
 }
 \value{
 A \code{clerk_tbl} object (a list with class \code{"clerk_tbl"}) containing:
@@ -72,7 +72,6 @@ compared with an independent-samples t-test (two groups) or one-way ANOVA
 compared with a chi-squared test.
 }
 \examples{
-# gt output (default) — pipe into render()
 tbl_descriptive(
   clerk_example,
   group    = sex,
@@ -83,6 +82,6 @@ tbl_descriptive(
   ),
   log_vars = "tmt_time",
   output   = "gt"
-) |> render(title = "Table 1. Sample characteristics by sex")
+) |> clerk_render(title = "Table 1. Sample characteristics by sex")
 
 }

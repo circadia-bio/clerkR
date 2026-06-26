@@ -14,7 +14,7 @@ manuscripts.
 \item \strong{Descriptive / Table 1} (\code{tbl_descriptive()}): sample characteristics
 with group comparisons, mean ± SD, t-test / chi-squared statistics.
 \item \strong{Heritability} (\code{tbl_heritability()}): h2, confidence intervals, LRT p,
-variance components.
+variance components. Directly compatible with \code{R-itable::herit_batch()}.
 \item \strong{Correlation} (\code{tbl_correlation()}): r, p, FDR-corrected p, domain
 grouping.
 \item \strong{Regression} (\code{tbl_regression()}): beta, SE, CI, p, FDR annotation.
@@ -24,8 +24,8 @@ grouping.
 
 \subsection{Rendering}{
 
-All constructors return a \code{clerk_tbl} S3 object. Use \code{render_gt()} for
-Word/PDF output and \code{render_reactable()} for interactive HTML.
+All constructors return a \code{clerk_tbl} S3 object. Pass to \code{clerk_render()}
+to dispatch to \code{gt} (Word/PDF), \code{reactable} (HTML), or LaTeX output.
 }
 }
 \seealso{

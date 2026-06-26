@@ -6,35 +6,26 @@
 #' output of `stats::cor.test()`, `ppcor::pcor.test()`, or a custom loop — as
 #' a tidy data frame with one row per variable pair.
 #'
-#' Domain/section grouping is applied via the `domains` argument (grouping the
-#' predictor variable). FDR correction can be applied globally or within a
-#' grouping variable (e.g. within each outcome or domain).
-#'
 #' @param data A tidy data frame of correlation results with one row per
-#'   predictor × outcome pair.
+#'   predictor x outcome pair.
 #' @param predictor <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name
-#'   of the column identifying the predictor variable. Used as the row
-#'   identifier.
+#'   of the column identifying the predictor variable.
 #' @param outcome <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of
-#'   the column identifying the outcome variable. Pivoted to wide columns.
+#'   the column identifying the outcome variable.
 #' @param r <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of the
 #'   correlation coefficient column.
 #' @param p <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of the
 #'   p-value column.
-#' @param n Optional unquoted name of the sample size column. If supplied,
-#'   included as a column in the output.
-#' @param extra_cols Optional character vector of additional column names from
-#'   `data` to carry through into the output table (e.g. hemisphere, lobe).
-#' @param domains A named list mapping predictor variable names to domain /
-#'   section labels. Variables not mentioned are placed in an "Other" section.
-#' @param fdr Logical. Apply BH FDR correction to p-values (default `FALSE`).
-#' @param fdr_within Optional unquoted name of a column to group FDR correction
-#'   within (e.g. `outcome` to correct separately per outcome variable).
-#' @param digits Integer. Number of decimal places for r (default `3`).
-#' @param p_digits Integer. Number of decimal places for p-values (default `3`).
-#' @param pivot Logical. If `TRUE` (default) and there are multiple outcomes,
-#'   pivot to wide format with one column per outcome showing `r (p)`. If
-#'   `FALSE`, keep long format with separate `r`, `p`, and `p_fdr` columns.
+#' @param n Optional unquoted name of the sample size column.
+#' @param extra_cols Optional character vector of additional column names to
+#'   carry through (e.g. hemisphere, lobe).
+#' @param domains A named list mapping predictor names to domain/section labels.
+#' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
+#' @param fdr_within Optional unquoted column to group FDR correction within.
+#' @param digits Integer. Decimal places for r (default `3`).
+#' @param p_digits Integer. Decimal places for p-values (default `3`).
+#' @param pivot Logical. Pivot to wide format with one column per outcome
+#'   (default `FALSE`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
 #'
@@ -49,14 +40,15 @@
 #'   p         = p,
 #'   n         = n,
 #'   domains   = list(
-#'     "Metabolic"     = c("hdl", "glucose", "bmi"),
-#'     "Anthropometric"= c("waist", "systolic_bp"),
-#'     "Mental health" = c("bdi", "panas_neg")
+#'     "Metabolic"      = c("hdl", "glucose", "bmi"),
+#'     "Anthropometric" = c("waist", "systolic_bp"),
+#'     "Mental health"  = c("bdi", "panas_neg")
 #'   ),
 #'   fdr    = TRUE,
 #'   output = "gt"
-#' ) |> render(title = "Partial correlations (age + sex controlled)")
+#' ) |> clerk_render(title = "Partial correlations (age + sex controlled)")
 #'
+#' @importFrom rlang .data
 #' @export
 tbl_correlation <- function(data,
                             predictor  = variable,
@@ -86,7 +78,6 @@ tbl_correlation <- function(data,
 
   tbl <- data
 
-  # --- FDR correction --------------------------------------------------------
   if (fdr) {
     if (!is.null(fw_nm)) {
       tbl <- tbl |>
@@ -99,14 +90,11 @@ tbl_correlation <- function(data,
     }
   }
 
-  # --- Format r and p --------------------------------------------------------
   fmt_r <- function(x) sprintf(paste0("%+.", digits, "f"), x)
-  fmt_p <- function(x) {
-    dplyr::case_when(
-      x < 0.001 ~ "<0.001",
-      TRUE       ~ sprintf(paste0("%.", p_digits, "f"), x)
-    )
-  }
+  fmt_p <- function(x) dplyr::case_when(
+    x < 0.001 ~ "<0.001",
+    TRUE       ~ sprintf(paste0("%.", p_digits, "f"), x)
+  )
 
   tbl <- tbl |>
     dplyr::mutate(
@@ -114,26 +102,15 @@ tbl_correlation <- function(data,
       p_fmt = fmt_p(.data[[p_nm]])
     )
 
-  if (fdr && "p_fdr" %in% names(tbl)) {
-    tbl <- tbl |>
-      dplyr::mutate(p_fdr_fmt = fmt_p(.data[["p_fdr"]]))
-  }
+  if (fdr && "p_fdr" %in% names(tbl))
+    tbl <- tbl |> dplyr::mutate(p_fdr_fmt = fmt_p(.data[["p_fdr"]]))
 
-  # --- Pivot or long ---------------------------------------------------------
   if (pivot) {
-    outcomes <- unique(tbl[[out_nm]])
-
-    if (fdr && "p_fdr" %in% names(tbl)) {
-      tbl <- tbl |>
-        dplyr::mutate(
-          cell = paste0(.data[["r_fmt"]], " (", .data[["p_fdr_fmt"]], ")")
-        )
-    } else {
-      tbl <- tbl |>
-        dplyr::mutate(
-          cell = paste0(.data[["r_fmt"]], " (", .data[["p_fmt"]], ")")
-        )
-    }
+    cell_col <- if (fdr && "p_fdr" %in% names(tbl)) "p_fdr_fmt" else "p_fmt"
+    tbl <- tbl |>
+      dplyr::mutate(
+        cell = paste0(.data[["r_fmt"]], " (", .data[[cell_col]], ")")
+      )
 
     keep_cols <- c(pred_nm, extra_cols, out_nm, "cell")
     tbl_wide  <- tbl |>
@@ -146,7 +123,9 @@ tbl_correlation <- function(data,
     if (!is.null(n_nm)) {
       n_tbl <- tbl |>
         dplyr::group_by(.data[[pred_nm]]) |>
-        dplyr::summarise(n = round(mean(.data[[n_nm]], na.rm = TRUE)), .groups = "drop")
+        dplyr::summarise(
+          n = round(mean(.data[[n_nm]], na.rm = TRUE)), .groups = "drop"
+        )
       tbl_wide <- dplyr::left_join(tbl_wide, n_tbl, by = pred_nm)
     }
 
@@ -154,17 +133,15 @@ tbl_correlation <- function(data,
       dplyr::rename(variable = dplyr::all_of(pred_nm))
 
   } else {
-    # Long format — keep r, p, and optionally p_fdr as separate columns
-    keep_cols <- c(pred_nm, extra_cols, out_nm)
-    if (!is.null(n_nm)) keep_cols <- c(keep_cols, n_nm)
-    keep_cols <- c(keep_cols, "r_fmt", "p_fmt")
-    if (fdr && "p_fdr" %in% names(tbl)) keep_cols <- c(keep_cols, "p_fdr_fmt")
+    keep <- c(pred_nm, extra_cols, out_nm)
+    if (!is.null(n_nm)) keep <- c(keep, n_nm)
+    keep <- c(keep, "r_fmt", "p_fmt")
+    if (fdr && "p_fdr_fmt" %in% names(tbl)) keep <- c(keep, "p_fdr_fmt")
 
     out_tbl <- tbl |>
-      dplyr::select(dplyr::all_of(keep_cols)) |>
+      dplyr::select(dplyr::all_of(keep)) |>
       dplyr::rename(variable = dplyr::all_of(pred_nm))
 
-    # Rename formatted columns to clean names
     names(out_tbl)[names(out_tbl) == "r_fmt"]     <- "r"
     names(out_tbl)[names(out_tbl) == "p_fmt"]     <- "p"
     names(out_tbl)[names(out_tbl) == "p_fdr_fmt"] <- "p_fdr"
@@ -172,14 +149,14 @@ tbl_correlation <- function(data,
 
   structure(
     list(
-      table     = out_tbl,
-      domains   = domains,
-      log_vars  = character(0),
-      type      = "correlation",
-      group     = NULL,
-      pivot     = pivot,
-      outcomes  = if (pivot) unique(tbl[[out_nm]]) else NULL,
-      output    = output
+      table    = out_tbl,
+      domains  = domains,
+      log_vars = character(0),
+      type     = "correlation",
+      group    = NULL,
+      pivot    = pivot,
+      outcomes = if (pivot) unique(tbl[[out_nm]]) else NULL,
+      output   = output
     ),
     class = "clerk_tbl"
   )

@@ -24,7 +24,7 @@ A \code{gt_tbl} object.
 Renders a \code{clerk_tbl} as a \code{gt} table with clerkR styling applied via
 \code{clerk_theme()}. Domain groupings become row-group labels; log-transformed
 variables receive an automatic footnote. Typically called indirectly via
-\code{render()}.
+\code{clerk_render()}.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex) |>

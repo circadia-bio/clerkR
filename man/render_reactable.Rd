@@ -18,10 +18,10 @@ A \code{reactable} htmlwidget.
 }
 \description{
 Renders a \code{clerk_tbl} as a \code{reactable} interactive HTML table. Typically
-called indirectly via \code{render()}.
+called indirectly via \code{clerk_render()}.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex, output = "html") |>
-  render()
+  clerk_render()
 
 }

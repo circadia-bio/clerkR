@@ -3,21 +3,16 @@
 #' @description
 #' Produces a concise descriptive summary of a data frame — mean ± SD for
 #' continuous variables and n (%) for categorical variables — with no group
-#' comparisons or statistical tests. Useful for supplementary tables,
-#' sub-cohort descriptions, or any context where a clean summary is needed
-#' without inference.
+#' comparisons or statistical tests.
 #'
 #' @param data A data frame.
 #' @param vars <[`tidy-select`][dplyr::dplyr_tidy_select]> Variables to
 #'   include. Defaults to all columns.
 #' @param domains A named list mapping variable names to domain/section labels.
-#'   Variables not mentioned are placed in an "Other" section.
-#' @param log_vars Character vector of variable names that were log-transformed
-#'   prior to analysis. A footnote is appended noting raw-scale display.
-#' @param digits Integer. Number of decimal places for continuous variables
-#'   (default `2`).
+#' @param log_vars Character vector of log-transformed variable names.
+#' @param digits Integer. Decimal places for continuous variables (default `2`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
-#'   `"latex"`. Stored on the returned object and used by `render()`.
+#'   `"latex"`.
 #'
 #' @return A `clerk_tbl` object with type `"simple"`.
 #'
@@ -31,7 +26,7 @@
 #'   ),
 #'   log_vars = "tmt_time",
 #'   output   = "gt"
-#' ) |> render(title = "Descriptive statistics")
+#' ) |> clerk_render(title = "Descriptive statistics")
 #'
 #' @export
 tbl_simple <- function(data,
@@ -70,9 +65,7 @@ tbl_simple <- function(data,
     }
 
     data.frame(
-      variable = v,
-      n        = n_obs,
-      summary  = summary,
+      variable = v, n = n_obs, summary = summary,
       stringsAsFactors = FALSE
     )
   })

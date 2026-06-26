@@ -19,17 +19,14 @@ tbl_simple(
 \item{vars}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Variables to
 include. Defaults to all columns.}
 
-\item{domains}{A named list mapping variable names to domain/section labels.
-Variables not mentioned are placed in an "Other" section.}
+\item{domains}{A named list mapping variable names to domain/section labels.}
 
-\item{log_vars}{Character vector of variable names that were log-transformed
-prior to analysis. A footnote is appended noting raw-scale display.}
+\item{log_vars}{Character vector of log-transformed variable names.}
 
-\item{digits}{Integer. Number of decimal places for continuous variables
-(default \code{2}).}
+\item{digits}{Integer. Decimal places for continuous variables (default \code{2}).}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
-\code{"latex"}. Stored on the returned object and used by \code{render()}.}
+\code{"latex"}.}
 }
 \value{
 A \code{clerk_tbl} object with type \code{"simple"}.
@@ -37,9 +34,7 @@ A \code{clerk_tbl} object with type \code{"simple"}.
 \description{
 Produces a concise descriptive summary of a data frame — mean ± SD for
 continuous variables and n (\%) for categorical variables — with no group
-comparisons or statistical tests. Useful for supplementary tables,
-sub-cohort descriptions, or any context where a clean summary is needed
-without inference.
+comparisons or statistical tests.
 }
 \examples{
 tbl_simple(
@@ -51,6 +46,6 @@ tbl_simple(
   ),
   log_vars = "tmt_time",
   output   = "gt"
-) |> render(title = "Descriptive statistics")
+) |> clerk_render(title = "Descriptive statistics")
 
 }

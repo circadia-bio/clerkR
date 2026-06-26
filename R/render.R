@@ -18,22 +18,24 @@
 #'
 #' @examples
 #' tbl_descriptive(clerk_example, group = sex, output = "gt") |>
-#'   render(title = "Table 1")
+#'   clerk_render(title = "Table 1")
 #'
 #' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   render()
+#'   clerk_render()
 #'
-#' tbl_descriptive(clerk_example, group = sex, output = "latex") |>
-#'   render(title = "Table 1")
-#'
+#' @importFrom utils stack
+#' @importFrom rlang .data
+#' @importFrom knitr asis_output
+#' @importFrom reactable reactable
 #' @export
-render <- function(x, title = NULL, subtitle = NULL, footnote = NULL, ...) {
-  UseMethod("render")
+clerk_render <- function(x, title = NULL, subtitle = NULL,
+                         footnote = NULL, ...) {
+  UseMethod("clerk_render")
 }
 
 #' @export
-render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                             footnote = NULL, ...) {
+clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
+                                   footnote = NULL, ...) {
   switch(
     x$output,
     gt    = render_gt(x,        title = title, subtitle = subtitle,
@@ -52,7 +54,7 @@ render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' Renders a `clerk_tbl` as a `gt` table with clerkR styling applied via
 #' `clerk_theme()`. Domain groupings become row-group labels; log-transformed
 #' variables receive an automatic footnote. Typically called indirectly via
-#' `render()`.
+#' `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title.
@@ -66,8 +68,6 @@ render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' tbl_descriptive(clerk_example, group = sex) |>
 #'   render_gt(title = "Table 1")
 #'
-#' @importFrom utils stack
-#' @importFrom rlang .data
 #' @export
 render_gt <- function(x, title = NULL, subtitle = NULL,
                       footnote = NULL, ...) {
@@ -82,13 +82,9 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
   domains  <- x$domains
   log_vars <- x$log_vars
 
-  # --- Attach domain labels ---------------------------------------------------
   tbl <- .attach_domains(tbl, domains)
-
-  # --- Pretty column labels ---------------------------------------------------
   col_labels <- .clerk_col_labels(names(tbl), x$group)
 
-  # --- Build gt ---------------------------------------------------------------
   gt_tbl <- tbl |>
     dplyr::group_by(.data[["domain"]]) |>
     gt::gt(rowname_col = "variable") |>
@@ -96,11 +92,9 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
     gt::cols_hide("domain") |>
     clerk_theme()
 
-  # --- Title / subtitle -------------------------------------------------------
   if (!is.null(title) || !is.null(subtitle))
     gt_tbl <- gt_tbl |> gt::tab_header(title = title, subtitle = subtitle)
 
-  # --- Log-transform footnote -------------------------------------------------
   if (length(log_vars) > 0)
     gt_tbl <- gt_tbl |>
       gt::tab_footnote(
@@ -108,7 +102,6 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
         locations = gt::cells_stub(rows = log_vars)
       )
 
-  # --- User footnote ----------------------------------------------------------
   if (!is.null(footnote))
     gt_tbl <- gt_tbl |> gt::tab_source_note(source_note = footnote)
 
@@ -120,9 +113,8 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' Render a clerk_tbl as a LaTeX table
 #'
 #' @description
-#' Renders a `clerk_tbl` as a LaTeX table via `gt::as_latex()`. The result
-#' can be included directly in a `.Rnw` or `.Rmd`/Quarto document compiled with
-#' a LaTeX engine. Typically called indirectly via `render()`.
+#' Renders a `clerk_tbl` as a LaTeX table via `gt::as_latex()`. Typically
+#' called indirectly via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title (used as the `\caption{}`).
@@ -134,7 +126,7 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @examples
 #' tbl_descriptive(clerk_example, group = sex, output = "latex") |>
-#'   render(title = "Sample characteristics by sex")
+#'   clerk_render(title = "Sample characteristics by sex")
 #'
 #' @export
 render_latex <- function(x, title = NULL, subtitle = NULL,
@@ -145,10 +137,8 @@ render_latex <- function(x, title = NULL, subtitle = NULL,
 #' @export
 render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
                                    footnote = NULL, ...) {
-
-  gt_tbl <- render_gt(x, title = title, subtitle = subtitle,
-                      footnote = footnote)
-
+  gt_tbl    <- render_gt(x, title = title, subtitle = subtitle,
+                         footnote = footnote)
   latex_out <- gt::as_latex(gt_tbl)
   knitr::asis_output(as.character(latex_out))
 }
@@ -159,7 +149,7 @@ render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @description
 #' Renders a `clerk_tbl` as a `reactable` interactive HTML table. Typically
-#' called indirectly via `render()`.
+#' called indirectly via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional character string displayed above the table.
@@ -169,7 +159,7 @@ render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @examples
 #' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   render()
+#'   clerk_render()
 #'
 #' @export
 render_reactable <- function(x, title = NULL, ...) {
@@ -178,11 +168,8 @@ render_reactable <- function(x, title = NULL, ...) {
 
 #' @export
 render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
-
-  tbl <- x$table
-
   reactable::reactable(
-    tbl,
+    x$table,
     groupBy    = if (length(x$domains) > 0) "domain" else NULL,
     searchable = TRUE,
     striped    = TRUE,
@@ -221,7 +208,14 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
     p         = "p",
     p_fdr     = "p (FDR)",
     r         = "r",
-    outcome   = "Outcome"
+    outcome   = "Outcome",
+    beta      = "\u03b2",
+    se        = "SE",
+    ci        = "95% CI",
+    ci_95     = "95% CI",
+    h2        = "h\u00b2",
+    sigma2_a  = "\u03c3\u00b2a",
+    sigma2_e  = "\u03c3\u00b2e"
   )
   fixed[intersect(names(fixed), nms)]
 }

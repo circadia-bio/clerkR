@@ -23,14 +23,13 @@ tbl_correlation(
 }
 \arguments{
 \item{data}{A tidy data frame of correlation results with one row per
-predictor × outcome pair.}
+predictor x outcome pair.}
 
 \item{predictor}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the column identifying the predictor variable. Used as the row
-identifier.}
+of the column identifying the predictor variable.}
 
 \item{outcome}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of
-the column identifying the outcome variable. Pivoted to wide columns.}
+the column identifying the outcome variable.}
 
 \item{r}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of the
 correlation coefficient column.}
@@ -38,27 +37,23 @@ correlation coefficient column.}
 \item{p}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of the
 p-value column.}
 
-\item{n}{Optional unquoted name of the sample size column. If supplied,
-included as a column in the output.}
+\item{n}{Optional unquoted name of the sample size column.}
 
-\item{extra_cols}{Optional character vector of additional column names from
-\code{data} to carry through into the output table (e.g. hemisphere, lobe).}
+\item{extra_cols}{Optional character vector of additional column names to
+carry through (e.g. hemisphere, lobe).}
 
-\item{domains}{A named list mapping predictor variable names to domain /
-section labels. Variables not mentioned are placed in an "Other" section.}
+\item{domains}{A named list mapping predictor names to domain/section labels.}
 
-\item{fdr}{Logical. Apply BH FDR correction to p-values (default \code{FALSE}).}
+\item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Optional unquoted name of a column to group FDR correction
-within (e.g. \code{outcome} to correct separately per outcome variable).}
+\item{fdr_within}{Optional unquoted column to group FDR correction within.}
 
-\item{digits}{Integer. Number of decimal places for r (default \code{3}).}
+\item{digits}{Integer. Decimal places for r (default \code{3}).}
 
-\item{p_digits}{Integer. Number of decimal places for p-values (default \code{3}).}
+\item{p_digits}{Integer. Decimal places for p-values (default \code{3}).}
 
-\item{pivot}{Logical. If \code{TRUE} (default) and there are multiple outcomes,
-pivot to wide format with one column per outcome showing \code{r (p)}. If
-\code{FALSE}, keep long format with separate \code{r}, \code{p}, and \code{p_fdr} columns.}
+\item{pivot}{Logical. Pivot to wide format with one column per outcome
+(default \code{FALSE}).}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}
@@ -71,10 +66,6 @@ Formats a tidy data frame of (partial) correlation results into a
 publication-ready table. Expects pre-computed coefficients — typically the
 output of \code{stats::cor.test()}, \code{ppcor::pcor.test()}, or a custom loop — as
 a tidy data frame with one row per variable pair.
-
-Domain/section grouping is applied via the \code{domains} argument (grouping the
-predictor variable). FDR correction can be applied globally or within a
-grouping variable (e.g. within each outcome or domain).
 }
 \examples{
 tbl_correlation(
@@ -85,12 +76,12 @@ tbl_correlation(
   p         = p,
   n         = n,
   domains   = list(
-    "Metabolic"     = c("hdl", "glucose", "bmi"),
-    "Anthropometric"= c("waist", "systolic_bp"),
-    "Mental health" = c("bdi", "panas_neg")
+    "Metabolic"      = c("hdl", "glucose", "bmi"),
+    "Anthropometric" = c("waist", "systolic_bp"),
+    "Mental health"  = c("bdi", "panas_neg")
   ),
   fdr    = TRUE,
   output = "gt"
-) |> render(title = "Partial correlations (age + sex controlled)")
+) |> clerk_render(title = "Partial correlations (age + sex controlled)")
 
 }

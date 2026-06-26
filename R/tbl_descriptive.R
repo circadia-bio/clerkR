@@ -15,7 +15,7 @@
 #'   include. Defaults to all columns except `group`.
 #' @param domains A named list mapping variable names to domain/section labels,
 #'   e.g. `list("Metabolic" = c("hdl", "glucose"), "Anthropometric" =
-#'   c("bmi", "waist"))`. Variables not mentioned are placed in an unlabelled
+#'   c("bmi", "waist"))`. Variables not mentioned are placed in an "Other"
 #'   section.
 #' @param log_vars Character vector of variable names that were log-transformed
 #'   prior to analysis. A footnote is appended noting that values are shown on
@@ -31,8 +31,8 @@
 #' @param output Character string specifying the render target. One of
 #'   `"gt"` (default, for Word/PDF via `gt`), `"html"` (interactive
 #'   `reactable`), or `"latex"` (LaTeX via `gt::as_latex()`). This value is
-#'   stored on the returned object and used by `render()` to dispatch to the
-#'   correct renderer automatically.
+#'   stored on the returned object and used by `clerk_render()` to dispatch to
+#'   the correct renderer automatically.
 #'
 #' @return A `clerk_tbl` object (a list with class `"clerk_tbl"`) containing:
 #'   \describe{
@@ -45,7 +45,6 @@
 #'   }
 #'
 #' @examples
-#' # gt output (default) — pipe into render()
 #' tbl_descriptive(
 #'   clerk_example,
 #'   group    = sex,
@@ -56,7 +55,7 @@
 #'   ),
 #'   log_vars = "tmt_time",
 #'   output   = "gt"
-#' ) |> render(title = "Table 1. Sample characteristics by sex")
+#' ) |> clerk_render(title = "Table 1. Sample characteristics by sex")
 #'
 #' @export
 tbl_descriptive <- function(data,
@@ -76,18 +75,15 @@ tbl_descriptive <- function(data,
   group_nm  <- if (!rlang::quo_is_null(group_var))
     rlang::as_name(group_var) else NULL
 
-  # --- Select variables -------------------------------------------------------
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- setdiff(names(data), group_nm)
   } else {
     var_nms <- names(dplyr::select(data, {{ vars }}))
   }
 
-  # --- Detect variable types --------------------------------------------------
   is_cat <- vapply(data[var_nms], function(x)
     is.factor(x) || is.character(x) || is.logical(x), logical(1))
 
-  # --- Build summary rows -----------------------------------------------------
   rows <- lapply(var_nms, function(v) {
     .summarise_var(
       x        = data[[v]],
@@ -102,12 +98,10 @@ tbl_descriptive <- function(data,
 
   tbl <- dplyr::bind_rows(rows)
 
-  # --- FDR correction ---------------------------------------------------------
   if (fdr && !is.null(group_nm) && "p" %in% names(tbl)) {
     tbl$p_fdr <- stats::p.adjust(tbl$p, method = "BH")
   }
 
-  # --- Return clerk_tbl -------------------------------------------------------
   structure(
     list(
       table    = tbl,
@@ -137,17 +131,16 @@ tbl_descriptive <- function(data,
   fmt_n_pct <- function(v) {
     tab <- table(v, useNA = "no")
     paste(
-      paste0(names(tab), ": ", tab, " (", round(tab / sum(tab) * 100, 1), "%)"),
+      paste0(names(tab), ": ", tab,
+             " (", round(tab / sum(tab) * 100, 1), "%)"),
       collapse = "; "
     )
   }
 
-  n_obs <- sum(!is.na(x))
-
+  n_obs       <- sum(!is.na(x))
   overall_str <- if (is_cat) fmt_n_pct(x) else fmt_mean_sd(x, digits)
-
-  stat_str <- NA_character_
-  p_val    <- NA_real_
+  stat_str    <- NA_character_
+  p_val       <- NA_real_
 
   if (!is.null(group)) {
     grp_levels <- levels(factor(group))
@@ -172,12 +165,12 @@ tbl_descriptive <- function(data,
           p_val    <- tt$p.value
         }
       } else {
-        aov_res <- tryCatch(
+        av <- tryCatch(
           stats::oneway.test(x ~ factor(group)), error = function(e) NULL
         )
-        if (!is.null(aov_res)) {
-          stat_str <- sprintf("F = %.2f", aov_res$statistic)
-          p_val    <- aov_res$p.value
+        if (!is.null(av)) {
+          stat_str <- sprintf("F = %.2f", av$statistic)
+          p_val    <- av$p.value
         }
       }
     }
@@ -190,9 +183,7 @@ tbl_descriptive <- function(data,
 
   } else {
     out <- data.frame(
-      variable = name,
-      n        = n_obs,
-      overall  = overall_str,
+      variable = name, n = n_obs, overall = overall_str,
       stringsAsFactors = FALSE
     )
   }

@@ -21,12 +21,11 @@ render_latex(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 A \code{knit_asis} character object containing the LaTeX table source.
 }
 \description{
-Renders a \code{clerk_tbl} as a LaTeX table via \code{gt::as_latex()}. The result
-can be included directly in a \code{.Rnw} or \code{.Rmd}/Quarto document compiled with
-a LaTeX engine. Typically called indirectly via \code{render()}.
+Renders a \code{clerk_tbl} as a LaTeX table via \code{gt::as_latex()}. Typically
+called indirectly via \code{clerk_render()}.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex, output = "latex") |>
-  render(title = "Sample characteristics by sex")
+  clerk_render(title = "Sample characteristics by sex")
 
 }
