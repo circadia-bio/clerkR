@@ -121,6 +121,11 @@ reference:
   - render_reactable
   - render_latex
 
+- title: "Options"
+  desc: "Session-level formatting defaults — p-value style, decimal places, FDR display."
+  contents:
+  - clerk_options
+
 - title: "Theme & palette"
   desc: "clerkR visual identity — colours, scales, and gt theme."
   contents:
