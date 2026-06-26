@@ -168,7 +168,6 @@ render_reactable <- function(x, title = NULL, ...) {
 
 #' @export
 render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
-  # Attach domains so groupBy has the column it needs
   tbl <- .attach_domains(x$table, x$domains)
 
   reactable::reactable(
@@ -195,7 +194,7 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
     tbl <- dplyr::left_join(tbl, domain_map, by = "variable")
     tbl[["domain"]][is.na(tbl[["domain"]])] <- "Other"
   } else {
-    tbl[["domain"]] <- "All variables"
+    tbl[["domain"]] <- rep("All variables", nrow(tbl))
   }
   tbl
 }
