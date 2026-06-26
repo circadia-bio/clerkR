@@ -22,6 +22,7 @@ tbl_heritability(
   p_style = NULL,
   stars = NULL,
   fdr_ns = NULL,
+  fdr_alpha = NULL,
   output = c("gt", "html", "latex")
 )
 }
@@ -65,8 +66,11 @@ Inherits from \code{clerk_options()$r_digits} if \code{NULL}.}
 \item{stars}{Logical. Append significance stars. Inherits from
 \code{clerk_options()$stars} if \code{NULL}.}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR values with \code{"ns"}.
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
 Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+
+\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value to
+determine survival. Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}

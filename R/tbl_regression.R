@@ -33,8 +33,10 @@
 #'   `clerk_options()$p_style` if `NULL`.
 #' @param stars Logical. Append significance stars. Inherits from
 #'   `clerk_options()$stars` if `NULL`.
-#' @param fdr_ns Logical. Replace non-surviving FDR values with `"ns"`.
+#' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
+#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
 #'
@@ -71,6 +73,7 @@ tbl_regression <- function(data,
                            p_style      = NULL,
                            stars        = NULL,
                            fdr_ns       = NULL,
+                           fdr_alpha    = NULL,
                            output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
@@ -93,7 +96,6 @@ tbl_regression <- function(data,
     }
   }
 
-  # Direct assignment avoids dplyr eval environment issues
   tbl[["beta"]] <- .fmt_stat(tbl[[estimate]], digits = digits, signed = TRUE)
   tbl[["se"]]   <- .fmt_stat(tbl[[std_error]], digits = digits)
   tbl[["ci"]]   <- paste0(
@@ -108,6 +110,7 @@ tbl_regression <- function(data,
 
   if (fdr && "p_fdr_raw" %in% names(tbl))
     tbl[["p_fdr_fmt"]] <- .fmt_p_fdr(tbl[["p_fdr_raw"]], fdr_ns = fdr_ns,
+                                      fdr_alpha = fdr_alpha,
                                       p_digits = p_digits, p_style = p_style,
                                       stars = stars)
 

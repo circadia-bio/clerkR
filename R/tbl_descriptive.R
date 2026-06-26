@@ -26,8 +26,10 @@
 #' @param stars Logical. Append significance stars. Inherits from
 #'   `clerk_options()$stars` if `NULL`.
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
-#' @param fdr_ns Logical. Replace non-surviving FDR values with `"ns"`.
+#' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
+#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
 #' @param overall Logical. Include an overall column (default `TRUE`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
@@ -49,18 +51,19 @@
 #'
 #' @export
 tbl_descriptive <- function(data,
-                            group    = NULL,
-                            vars     = NULL,
-                            domains  = list(),
-                            log_vars = character(0),
-                            digits   = NULL,
-                            p_digits = NULL,
-                            p_style  = NULL,
-                            stars    = NULL,
-                            fdr      = FALSE,
-                            fdr_ns   = NULL,
-                            overall  = TRUE,
-                            output   = c("gt", "html", "latex")) {
+                            group     = NULL,
+                            vars      = NULL,
+                            domains   = list(),
+                            log_vars  = character(0),
+                            digits    = NULL,
+                            p_digits  = NULL,
+                            p_style   = NULL,
+                            stars     = NULL,
+                            fdr       = FALSE,
+                            fdr_ns    = NULL,
+                            fdr_alpha = NULL,
+                            overall   = TRUE,
+                            output    = c("gt", "html", "latex")) {
 
   output    <- match.arg(output)
   group_var <- rlang::enquo(group)
@@ -95,11 +98,11 @@ tbl_descriptive <- function(data,
   if (fdr && !is.null(group_nm) && "p_raw" %in% names(tbl)) {
     p_fdr_raw      <- stats::p.adjust(tbl[["p_raw"]], method = "BH")
     tbl[["p_fdr"]] <- .fmt_p_fdr(p_fdr_raw, fdr_ns = fdr_ns,
+                                  fdr_alpha = fdr_alpha,
                                   p_digits = p_digits, p_style = p_style,
                                   stars = stars)
   }
 
-  # Drop the raw p helper column before storing
   tbl[["p_raw"]] <- NULL
 
   structure(

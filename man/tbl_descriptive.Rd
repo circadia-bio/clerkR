@@ -16,6 +16,7 @@ tbl_descriptive(
   stars = NULL,
   fdr = FALSE,
   fdr_ns = NULL,
+  fdr_alpha = NULL,
   overall = TRUE,
   output = c("gt", "html", "latex")
 )
@@ -47,8 +48,11 @@ from \code{clerk_options()$digits} if \code{NULL}.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR values with \code{"ns"}.
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
 Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+
+\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value to
+determine survival. Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
 
 \item{overall}{Logical. Include an overall column (default \code{TRUE}).}
 

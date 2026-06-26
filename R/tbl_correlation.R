@@ -29,8 +29,10 @@
 #'   `clerk_options()$p_style` if `NULL`.
 #' @param stars Logical. Append significance stars. Inherits from
 #'   `clerk_options()$stars` if `NULL`.
-#' @param fdr_ns Logical. Replace non-surviving FDR values with `"ns"`.
+#' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
+#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
 #' @param pivot Logical. Pivot to wide format (default `FALSE`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
@@ -66,6 +68,7 @@ tbl_correlation <- function(data,
                             p_style    = NULL,
                             stars      = NULL,
                             fdr_ns     = NULL,
+                            fdr_alpha  = NULL,
                             pivot      = FALSE,
                             output     = c("gt", "html", "latex")) {
 
@@ -84,13 +87,14 @@ tbl_correlation <- function(data,
     }
   }
 
-  # --- Format r and p (direct assignment avoids dplyr eval environment) ------
+  # --- Format r and p --------------------------------------------------------
   tbl[["r_fmt"]] <- .fmt_r(tbl[[r]], r_digits = r_digits)
   tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits, p_style = p_style,
                             stars = stars)
 
   if (fdr && "p_fdr_raw" %in% names(tbl))
     tbl[["p_fdr_fmt"]] <- .fmt_p_fdr(tbl[["p_fdr_raw"]], fdr_ns = fdr_ns,
+                                      fdr_alpha = fdr_alpha,
                                       p_digits = p_digits, p_style = p_style,
                                       stars = stars)
 

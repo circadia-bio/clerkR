@@ -14,8 +14,9 @@
 #' @param r_digits Integer. Decimal places for correlation coefficients and h²
 #'   estimates (default `3`).
 #' @param p_digits Integer. Decimal places for p-values (default `3`).
-#' @param p_threshold Numeric. P-values below this are shown as
-#'   `"< {threshold}"` rather than as a decimal (default `0.001`).
+#' @param p_threshold Numeric. Raw p-values **below** this are shown as
+#'   `"< {threshold}"` rather than as a decimal (default `0.001`). This
+#'   affects display only — it is not a significance threshold.
 #' @param p_style Character string controlling p-value display style:
 #'   \describe{
 #'     \item{`"apa"`}{APA format: `= 0.032`, `< 0.001` (default).}
@@ -27,11 +28,15 @@
 #'   cells (default `FALSE`).
 #' @param star_thresholds Numeric vector of length 3. P-value cutoffs for one,
 #'   two, and three stars respectively (default `c(0.05, 0.01, 0.001)`).
-#' @param fdr_ns Logical. When FDR-corrected p-values do not survive the
-#'   threshold, replace the cell with `fdr_ns_label` (default `TRUE`).
-#' @param fdr_threshold Numeric. FDR survival cutoff (default `0.05`).
-#' @param fdr_ns_label Character string for non-significant FDR results
-#'   (default `"ns"`).
+#' @param fdr_ns Logical. Replace the FDR-corrected p-value cell with
+#'   `fdr_ns_label` when the **FDR-corrected** p-value does not survive
+#'   `fdr_alpha` (default `TRUE`). The raw p-value column is unaffected.
+#' @param fdr_alpha Numeric. Alpha level applied to the **FDR-corrected**
+#'   p-value to determine survival. Cells where `p(FDR) >= fdr_alpha` are
+#'   replaced with `fdr_ns_label` when `fdr_ns = TRUE` (default `0.05`).
+#'   Note: this is compared against the BH-adjusted p-value, not the raw p.
+#' @param fdr_ns_label Character string displayed when a FDR-corrected p-value
+#'   does not survive `fdr_alpha` (default `"ns"`).
 #' @param reset Logical. If `TRUE`, restore all options to factory defaults
 #'   (default `FALSE`).
 #'
@@ -41,8 +46,11 @@
 #' # Inspect current settings
 #' clerk_options()
 #'
-#' # Change p-value style and enable stars
-#' clerk_options(p_style = "apa", stars = TRUE)
+#' # APA style with stars; ns where FDR does not survive at 0.05
+#' clerk_options(p_style = "apa", stars = TRUE, fdr_ns = TRUE, fdr_alpha = 0.05)
+#'
+#' # Stricter FDR survival threshold
+#' clerk_options(fdr_alpha = 0.01)
 #'
 #' # Restore defaults
 #' clerk_options(reset = TRUE)
@@ -56,7 +64,7 @@ clerk_options <- function(digits          = NULL,
                           stars           = NULL,
                           star_thresholds = NULL,
                           fdr_ns          = NULL,
-                          fdr_threshold   = NULL,
+                          fdr_alpha       = NULL,
                           fdr_ns_label    = NULL,
                           reset           = FALSE) {
 
@@ -74,7 +82,7 @@ clerk_options <- function(digits          = NULL,
     stars           = stars,
     star_thresholds = star_thresholds,
     fdr_ns          = fdr_ns,
-    fdr_threshold   = fdr_threshold,
+    fdr_alpha       = fdr_alpha,
     fdr_ns_label    = fdr_ns_label
   )
   new_vals <- Filter(Negate(is.null), new_vals)
@@ -107,7 +115,7 @@ clerk_options <- function(digits          = NULL,
   stars           = FALSE,
   star_thresholds = c(0.05, 0.01, 0.001),
   fdr_ns          = TRUE,
-  fdr_threshold   = 0.05,
+  fdr_alpha       = 0.05,
   fdr_ns_label    = "ns"
 )
 
@@ -187,24 +195,31 @@ clerk_options <- function(digits          = NULL,
   formatted
 }
 
-#' Format an FDR-corrected p-value, replacing non-survivors with ns label
+#' Format a BH-adjusted p-value, replacing non-survivors with ns label
+#'
+#' @param x Numeric vector of **BH-adjusted** p-values.
+#' @param fdr_ns Logical override.
+#' @param fdr_alpha Numeric override. Compared against the BH-adjusted p-value.
+#' @param fdr_ns_label Character override.
+#' @param ... Passed to `.fmt_p()` for numeric formatting.
 #' @keywords internal
 .fmt_p_fdr <- function(x,
-                       fdr_ns        = NULL,
-                       fdr_threshold = NULL,
-                       fdr_ns_label  = NULL,
+                       fdr_ns       = NULL,
+                       fdr_alpha    = NULL,
+                       fdr_ns_label = NULL,
                        ...) {
 
-  opts          <- .get_clerk_options()
-  fdr_ns        <- fdr_ns        %||% opts$fdr_ns
-  fdr_threshold <- fdr_threshold %||% opts$fdr_threshold
-  fdr_ns_label  <- fdr_ns_label  %||% opts$fdr_ns_label
+  opts         <- .get_clerk_options()
+  fdr_ns       <- fdr_ns       %||% opts$fdr_ns
+  fdr_alpha    <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_ns_label <- fdr_ns_label %||% opts$fdr_ns_label
 
+  # x is already the BH-adjusted p-value — compare directly against fdr_alpha
   formatted <- .fmt_p(x, ...)
 
   if (isTRUE(fdr_ns)) {
     formatted <- ifelse(
-      !is.na(x) & x >= fdr_threshold,
+      !is.na(x) & x >= fdr_alpha,
       fdr_ns_label,
       formatted
     )

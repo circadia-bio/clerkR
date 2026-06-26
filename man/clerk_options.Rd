@@ -13,7 +13,7 @@ clerk_options(
   stars = NULL,
   star_thresholds = NULL,
   fdr_ns = NULL,
-  fdr_threshold = NULL,
+  fdr_alpha = NULL,
   fdr_ns_label = NULL,
   reset = FALSE
 )
@@ -27,8 +27,9 @@ estimates (default \code{3}).}
 
 \item{p_digits}{Integer. Decimal places for p-values (default \code{3}).}
 
-\item{p_threshold}{Numeric. P-values below this are shown as
-\code{"< {threshold}"} rather than as a decimal (default \code{0.001}).}
+\item{p_threshold}{Numeric. Raw p-values \strong{below} this are shown as
+\code{"< {threshold}"} rather than as a decimal (default \code{0.001}). This
+affects display only — it is not a significance threshold.}
 
 \item{p_style}{Character string controlling p-value display style:
 \describe{
@@ -44,13 +45,17 @@ cells (default \code{FALSE}).}
 \item{star_thresholds}{Numeric vector of length 3. P-value cutoffs for one,
 two, and three stars respectively (default \code{c(0.05, 0.01, 0.001)}).}
 
-\item{fdr_ns}{Logical. When FDR-corrected p-values do not survive the
-threshold, replace the cell with \code{fdr_ns_label} (default \code{TRUE}).}
+\item{fdr_ns}{Logical. Replace the FDR-corrected p-value cell with
+\code{fdr_ns_label} when the \strong{FDR-corrected} p-value does not survive
+\code{fdr_alpha} (default \code{TRUE}). The raw p-value column is unaffected.}
 
-\item{fdr_threshold}{Numeric. FDR survival cutoff (default \code{0.05}).}
+\item{fdr_alpha}{Numeric. Alpha level applied to the \strong{FDR-corrected}
+p-value to determine survival. Cells where \code{p(FDR) >= fdr_alpha} are
+replaced with \code{fdr_ns_label} when \code{fdr_ns = TRUE} (default \code{0.05}).
+Note: this is compared against the BH-adjusted p-value, not the raw p.}
 
-\item{fdr_ns_label}{Character string for non-significant FDR results
-(default \code{"ns"}).}
+\item{fdr_ns_label}{Character string displayed when a FDR-corrected p-value
+does not survive \code{fdr_alpha} (default \code{"ns"}).}
 
 \item{reset}{Logical. If \code{TRUE}, restore all options to factory defaults
 (default \code{FALSE}).}
@@ -71,8 +76,11 @@ defaults.
 # Inspect current settings
 clerk_options()
 
-# Change p-value style and enable stars
-clerk_options(p_style = "apa", stars = TRUE)
+# APA style with stars; ns where FDR does not survive at 0.05
+clerk_options(p_style = "apa", stars = TRUE, fdr_ns = TRUE, fdr_alpha = 0.05)
+
+# Stricter FDR survival threshold
+clerk_options(fdr_alpha = 0.01)
 
 # Restore defaults
 clerk_options(reset = TRUE)

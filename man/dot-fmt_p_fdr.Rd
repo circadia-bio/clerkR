@@ -2,11 +2,22 @@
 % Please edit documentation in R/options.R
 \name{.fmt_p_fdr}
 \alias{.fmt_p_fdr}
-\title{Format an FDR-corrected p-value, replacing non-survivors with ns label}
+\title{Format a BH-adjusted p-value, replacing non-survivors with ns label}
 \usage{
-.fmt_p_fdr(x, fdr_ns = NULL, fdr_threshold = NULL, fdr_ns_label = NULL, ...)
+.fmt_p_fdr(x, fdr_ns = NULL, fdr_alpha = NULL, fdr_ns_label = NULL, ...)
+}
+\arguments{
+\item{x}{Numeric vector of \strong{BH-adjusted} p-values.}
+
+\item{fdr_ns}{Logical override.}
+
+\item{fdr_alpha}{Numeric override. Compared against the BH-adjusted p-value.}
+
+\item{fdr_ns_label}{Character override.}
+
+\item{...}{Passed to \code{.fmt_p()} for numeric formatting.}
 }
 \description{
-Format an FDR-corrected p-value, replacing non-survivors with ns label
+Format a BH-adjusted p-value, replacing non-survivors with ns label
 }
 \keyword{internal}
