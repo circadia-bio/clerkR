@@ -34,6 +34,14 @@ The covariate model column is `"covariates"` in `herit_batch()` output — pass
 
 ## Setup
 
+Install both packages from GitHub if you haven't already:
+
+```{r install}
+# install.packages("remotes")
+remotes::install_github("circadia-bio/R-itable")
+remotes::install_github("circadia-bio/clerkR")
+```
+
 ```{r libraries}
 library(Ritable)
 library(clerkR)
@@ -117,8 +125,7 @@ res |>
   clerk_render(
     title    = "Heritability estimates",
     subtitle = "Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI",
-    footnote = "FDR correction applied within each covariate model (BH). \
-p-values are one-sided LRT with chi-squared(1) boundary correction."
+    footnote = "FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction."
   )
 ```
 

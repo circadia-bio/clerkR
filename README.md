@@ -64,8 +64,11 @@ clerkR/
 ### Installation
 
 ```r
-# Development version from GitHub
+# clerkR
 remotes::install_github("circadia-bio/clerkR")
+
+# For the heritability workflow, also install R-itable
+remotes::install_github("circadia-bio/R-itable")
 ```
 
 ### The one-two pattern
@@ -96,11 +99,7 @@ tbl_descriptive(
 ```r
 tbl_correlation(
   clerk_cor_example,
-  predictor = variable,
-  outcome   = outcome,
-  r         = r,
-  p         = p,
-  domains   = list(
+  domains = list(
     "Metabolic"    = c("hdl", "glucose", "bmi"),
     "Mental health"= c("bdi", "panas_neg")
   ),
@@ -116,9 +115,9 @@ tbl_correlation(
 # herit_batch() output pipes straight in — no renaming needed
 herit_batch(traits, grm = A, data = dat, covs_list = covs_list) |>
   tbl_heritability(
-    model    = covariates,
-    sigma2_a = sigma2_a,
-    sigma2_e = sigma2_e,
+    model    = "covariates",
+    sigma2_a = "sigma2_a",
+    sigma2_e = "sigma2_e",
     fdr      = TRUE,
     output   = "gt"
   ) |>
