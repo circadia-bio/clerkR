@@ -10,9 +10,12 @@ tbl_descriptive(
   vars = NULL,
   domains = list(),
   log_vars = character(0),
-  digits = 2,
-  p_digits = 3,
+  digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
   fdr = FALSE,
+  fdr_ns = NULL,
   overall = TRUE,
   output = c("gt", "html", "latex")
 )
@@ -21,48 +24,39 @@ tbl_descriptive(
 \item{data}{A data frame.}
 
 \item{group}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of
-the grouping variable. If \code{NULL} (default) the overall sample is
-summarised without a comparison column.}
+the grouping variable.}
 
 \item{vars}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Variables to
 include. Defaults to all columns except \code{group}.}
 
-\item{domains}{A named list mapping variable names to domain/section labels,
-e.g. \code{list("Metabolic" = c("hdl", "glucose"), "Anthropometric" = c("bmi", "waist"))}. Variables not mentioned are placed in an "Other"
-section.}
+\item{domains}{A named list mapping variable names to domain/section labels.}
 
-\item{log_vars}{Character vector of variable names that were log-transformed
-prior to analysis. A footnote is appended noting that values are shown on
-the raw scale.}
+\item{log_vars}{Character vector of log-transformed variable names.}
 
-\item{digits}{Integer. Number of decimal places for continuous variables
-(default \code{2}).}
+\item{digits}{Integer. Decimal places for continuous variables. Inherits
+from \code{clerk_options()$digits} if \code{NULL}.}
 
-\item{p_digits}{Integer. Number of decimal places for p-values (default
-\code{3}).}
+\item{p_digits}{Integer. Decimal places for p-values. Inherits from
+\code{clerk_options()$p_digits} if \code{NULL}.}
 
-\item{fdr}{Logical. Apply BH FDR correction to p-values across all tests
-(default \code{FALSE}).}
+\item{p_style}{Character. P-value style. Inherits from
+\code{clerk_options()$p_style} if \code{NULL}.}
 
-\item{overall}{Logical. Include an overall (ungrouped) column alongside
-group columns (default \code{TRUE}).}
+\item{stars}{Logical. Append significance stars. Inherits from
+\code{clerk_options()$stars} if \code{NULL}.}
 
-\item{output}{Character string specifying the render target. One of
-\code{"gt"} (default, for Word/PDF via \code{gt}), \code{"html"} (interactive
-\code{reactable}), or \code{"latex"} (LaTeX via \code{gt::as_latex()}). This value is
-stored on the returned object and used by \code{clerk_render()} to dispatch to
-the correct renderer automatically.}
+\item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
+
+\item{fdr_ns}{Logical. Replace non-surviving FDR values with \code{"ns"}.
+Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+
+\item{overall}{Logical. Include an overall column (default \code{TRUE}).}
+
+\item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
+\code{"latex"}.}
 }
 \value{
-A \code{clerk_tbl} object (a list with class \code{"clerk_tbl"}) containing:
-\describe{
-\item{\code{table}}{A data frame with one row per variable.}
-\item{\code{domains}}{The domain list supplied by the user.}
-\item{\code{log_vars}}{The log-transformed variable names.}
-\item{\code{type}}{Character string \code{"descriptive"}.}
-\item{\code{group}}{Name of the grouping variable, or \code{NULL}.}
-\item{\code{output}}{The render target: \code{"gt"}, \code{"html"}, or \code{"latex"}.}
-}
+A \code{clerk_tbl} object with type \code{"descriptive"}.
 }
 \description{
 Produces a descriptive/Table 1-style summary of a data frame, with optional
@@ -70,12 +64,15 @@ group comparisons. Continuous variables are summarised as mean ± SD and
 compared with an independent-samples t-test (two groups) or one-way ANOVA
 (three or more groups). Categorical variables are summarised as n (\%) and
 compared with a chi-squared test.
+
+Formatting defaults are inherited from \code{clerk_options()} and can be
+overridden per call.
 }
 \examples{
 tbl_descriptive(
   clerk_example,
-  group    = sex,
-  domains  = list(
+  group   = sex,
+  domains = list(
     "Metabolic"    = c("hdl", "glucose", "bmi"),
     "Cognitive"    = c("tmt_time", "verbal_fluency"),
     "Mental health"= c("bdi", "panas_neg")

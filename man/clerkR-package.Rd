@@ -27,6 +27,13 @@ grouping.
 All constructors return a \code{clerk_tbl} S3 object. Pass to \code{clerk_render()}
 to dispatch to \code{gt} (Word/PDF), \code{reactable} (HTML), or LaTeX output.
 }
+
+\subsection{Options}{
+
+Formatting defaults (decimal places, p-value style, FDR display) are
+controlled via \code{clerk_options()}. Biomed/APA defaults are loaded
+automatically on package attach.
+}
 }
 \seealso{
 Useful links:

@@ -18,34 +18,33 @@ tbl_regression(
   fdr = FALSE,
   fdr_within = NULL,
   ci_sep = ", ",
-  digits = 3,
-  p_digits = 3,
+  digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
   output = c("gt", "html", "latex")
 )
 }
 \arguments{
-\item{data}{A tidy data frame of regression results with one row per term.}
+\item{data}{A tidy data frame of regression results.}
 
-\item{term}{Character string. Name of the model term column.
-Default \code{"term"}.}
+\item{term}{Character string. Model term column. Default \code{"term"}.}
 
-\item{estimate}{Character string. Name of the coefficient column.
-Default \code{"estimate"}.}
+\item{estimate}{Character string. Coefficient column. Default \code{"estimate"}.}
 
-\item{std_error}{Character string. Name of the standard error column.
-Default \code{"std.error"}.}
+\item{std_error}{Character string. Standard error column. Default
+\code{"std.error"}.}
 
-\item{conf_low}{Character string. Name of the lower CI bound column.
-Default \code{"conf.low"}.}
+\item{conf_low}{Character string. Lower CI bound column. Default
+\code{"conf.low"}.}
 
-\item{conf_high}{Character string. Name of the upper CI bound column.
-Default \code{"conf.high"}.}
+\item{conf_high}{Character string. Upper CI bound column. Default
+\code{"conf.high"}.}
 
-\item{p}{Character string. Name of the p-value column.
-Default \code{"p.value"}.}
+\item{p}{Character string. P-value column. Default \code{"p.value"}.}
 
-\item{model}{Character string or \code{NULL}. Name of a column identifying
-multiple models. Default \code{NULL}.}
+\item{model}{Character string or \code{NULL}. Column identifying multiple models.}
 
 \item{domains}{A named list mapping term names to domain/section labels.}
 
@@ -54,14 +53,24 @@ multiple models. Default \code{NULL}.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Character string or \code{NULL}. Column name to group FDR
-correction within.}
+\item{fdr_within}{Character string or \code{NULL}. Column to group FDR within.}
 
 \item{ci_sep}{Character string separating CI bounds (default \code{", "}).}
 
-\item{digits}{Integer. Decimal places for estimates (default \code{3}).}
+\item{digits}{Integer. Decimal places for estimates. Inherits from
+\code{clerk_options()$digits} if \code{NULL}.}
 
-\item{p_digits}{Integer. Decimal places for p-values (default \code{3}).}
+\item{p_digits}{Integer. Decimal places for p-values. Inherits from
+\code{clerk_options()$p_digits} if \code{NULL}.}
+
+\item{p_style}{Character. P-value style. Inherits from
+\code{clerk_options()$p_style} if \code{NULL}.}
+
+\item{stars}{Logical. Append significance stars. Inherits from
+\code{clerk_options()$stars} if \code{NULL}.}
+
+\item{fdr_ns}{Logical. Replace non-surviving FDR values with \code{"ns"}.
+Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}
@@ -71,10 +80,11 @@ A \code{clerk_tbl} object with type \code{"regression"}.
 }
 \description{
 Formats a tidy data frame of regression results into a publication-ready
-table. Designed to accept the output of \code{broom::tidy()} directly.
+table. Designed to accept \code{broom::tidy()} output directly. Column-name
+arguments accept character strings; defaults match \code{broom::tidy()}.
 
-Column-name arguments accept \strong{character strings} (quoted names). Defaults
-match \code{broom::tidy(model, conf.int = TRUE)} output.
+Formatting defaults are inherited from \code{clerk_options()} and can be
+overridden per call.
 }
 \examples{
 tbl_regression(

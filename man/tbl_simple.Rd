@@ -9,7 +9,7 @@ tbl_simple(
   vars = NULL,
   domains = list(),
   log_vars = character(0),
-  digits = 2,
+  digits = NULL,
   output = c("gt", "html", "latex")
 )
 }
@@ -23,7 +23,8 @@ include. Defaults to all columns.}
 
 \item{log_vars}{Character vector of log-transformed variable names.}
 
-\item{digits}{Integer. Decimal places for continuous variables (default \code{2}).}
+\item{digits}{Integer. Decimal places for continuous variables. Inherits
+from \code{clerk_options()$digits} if \code{NULL}.}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}
@@ -32,17 +33,19 @@ include. Defaults to all columns.}
 A \code{clerk_tbl} object with type \code{"simple"}.
 }
 \description{
-Produces a concise descriptive summary of a data frame — mean ± SD for
-continuous variables and n (\%) for categorical variables — with no group
-comparisons or statistical tests.
+Produces a concise descriptive summary — mean ± SD for continuous variables
+and n (\%) for categorical variables — with no group comparisons or
+statistical tests.
+
+Formatting defaults are inherited from \code{clerk_options()} and can be
+overridden per call.
 }
 \examples{
 tbl_simple(
   clerk_example,
-  domains = list(
-    "Metabolic"     = c("hdl", "glucose", "bmi"),
-    "Cognitive"     = c("tmt_time", "verbal_fluency"),
-    "Mental health" = c("bdi", "panas_neg", "life_satisfaction")
+  domains  = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
   ),
   log_vars = "tmt_time",
   output   = "gt"
