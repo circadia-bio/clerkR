@@ -11,28 +11,34 @@ neuroscience manuscripts.
   sample characteristics with group comparisons, mean ± SD, t-test /
   chi-squared statistics.
 
-- **Heritability** (`tbl_heritability()`): h2, confidence intervals, LRT
-  p, variance components.
+- **Heritability**
+  ([`tbl_heritability()`](https://clerkr.circadia-lab.uk/reference/tbl_heritability.md)):
+  h2, confidence intervals, LRT p, variance components. Directly
+  compatible with `R-itable::herit_batch()`.
 
-- **Correlation** (`tbl_correlation()`): r, p, FDR-corrected p, domain
-  grouping.
+- **Correlation**
+  ([`tbl_correlation()`](https://clerkr.circadia-lab.uk/reference/tbl_correlation.md)):
+  r, p, FDR-corrected p, domain grouping.
 
-- **Regression** (`tbl_regression()`): beta, SE, CI, p, FDR annotation.
+- **Regression**
+  ([`tbl_regression()`](https://clerkr.circadia-lab.uk/reference/tbl_regression.md)):
+  beta, SE, CI, p, FDR annotation.
 
-- **Simple descriptive** (`tbl_simple()`): means/SDs, no inferential
-  test.
+- **Simple descriptive**
+  ([`tbl_simple()`](https://clerkr.circadia-lab.uk/reference/tbl_simple.md)):
+  means/SDs, no inferential test.
 
 ### Rendering
 
-All constructors return a `clerk_tbl` S3 object. Use
-[`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md)
-for Word/PDF output and
-[`render_reactable()`](https://clerkr.circadia-lab.uk/reference/render_reactable.md)
-for interactive HTML.
+All constructors return a `clerk_tbl` S3 object. Pass to
+[`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
+to dispatch to `gt` (Word/PDF), `reactable` (HTML), or LaTeX output.
 
 ## See also
 
 Useful links:
+
+- <https://clerkr.circadia-lab.uk>
 
 - <https://github.com/circadia-bio/clerkR>
 

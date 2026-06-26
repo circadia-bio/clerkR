@@ -6,13 +6,21 @@ Build publication-ready tables from data frames.
 
 - [`tbl_descriptive()`](https://clerkr.circadia-lab.uk/reference/tbl_descriptive.md)
   : Descriptive summary table with group comparisons (Table 1)
+- [`tbl_simple()`](https://clerkr.circadia-lab.uk/reference/tbl_simple.md)
+  : Simple descriptive summary table (no inferential tests)
+- [`tbl_correlation()`](https://clerkr.circadia-lab.uk/reference/tbl_correlation.md)
+  : Correlation / partial correlation table
+- [`tbl_regression()`](https://clerkr.circadia-lab.uk/reference/tbl_regression.md)
+  : Regression coefficients table
+- [`tbl_heritability()`](https://clerkr.circadia-lab.uk/reference/tbl_heritability.md)
+  : Heritability and variance components table
 
 ## Render
 
 Render a clerk_tbl to gt, HTML, or LaTeX.
 
-- [`render()`](https://clerkr.circadia-lab.uk/reference/render.md) :
-  Render a clerk_tbl to its target output format
+- [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
+  : Render a clerk_tbl to its target output format
 - [`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md)
   : Render a clerk_tbl as a gt table (Word / PDF)
 - [`render_reactable()`](https://clerkr.circadia-lab.uk/reference/render_reactable.md)
@@ -37,10 +45,16 @@ clerkR visual identity — colours, scales, and gt theme.
 
 ## Data
 
-Synthetic example dataset.
+Synthetic example datasets.
 
 - [`clerk_example`](https://clerkr.circadia-lab.uk/reference/clerk_example.md)
   : Synthetic example dataset for clerkR
+- [`clerk_cor_example`](https://clerkr.circadia-lab.uk/reference/clerk_cor_example.md)
+  : Synthetic partial correlation results for clerkR examples
+- [`clerk_reg_example`](https://clerkr.circadia-lab.uk/reference/clerk_reg_example.md)
+  : Synthetic regression results for clerkR examples
+- [`clerk_h2_example`](https://clerkr.circadia-lab.uk/reference/clerk_h2_example.md)
+  : Synthetic heritability estimates for clerkR examples
 
 ## Package
 

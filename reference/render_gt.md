@@ -4,7 +4,7 @@ Renders a `clerk_tbl` as a `gt` table with clerkR styling applied via
 [`clerk_theme()`](https://clerkr.circadia-lab.uk/reference/clerk_theme.md).
 Domain groupings become row-group labels; log-transformed variables
 receive an automatic footnote. Typically called indirectly via
-[`render()`](https://clerkr.circadia-lab.uk/reference/render.md).
+[`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md).
 
 ## Usage
 

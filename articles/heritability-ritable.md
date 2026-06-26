@@ -1,0 +1,152 @@
+# Heritability tables with R-itable and clerkR
+
+## Overview
+
+[`clerkR::tbl_heritability()`](https://clerkr.circadia-lab.uk/reference/tbl_heritability.md)
+is designed to accept the output of `R-itable::herit_batch()` directly.
+Column-name defaults match `herit_batch()` output exactly:
+
+| [`tbl_heritability()`](https://clerkr.circadia-lab.uk/reference/tbl_heritability.md) argument | Default | `herit_batch()` column |
+|----|----|----|
+| `metric` | `"trait"` | trait name |
+| `h2` | `"h2"` | heritability estimate |
+| `ci_low` | `"ci_lo"` | lower CI bound |
+| `ci_high` | `"ci_hi"` | upper CI bound |
+| `p` | `"pval"` | one-sided LRT p-value |
+
+The covariate model column is `"covariates"` in `herit_batch()` output —
+pass `model = "covariates"` to include it.
+
+## Setup
+
+Install both packages from GitHub if you haven’t already:
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("circadia-bio/R-itable")
+remotes::install_github("circadia-bio/clerkR")
+```
+
+``` r
+
+library(Ritable)
+library(clerkR)
+```
+
+## 1. Simulate a family cohort
+
+``` r
+
+set.seed(2026)
+n_fam <- 80
+
+ped <- do.call(rbind, lapply(seq_len(n_fam), function(f) {
+  base <- (f - 1L) * 5L
+  data.frame(
+    id  = base + 1:5,
+    pat = c(0L, 0L, base + 1L, base + 1L, base + 1L),
+    mom = c(0L, 0L, base + 2L, base + 2L, base + 2L),
+    sex = c(1L, 2L, sample(1:2, 3, replace = TRUE))
+  )
+}))
+
+simulate_trait <- function(ped, n_fam, h2, seed) {
+  set.seed(seed)
+  genetic  <- rep(rnorm(n_fam, 0, sqrt(h2)),      each = 5)
+  residual <- rnorm(nrow(ped),         0, sqrt(1 - h2))
+  genetic + residual
+}
+
+pheno_all <- data.frame(
+  bmi = simulate_trait(ped, n_fam, h2 = 0.60, seed = 1),
+  sbp = simulate_trait(ped, n_fam, h2 = 0.35, seed = 2),
+  hdl = simulate_trait(ped, n_fam, h2 = 0.50, seed = 3)
+)
+
+off_rows <- ped$pat != 0L
+dat <- data.frame(
+  IID     = ped$id[off_rows],
+  age     = round(runif(sum(off_rows), 20, 75)),
+  sex_num = ped$sex[off_rows],
+  bmi     = pheno_all$bmi[off_rows],
+  sbp     = pheno_all$sbp[off_rows],
+  hdl     = pheno_all$hdl[off_rows]
+)
+dat$age2 <- dat$age^2
+```
+
+## 2. Build GRM and run batch estimation
+
+``` r
+
+A <- build_grm(ped, study_ids = dat$IID)
+
+res <- herit_batch(
+  traits    = c("bmi", "sbp", "hdl"),
+  grm       = A,
+  data      = dat,
+  covs_list = list(
+    unadj = NULL,
+    cov1  = c("age", "sex_num"),
+    cov2  = c("age", "sex_num", "age2")
+  )
+)
+
+res
+```
+
+## 3. Render the table
+
+Pass `model = "covariates"` and optional variance component column names
+as strings:
+
+``` r
+
+res |>
+  tbl_heritability(
+    model    = "covariates",
+    sigma2_a = "sigma2_a",
+    sigma2_e = "sigma2_e",
+    domains  = list("Cardiometabolic" = c("bmi", "sbp", "hdl")),
+    fdr      = TRUE,
+    output   = "gt"
+  ) |>
+  clerk_render(
+    title    = "Heritability estimates",
+    subtitle = "Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI",
+    footnote = "FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction."
+  )
+```
+
+## Filtering to a single model
+
+``` r
+
+res |>
+  subset(covariates == "cov2") |>
+  tbl_heritability(
+    sigma2_a = "sigma2_a",
+    sigma2_e = "sigma2_e",
+    fdr      = TRUE,
+    output   = "gt"
+  ) |>
+  clerk_render(
+    title    = "Heritability estimates (age + sex + age\u00b2)",
+    footnote = "FDR correction applied across all traits (BH)."
+  )
+```
+
+## HTML output
+
+``` r
+
+res |>
+  subset(covariates == "cov2") |>
+  tbl_heritability(
+    sigma2_a = "sigma2_a",
+    sigma2_e = "sigma2_e",
+    output   = "html"
+  ) |>
+  clerk_render()
+```

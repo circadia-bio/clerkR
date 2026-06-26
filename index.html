@@ -18,7 +18,6 @@
 <meta property="og:description" content="An R package for transforming data frames into publication-ready tables across common biomedical and neuroscience archetypes. Renders to gt (Word/PDF), reactable (HTML), and LaTeX. Built by the Circadia Lab at Northumbria University.
 ">
 <style>
-  /* ── Navbar ── */
   .navbar {
     background-color: #293681 !important;
     border-bottom: 2px solid #95CCDD;
@@ -34,60 +33,31 @@
     color: #D0E7E6 !important;
     border-bottom: 2px solid #95CCDD;
   }
-
-  /* ── Navbar logo size ── */
   .navbar-brand img { height: 40px; width: auto; }
-
-  /* ── Remove border under page title ── */
   .page-header { border-bottom: none !important; }
-
-  /* ── Sidebar TOC links ── */
-  .sidebar .nav-link,
-  .sidebar a,
-  #toc a,
-  #toc .nav-link {
+  .sidebar .nav-link, .sidebar a, #toc a, #toc .nav-link {
     color: #293681 !important;
   }
-  .sidebar .nav-link:hover,
-  .sidebar a:hover,
-  #toc a:hover {
+  .sidebar .nav-link:hover, .sidebar a:hover, #toc a:hover {
     color: #4274D9 !important;
   }
-  .sidebar .nav-link.active,
-  #toc .nav-link.active {
+  .sidebar .nav-link.active, #toc .nav-link.active {
     color: #4274D9 !important;
     border-left: 2px solid #95CCDD;
     font-weight: 600;
   }
-
-  /* ── Sidebar border ── */
   .sidebar { border-left: 3px solid #95CCDD; padding-left: 1rem; }
-
-  /* ── Reference index section headers ── */
   .reference-index h2 {
     color: #4274D9;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-
-  /* ── Inline code ── */
-  code {
-    color: #293681;
-    background: #D0E7E6;
-    border-radius: 4px;
-    padding: 0.1em 0.35em;
-  }
-
-  /* ── Links ── */
+  code { color: #293681; background: #D0E7E6; border-radius: 4px; padding: 0.1em 0.35em; }
   a { color: #4274D9; }
   a:hover { color: #293681; }
-
-  /* ── Footer ── */
   .footer { background: #293681; color: #D0E7E6; padding: 1.5rem 0; }
   .footer a { color: #95CCDD; }
-
-  /* ── Buttons ── */
   .btn-primary {
     background-color: #4274D9 !important;
     border-color: #4274D9 !important;
@@ -97,8 +67,6 @@
     background-color: #293681 !important;
     border-color: #293681 !important;
   }
-
-  /* ── text-muted ── */
   .text-muted { color: #4274D9 !important; }
 </style>
 </head>
@@ -121,6 +89,19 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/getting-started.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/getting-started.html">Getting started with clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Archetypes</h6></li>
+    <li><a class="dropdown-item" href="articles/descriptive-table1.html">Descriptive tables (Table 1)</a></li>
+    <li><a class="dropdown-item" href="articles/simple-descriptive.html">Simple descriptive tables</a></li>
+    <li><a class="dropdown-item" href="articles/correlation.html">Correlation and partial correlation tables</a></li>
+    <li><a class="dropdown-item" href="articles/regression.html">Regression coefficient tables</a></li>
+    <li><a class="dropdown-item" href="articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -138,82 +119,195 @@
 <div class="page-header"><h1 id="test_tube-clerkr">🧪 clerkR<a class="anchor" aria-label="anchor" href="#test_tube-clerkr"></a>
 </h1></div>
 <p><strong>A clerk keeps tabs — <code>clerkR</code> keeps yours publication-ready.</strong></p>
-<p><a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://cran.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D4.1.0-276DC3" alt="R"></a></p>
+<p><a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://cran.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D4.1.0-276DC3" alt="R"></a> <a href="https://clerkr.circadia-lab.uk"><img src="https://img.shields.io/badge/docs-clerkr.circadia--lab.uk-4274D9" alt="pkgdown"></a></p>
 <hr>
 <div class="section level2">
 <h2 id="open_book-what-is-clerkr">📖 What is clerkR?<a class="anchor" aria-label="anchor" href="#open_book-what-is-clerkr"></a>
 </h2>
-<p><code>clerkR</code> transforms standard R data frames into publication-ready tables for biomedical and neuroscience manuscripts. Rather than wrestling with formatting each time, <code>clerkR</code> reduces the most common table types to a handful of opinionated constructor functions that share consistent theming, domain grouping, footnote handling, and a unified rendering pipeline for both Word/PDF (<code>gt</code>) and interactive HTML (<code>reactable</code>) output.</p>
+<p><code>clerkR</code> transforms standard R data frames into publication-ready tables for biomedical and neuroscience manuscripts. Rather than wrestling with formatting each time, <code>clerkR</code> reduces the most common table types to a handful of opinionated constructor functions that share consistent theming, domain grouping, footnote handling, and a unified rendering pipeline for Word/PDF (<code>gt</code>), interactive HTML (<code>reactable</code>), and LaTeX output.</p>
 </div>
 <div class="section level2">
 <h2 id="sparkles-features">✨ Features<a class="anchor" aria-label="anchor" href="#sparkles-features"></a>
 </h2>
 <ul>
 <li>📋 <strong>Five table archetypes</strong> covering ~90% of what appears in a biomed paper</li>
-<li>🗂️ <strong>Domain/section grouping</strong> — organise rows under labelled headers</li>
+<li>🎨 <strong>clerkR theme</strong> — light teal headers, navy text, clean borders, consistent throughout</li>
+<li>🗂️ <strong>Domain/section grouping</strong> — organise rows under labelled section headers</li>
 <li>📝 <strong>Automatic footnotes</strong> for log-transformed variables and FDR correction</li>
-<li>🎨 <strong>Dual render targets</strong> — <code><a href="reference/render_gt.html">render_gt()</a></code> for Word/PDF, <code><a href="reference/render_reactable.html">render_reactable()</a></code> for HTML</li>
-<li>🔢 <strong>Significance annotation</strong> — p-values, FDR-corrected p, stars (toggleable)</li>
+<li>🖨️ <strong>Three render targets</strong> — <code>gt</code> for Word/PDF, <code>reactable</code> for HTML, LaTeX for manuscripts</li>
+<li>🔢 <strong>Output baked in at construction</strong> — set <code>output = "gt"</code> once, then just <code>|&gt; clerk_render()</code>
+</li>
+<li>🔗 <strong>R-itable compatible</strong> — <code>herit_batch()</code> output pipes straight into <code><a href="reference/tbl_heritability.html">tbl_heritability()</a></code>
+</li>
 <li>🧩 <strong>Composable</strong> — all constructors return a <code>clerk_tbl</code> S3 object</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="clipboard-table-archetypes">📋 Table archetypes<a class="anchor" aria-label="anchor" href="#clipboard-table-archetypes"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Use case</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/tbl_descriptive.html">tbl_descriptive()</a></code></td>
+<td>Sample characteristics by group, mean ± SD, t/χ²</td>
+<td>Table 1</td>
+</tr>
+<tr>
+<td><code><a href="reference/tbl_simple.html">tbl_simple()</a></code></td>
+<td>Descriptive summary, no inferential test</td>
+<td>Supplementary table</td>
+</tr>
+<tr>
+<td><code><a href="reference/tbl_correlation.html">tbl_correlation()</a></code></td>
+<td>Partial correlations, r, p, p†</td>
+<td>Correlation results</td>
+</tr>
+<tr>
+<td><code><a href="reference/tbl_regression.html">tbl_regression()</a></code></td>
+<td>β, SE, 95% CI, p, FDR — accepts <code>broom::tidy()</code>
+</td>
+<td>Linear/logistic models</td>
+</tr>
+<tr>
+<td><code><a href="reference/tbl_heritability.html">tbl_heritability()</a></code></td>
+<td>h², 95% CI, LRT p, σ²a/σ²e — accepts <code>herit_batch()</code>
+</td>
+<td>Heritability results</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="card_index_dividers-project-structure">🗂️ Project Structure<a class="anchor" aria-label="anchor" href="#card_index_dividers-project-structure"></a>
 </h2>
 <pre><code>clerkR/
 ├── R/
-│   ├── clerkR-package.R       # Package-level documentation
-│   ├── tbl_descriptive.R      # Archetype 1: Table 1 / descriptive
-│   ├── render.R               # render_gt() and render_reactable()
-│   └── clerk_example.R        # Synthetic example dataset docs
-├── data/
-│   └── clerk_example.rda      # Synthetic example dataset
-├── data-raw/
-│   └── clerk_example.R        # Script to generate example data
+│   ├── clerkR-package.R
+│   ├── tbl_descriptive.R
+│   ├── tbl_simple.R
+│   ├── tbl_correlation.R
+│   ├── tbl_regression.R
+│   ├── tbl_heritability.R
+│   ├── render.R               # clerk_render(), render_gt(), render_reactable(), render_latex()
+│   └── theme.R                # clerk_theme(), clerk_palette(), clerk_colour(), clerk_diverging()
+├── data/                      # Synthetic example datasets
+├── data-raw/                  # Scripts to generate example data
+├── vignettes/                 # Workflow vignettes
 ├── tests/testthat/
-│   └── test-tbl_descriptive.R
-├── man/                       # Auto-generated by roxygen2
 ├── DESCRIPTION
-├── NAMESPACE
-└── README.md</code></pre>
+└── NAMESPACE</code></pre>
 </div>
 <div class="section level2">
 <h2 id="rocket-getting-started">🚀 Getting Started<a class="anchor" aria-label="anchor" href="#rocket-getting-started"></a>
 </h2>
 <div class="section level3">
-<h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dplyr"</span>, <span class="st">"tidyr"</span>, <span class="st">"rlang"</span>, <span class="st">"gt"</span>, <span class="st">"reactable"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Development version from GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># clerkR</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For the heritability workflow, also install R-itable</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/R-itable"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+<h3 id="the-one-two-pattern">The one-two pattern<a class="anchor" aria-label="anchor" href="#the-one-two-pattern"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Every <code>clerkR</code> workflow follows the same pattern: construct → render.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://clerkr.circadia-lab.uk">clerkR</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Descriptive / Table 1</span></span>
 <span><span class="fu"><a href="reference/tbl_descriptive.html">tbl_descriptive</a></span><span class="op">(</span></span>
 <span>  <span class="va">clerk_example</span>,</span>
 <span>  group   <span class="op">=</span> <span class="va">sex</span>,</span>
 <span>  domains <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Metabolic"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hdl"</span>, <span class="st">"glucose"</span>, <span class="st">"bmi"</span><span class="op">)</span>,</span>
-<span>    <span class="st">"Anthropometric"</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"waist"</span>, <span class="st">"systolic_bp"</span><span class="op">)</span>,</span>
-<span>    <span class="st">"Cognitive"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tmt_time"</span>, <span class="st">"verbal_fluency"</span><span class="op">)</span>,</span>
-<span>    <span class="st">"Mental health"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bdi"</span>, <span class="st">"panas_neg"</span>, <span class="st">"life_satisfaction"</span><span class="op">)</span></span>
+<span>    <span class="st">"Metabolic"</span>      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hdl"</span>, <span class="st">"glucose"</span>, <span class="st">"bmi"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Anthropometric"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"waist"</span>, <span class="st">"systolic_bp"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Cognitive"</span>      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tmt_time"</span>, <span class="st">"verbal_fluency"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Mental health"</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bdi"</span>, <span class="st">"panas_neg"</span>, <span class="st">"life_satisfaction"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  log_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tmt_time"</span><span class="op">)</span>,</span>
-<span>  fdr      <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  log_vars <span class="op">=</span> <span class="st">"tmt_time"</span>,</span>
+<span>  fdr      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  output   <span class="op">=</span> <span class="st">"gt"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/render_gt.html">render_gt</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Table 1. Sample characteristics by sex"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/clerk_render.html">clerk_render</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Table 1. Sample characteristics by sex"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="correlation-table">Correlation table<a class="anchor" aria-label="anchor" href="#correlation-table"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tbl_correlation.html">tbl_correlation</a></span><span class="op">(</span></span>
+<span>  <span class="va">clerk_cor_example</span>,</span>
+<span>  domains <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Metabolic"</span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hdl"</span>, <span class="st">"glucose"</span>, <span class="st">"bmi"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Mental health"</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bdi"</span>, <span class="st">"panas_neg"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fdr    <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"gt"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/clerk_render.html">clerk_render</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Partial correlations (age + sex controlled)"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="heritability-from-r-itable">Heritability from R-itable<a class="anchor" aria-label="anchor" href="#heritability-from-r-itable"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># herit_batch() output pipes straight in — no renaming needed</span></span>
+<span><span class="fu">herit_batch</span><span class="op">(</span><span class="va">traits</span>, grm <span class="op">=</span> <span class="va">A</span>, data <span class="op">=</span> <span class="va">dat</span>, covs_list <span class="op">=</span> <span class="va">covs_list</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/tbl_heritability.html">tbl_heritability</a></span><span class="op">(</span></span>
+<span>    model    <span class="op">=</span> <span class="st">"covariates"</span>,</span>
+<span>    sigma2_a <span class="op">=</span> <span class="st">"sigma2_a"</span>,</span>
+<span>    sigma2_e <span class="op">=</span> <span class="st">"sigma2_e"</span>,</span>
+<span>    fdr      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    output   <span class="op">=</span> <span class="st">"gt"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/clerk_render.html">clerk_render</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Heritability estimates"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="art-colour-palette">🎨 Colour palette<a class="anchor" aria-label="anchor" href="#art-colour-palette"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/clerk_palette.html">clerk_palette</a></span><span class="op">(</span><span class="op">)</span>     <span class="co"># full named palette</span></span>
+<span><span class="fu"><a href="reference/clerk_diverging.html">clerk_diverging</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># terracotta → off-white → navy (9 steps)</span></span>
+<span><span class="fu"><a href="reference/clerk_sequential.html">clerk_sequential</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># near-white → navy (7 steps)</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th>Role</th>
+<th>Hex</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Header background</td>
+<td><code>#95CCDD</code></td>
+</tr>
+<tr>
+<td>Header / body text</td>
+<td><code>#293681</code></td>
+</tr>
+<tr>
+<td>Row group bar</td>
+<td><code>#D0E7E6</code></td>
+</tr>
+<tr>
+<td>Mid blue</td>
+<td><code>#4274D9</code></td>
+</tr>
+<tr>
+<td>Diverging warm pole</td>
+<td><code>#D4907E</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="package-dependencies">📦 Dependencies<a class="anchor" aria-label="anchor" href="#package-dependencies"></a>
@@ -250,6 +344,16 @@
 <td>≥ 0.4.0</td>
 <td>Interactive HTML rendering</td>
 </tr>
+<tr>
+<td><code>knitr</code></td>
+<td>any</td>
+<td>LaTeX output</td>
+</tr>
+<tr>
+<td><code>grDevices</code></td>
+<td>any</td>
+<td>Colour ramps</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -257,13 +361,17 @@
 <h2 id="busts_in_silhouette-authors">👥 Authors<a class="anchor" aria-label="anchor" href="#busts_in_silhouette-authors"></a>
 </h2>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr>
 <th>Role</th>
 <th>Name</th>
 </tr></thead>
 <tbody><tr>
 <td>Author, maintainer</td>
-<td><a href="https://github.com/lgsfr" class="external-link">Lucas G. S. França</a></td>
+<td><a href="https://orcid.org/0000-0003-0853-1319" class="external-link">Lucas G. S. França</a></td>
 </tr></tbody>
 </table>
 </div>
@@ -274,7 +382,8 @@
 <li>🕐 <a href="https://github.com/circadia-bio/zeitR" class="external-link"><strong>zeitR</strong></a> — actigraphy analysis and circadian metrics</li>
 <li>📓 <a href="https://github.com/circadia-bio/slumbR" class="external-link"><strong>slumbR</strong></a> — sleep diary processing</li>
 <li>📋 <a href="https://github.com/circadia-bio/tallieR" class="external-link"><strong>tallieR</strong></a> — questionnaire and sociodemographic data</li>
-<li>🔗 <a href="https://github.com/circadia-bio/syncR" class="external-link"><strong>syncR</strong></a> — integrates zeitR, slumbR, and tallieR into a unified database</li>
+<li>🔗 <a href="https://github.com/circadia-bio/syncR" class="external-link"><strong>syncR</strong></a> — integrates zeitR, slumbR, and tallieR</li>
+<li>🧬 <a href="https://github.com/circadia-bio/R-itable" class="external-link"><strong>R-itable</strong></a> — pedigree-based heritability estimation</li>
 <li>🔬 <a href="https://github.com/circadia-bio" class="external-link"><strong>circadia-bio</strong></a> — the Circadia Lab GitHub organisation</li>
 </ul>
 </div>
@@ -313,9 +422,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://orcid.org/0000-0003-0853-1319" class="external-link">Lucas França</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0853-1319" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
-<li>Mario Leocadio-Miguel <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7248-3529" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Lucas G. S. Franca <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0853-1319" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 

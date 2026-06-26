@@ -4,7 +4,6 @@ scale: near-white (#D0E7E6) → navy (#293681). Suitable for shading
 columns by magnitude (e.g. heritability h², correlation r)."><meta property="og:description" content="Returns a vector of n hex colours interpolated along the clerkR sequential
 scale: near-white (#D0E7E6) → navy (#293681). Suitable for shading
 columns by magnitude (e.g. heritability h², correlation r)."><style>
-  /* ── Navbar ── */
   .navbar {
     background-color: #293681 !important;
     border-bottom: 2px solid #95CCDD;
@@ -20,60 +19,31 @@ columns by magnitude (e.g. heritability h², correlation r)."><style>
     color: #D0E7E6 !important;
     border-bottom: 2px solid #95CCDD;
   }
-
-  /* ── Navbar logo size ── */
   .navbar-brand img { height: 40px; width: auto; }
-
-  /* ── Remove border under page title ── */
   .page-header { border-bottom: none !important; }
-
-  /* ── Sidebar TOC links ── */
-  .sidebar .nav-link,
-  .sidebar a,
-  #toc a,
-  #toc .nav-link {
+  .sidebar .nav-link, .sidebar a, #toc a, #toc .nav-link {
     color: #293681 !important;
   }
-  .sidebar .nav-link:hover,
-  .sidebar a:hover,
-  #toc a:hover {
+  .sidebar .nav-link:hover, .sidebar a:hover, #toc a:hover {
     color: #4274D9 !important;
   }
-  .sidebar .nav-link.active,
-  #toc .nav-link.active {
+  .sidebar .nav-link.active, #toc .nav-link.active {
     color: #4274D9 !important;
     border-left: 2px solid #95CCDD;
     font-weight: 600;
   }
-
-  /* ── Sidebar border ── */
   .sidebar { border-left: 3px solid #95CCDD; padding-left: 1rem; }
-
-  /* ── Reference index section headers ── */
   .reference-index h2 {
     color: #4274D9;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-
-  /* ── Inline code ── */
-  code {
-    color: #293681;
-    background: #D0E7E6;
-    border-radius: 4px;
-    padding: 0.1em 0.35em;
-  }
-
-  /* ── Links ── */
+  code { color: #293681; background: #D0E7E6; border-radius: 4px; padding: 0.1em 0.35em; }
   a { color: #4274D9; }
   a:hover { color: #293681; }
-
-  /* ── Footer ── */
   .footer { background: #293681; color: #D0E7E6; padding: 1.5rem 0; }
   .footer a { color: #95CCDD; }
-
-  /* ── Buttons ── */
   .btn-primary {
     background-color: #4274D9 !important;
     border-color: #4274D9 !important;
@@ -83,8 +53,6 @@ columns by magnitude (e.g. heritability h², correlation r)."><style>
     background-color: #293681 !important;
     border-color: #293681 !important;
   }
-
-  /* ── text-muted ── */
   .text-muted { color: #4274D9 !important; }
 </style></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -104,6 +72,17 @@ columns by magnitude (e.g. heritability h², correlation r)."><style>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/getting-started.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Archetypes</h6></li>
+    <li><a class="dropdown-item" href="../articles/descriptive-table1.html">Descriptive tables (Table 1)</a></li>
+    <li><a class="dropdown-item" href="../articles/simple-descriptive.html">Simple descriptive tables</a></li>
+    <li><a class="dropdown-item" href="../articles/correlation.html">Correlation and partial correlation tables</a></li>
+    <li><a class="dropdown-item" href="../articles/regression.html">Regression coefficient tables</a></li>
+    <li><a class="dropdown-item" href="../articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/circadia-bio/clerkR" aria-label="GitHub"><span class="fa fab fa-github"></span></a></li>

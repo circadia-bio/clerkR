@@ -44,7 +44,7 @@ tbl_descriptive(
 
   A named list mapping variable names to domain/section labels, e.g.
   `list("Metabolic" = c("hdl", "glucose"), "Anthropometric" = c("bmi", "waist"))`.
-  Variables not mentioned are placed in an unlabelled section.
+  Variables not mentioned are placed in an "Other" section.
 
 - log_vars:
 
@@ -78,8 +78,8 @@ tbl_descriptive(
   `"latex"` (LaTeX via
   [`gt::as_latex()`](https://gt.rstudio.com/reference/as_latex.html)).
   This value is stored on the returned object and used by
-  [`render()`](https://clerkr.circadia-lab.uk/reference/render.md) to
-  dispatch to the correct renderer automatically.
+  [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
+  to dispatch to the correct renderer automatically.
 
 ## Value
 
@@ -112,7 +112,6 @@ A `clerk_tbl` object (a list with class `"clerk_tbl"`) containing:
 ## Examples
 
 ``` r
-# gt output (default) — pipe into render()
 tbl_descriptive(
   clerk_example,
   group    = sex,
@@ -123,7 +122,7 @@ tbl_descriptive(
   ),
   log_vars = "tmt_time",
   output   = "gt"
-) |> render(title = "Table 1. Sample characteristics by sex")
+) |> clerk_render(title = "Table 1. Sample characteristics by sex")
 #> Warning: invalid factor level, NA generated
 
 
