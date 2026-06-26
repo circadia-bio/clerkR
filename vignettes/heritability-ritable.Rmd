@@ -8,10 +8,19 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+ritable_available <- requireNamespace("Ritable", quietly = TRUE)
+
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment  = "#>"
+  comment  = "#>",
+  eval     = ritable_available
 )
+```
+
+```{r not-available, eval=!ritable_available, echo=FALSE, results="asis"}
+cat("> **Note:** This vignette requires the `Ritable` package
+> (`remotes::install_github(\"circadia-bio/R-itable\")`).
+> Code is shown below but not executed in this build.")
 ```
 
 ## Overview
