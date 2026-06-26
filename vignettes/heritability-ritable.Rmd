@@ -116,10 +116,12 @@ res <- herit_batch(
   )
 )
 
+# Inspect available covariate model labels
+unique(res$covariates)
 res
 ```
 
-## 3. Render the table
+## 3. Render the full table
 
 Pass column names as strings — defaults already match `herit_batch()` output,
 so only `model`, `sigma2_a`, and `sigma2_e` need to be specified:
@@ -144,8 +146,9 @@ res |>
 ## Filtering to a single model
 
 ```{r filtered}
-res |>
-  subset(covariates == "cov2") |>
+adj_model <- unique(res$covariates)[length(unique(res$covariates))]
+
+res[res$covariates == adj_model, ] |>
   tbl_heritability(
     sigma2_a = "sigma2_a",
     sigma2_e = "sigma2_e",
@@ -153,7 +156,7 @@ res |>
     output   = "gt"
   ) |>
   clerk_render(
-    title    = "Heritability estimates (age + sex + age\u00b2)",
+    title    = paste0("Heritability estimates (", adj_model, ")"),
     footnote = "FDR correction applied across all traits (BH)."
   )
 ```
@@ -161,8 +164,7 @@ res |>
 ## HTML output
 
 ```{r html}
-res |>
-  subset(covariates == "cov2") |>
+res[res$covariates == adj_model, ] |>
   tbl_heritability(
     sigma2_a = "sigma2_a",
     sigma2_e = "sigma2_e",
