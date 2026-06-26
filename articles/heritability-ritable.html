@@ -113,8 +113,9 @@
 
 
 
-
-<div class="row">
+<script src="heritability-ritable_files/core-js-2.5.3/shim.min.js"></script><script src="heritability-ritable_files/react-18.2.0/react.min.js"></script><script src="heritability-ritable_files/react-18.2.0/react-dom.min.js"></script><script src="heritability-ritable_files/reactwidget-2.0.0/react-tools.js"></script><link href="heritability-ritable_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="heritability-ritable_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="heritability-ritable_files/reactable-0.4.5/reactable.css" rel="stylesheet">
+<script src="heritability-ritable_files/reactable-binding-0.4.5/reactable.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Heritability tables with R-itable and clerkR</h1>
@@ -131,14 +132,14 @@
 </h2>
 <p><code><a href="../reference/tbl_heritability.html">clerkR::tbl_heritability()</a></code> is designed to accept the
 output of <code>R-itable::herit_batch()</code> directly. Column-name
-defaults match <code>herit_batch()</code> output exactly:</p>
+defaults match <code><a href="https://r-itable.circadia-lab.uk/reference/herit_batch.html" class="external-link">herit_batch()</a></code> output exactly:</p>
 <table class="table">
 <thead><tr class="header">
 <th>
 <code><a href="../reference/tbl_heritability.html">tbl_heritability()</a></code> argument</th>
 <th>Default</th>
 <th>
-<code>herit_batch()</code> column</th>
+<code><a href="https://r-itable.circadia-lab.uk/reference/herit_batch.html" class="external-link">herit_batch()</a></code> column</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -169,7 +170,7 @@ defaults match <code>herit_batch()</code> output exactly:</p>
 </tbody>
 </table>
 <p>The covariate model column is <code>"covariates"</code> in
-<code>herit_batch()</code> output — pass
+<code><a href="https://r-itable.circadia-lab.uk/reference/herit_batch.html" class="external-link">herit_batch()</a></code> output — pass
 <code>model = "covariates"</code> to include it.</p>
 </div>
 <div class="section level2">
@@ -178,15 +179,18 @@ defaults match <code>herit_batch()</code> output exactly:</p>
 <p>Install both packages from GitHub if you haven’t already:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/R-itable"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"circadia-bio/R-itable"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Ritable</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-itable.circadia-lab.uk" class="external-link">Ritable</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://clerkr.circadia-lab.uk">clerkR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="simulate-a-family-cohort">1. Simulate a family cohort<a class="anchor" aria-label="anchor" href="#simulate-a-family-cohort"></a>
 </h2>
+<p>We simulate 80 nuclear families (2 parents + 3 offspring each) with
+three quantitative traits at different true h² values — BMI (~0.60),
+systolic blood pressure (~0.35), and HDL cholesterol (~0.50).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
 <span><span class="va">n_fam</span> <span class="op">&lt;-</span> <span class="fl">80</span></span>
@@ -229,9 +233,9 @@ defaults match <code>herit_batch()</code> output exactly:</p>
 <h2 id="build-grm-and-run-batch-estimation">2. Build GRM and run batch estimation<a class="anchor" aria-label="anchor" href="#build-grm-and-run-batch-estimation"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu">build_grm</span><span class="op">(</span><span class="va">ped</span>, study_ids <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">IID</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-itable.circadia-lab.uk/reference/build_grm.html" class="external-link">build_grm</a></span><span class="op">(</span><span class="va">ped</span>, study_ids <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">IID</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">herit_batch</span><span class="op">(</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-itable.circadia-lab.uk/reference/herit_batch.html" class="external-link">herit_batch</a></span><span class="op">(</span></span>
 <span>  traits    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bmi"</span>, <span class="st">"sbp"</span>, <span class="st">"hdl"</span><span class="op">)</span>,</span>
 <span>  grm       <span class="op">=</span> <span class="va">A</span>,</span>
 <span>  data      <span class="op">=</span> <span class="va">dat</span>,</span>
@@ -242,13 +246,38 @@ defaults match <code>herit_batch()</code> output exactly:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span></span></code></pre></div>
+<span><span class="co"># Inspect available covariate model labels</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">covariates</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] ""                 "age+sex_num"      "age+sex_num+age2"</span></span>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt;       label trait       covariates   n     h2     se  ci_lo ci_hi pval</span></span>
+<span><span class="co">#&gt; 1 bmi_unadj   bmi                  240 0.9990 0.1297 0.8400     1    0</span></span>
+<span><span class="co">#&gt; 2 sbp_unadj   sbp                  240 0.8055 0.1392 0.5303     1    0</span></span>
+<span><span class="co">#&gt; 3 hdl_unadj   hdl                  240 0.7998 0.1394 0.5243     1    0</span></span>
+<span><span class="co">#&gt; 4  bmi_cov1   bmi      age+sex_num 240 0.9990 0.1313 0.8331     1    0</span></span>
+<span><span class="co">#&gt; 5  sbp_cov1   sbp      age+sex_num 240 0.8012 0.1402 0.5240     1    0</span></span>
+<span><span class="co">#&gt; 6  hdl_cov1   hdl      age+sex_num 240 0.8014 0.1395 0.5258     1    0</span></span>
+<span><span class="co">#&gt; 7  bmi_cov2   bmi age+sex_num+age2 240 0.9990 0.1318 0.8280     1    0</span></span>
+<span><span class="co">#&gt; 8  sbp_cov2   sbp age+sex_num+age2 240 0.7999 0.1402 0.5228     1    0</span></span>
+<span><span class="co">#&gt; 9  hdl_cov2   hdl age+sex_num+age2 240 0.8039 0.1405 0.5259     1    0</span></span>
+<span><span class="co">#&gt;   var_covariates sigma2_a sigma2_e</span></span>
+<span><span class="co">#&gt; 1             NA  0.93477  0.00094</span></span>
+<span><span class="co">#&gt; 2             NA  0.80117  0.19348</span></span>
+<span><span class="co">#&gt; 3             NA  0.79550  0.19915</span></span>
+<span><span class="co">#&gt; 4         0.0207  0.92785  0.00093</span></span>
+<span><span class="co">#&gt; 5         0.0085  0.79187  0.19651</span></span>
+<span><span class="co">#&gt; 6         0.0067  0.79210  0.19624</span></span>
+<span><span class="co">#&gt; 7         0.0304  0.92432  0.00093</span></span>
+<span><span class="co">#&gt; 8         0.0118  0.78783  0.19710</span></span>
+<span><span class="co">#&gt; 9         0.0091  0.79525  0.19393</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="render-the-table">3. Render the table<a class="anchor" aria-label="anchor" href="#render-the-table"></a>
+<h2 id="render-the-full-table">3. Render the full table<a class="anchor" aria-label="anchor" href="#render-the-full-table"></a>
 </h2>
-<p>Pass <code>model = "covariates"</code> and optional variance
-component column names as strings:</p>
+<p>Pass column names as strings — defaults already match
+<code><a href="https://r-itable.circadia-lab.uk/reference/herit_batch.html" class="external-link">herit_batch()</a></code> output, so only <code>model</code>,
+<code>sigma2_a</code>, and <code>sigma2_e</code> need to be
+specified:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tbl_heritability.html">tbl_heritability</a></span><span class="op">(</span></span>
@@ -263,14 +292,585 @@ component column names as strings:</p>
 <span>    title    <span class="op">=</span> <span class="st">"Heritability estimates"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI"</span>,</span>
 <span>    footnote <span class="op">=</span> <span class="st">"FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction."</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):</span></span>
+<span><span class="co">#&gt; invalid factor level, NA generated</span></span></code></pre></div>
+<div id="njwdqtaadp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#njwdqtaadp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#njwdqtaadp thead, #njwdqtaadp tbody, #njwdqtaadp tfoot, #njwdqtaadp tr, #njwdqtaadp td, #njwdqtaadp th {
+  border-style: none;
+}
+
+#njwdqtaadp p {
+  margin: 0;
+  padding: 0;
+}
+
+#njwdqtaadp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#njwdqtaadp .gt_title {
+  color: #333333;
+  font-size: 13px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#njwdqtaadp .gt_subtitle {
+  color: #333333;
+  font-size: 11px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#njwdqtaadp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #293681;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#njwdqtaadp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#njwdqtaadp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#njwdqtaadp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#njwdqtaadp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#njwdqtaadp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#njwdqtaadp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: hidden;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#njwdqtaadp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: hidden;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#njwdqtaadp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#njwdqtaadp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#njwdqtaadp .gt_row {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#njwdqtaadp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: hidden;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#njwdqtaadp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#njwdqtaadp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#njwdqtaadp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#njwdqtaadp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#njwdqtaadp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#njwdqtaadp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#njwdqtaadp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#njwdqtaadp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#njwdqtaadp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#njwdqtaadp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#njwdqtaadp .gt_left {
+  text-align: left;
+}
+
+#njwdqtaadp .gt_center {
+  text-align: center;
+}
+
+#njwdqtaadp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#njwdqtaadp .gt_font_normal {
+  font-weight: normal;
+}
+
+#njwdqtaadp .gt_font_bold {
+  font-weight: bold;
+}
+
+#njwdqtaadp .gt_font_italic {
+  font-style: italic;
+}
+
+#njwdqtaadp .gt_super {
+  font-size: 65%;
+}
+
+#njwdqtaadp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#njwdqtaadp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#njwdqtaadp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#njwdqtaadp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#njwdqtaadp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#njwdqtaadp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#njwdqtaadp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#njwdqtaadp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#njwdqtaadp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_title gt_font_normal" style>Heritability estimates</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Narrow-sense h² ± 95% profile-likelihood CI</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="covariates">covariates</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="h2">h²</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="ci_95">95% CI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="p">p</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="sigma2_a">σ²a</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="sigma2_e">σ²e</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="p_fdr">p (FDR)</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" style="background-color: #D0E7E6; color: #293681; font-weight: bold;" scope="colgroup" id="Cardiometabolic">Cardiometabolic</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">bmi</th>
+<td headers="Cardiometabolic stub_1_1 covariates" class="gt_row gt_left" style="color: #293681;"></td>
+<td headers="Cardiometabolic stub_1_1 h2" class="gt_row gt_right" style="color: #293681;">1.00</td>
+<td headers="Cardiometabolic stub_1_1 ci_95" class="gt_row gt_left" style="color: #293681;">[0.84, 1.00]</td>
+<td headers="Cardiometabolic stub_1_1 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_1 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.93</td>
+<td headers="Cardiometabolic stub_1_1 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.00</td>
+<td headers="Cardiometabolic stub_1_1 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">sbp</th>
+<td headers="Cardiometabolic stub_1_2 covariates" class="gt_row gt_left" style="color: #293681;"></td>
+<td headers="Cardiometabolic stub_1_2 h2" class="gt_row gt_right" style="color: #293681;">0.81</td>
+<td headers="Cardiometabolic stub_1_2 ci_95" class="gt_row gt_left" style="color: #293681;">[0.53, 1.00]</td>
+<td headers="Cardiometabolic stub_1_2 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_2 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_2 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.19</td>
+<td headers="Cardiometabolic stub_1_2 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">hdl</th>
+<td headers="Cardiometabolic stub_1_3 covariates" class="gt_row gt_left" style="color: #293681;"></td>
+<td headers="Cardiometabolic stub_1_3 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_3 ci_95" class="gt_row gt_left" style="color: #293681;">[0.52, 1.00]</td>
+<td headers="Cardiometabolic stub_1_3 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_3 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_3 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.20</td>
+<td headers="Cardiometabolic stub_1_3 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">bmi</th>
+<td headers="Cardiometabolic stub_1_4 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num</td>
+<td headers="Cardiometabolic stub_1_4 h2" class="gt_row gt_right" style="color: #293681;">1.00</td>
+<td headers="Cardiometabolic stub_1_4 ci_95" class="gt_row gt_left" style="color: #293681;">[0.83, 1.00]</td>
+<td headers="Cardiometabolic stub_1_4 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_4 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.93</td>
+<td headers="Cardiometabolic stub_1_4 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.00</td>
+<td headers="Cardiometabolic stub_1_4 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">sbp</th>
+<td headers="Cardiometabolic stub_1_5 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num</td>
+<td headers="Cardiometabolic stub_1_5 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_5 ci_95" class="gt_row gt_left" style="color: #293681;">[0.52, 1.00]</td>
+<td headers="Cardiometabolic stub_1_5 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_5 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.79</td>
+<td headers="Cardiometabolic stub_1_5 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.20</td>
+<td headers="Cardiometabolic stub_1_5 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">hdl</th>
+<td headers="Cardiometabolic stub_1_6 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num</td>
+<td headers="Cardiometabolic stub_1_6 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_6 ci_95" class="gt_row gt_left" style="color: #293681;">[0.53, 1.00]</td>
+<td headers="Cardiometabolic stub_1_6 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_6 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.79</td>
+<td headers="Cardiometabolic stub_1_6 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.20</td>
+<td headers="Cardiometabolic stub_1_6 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">bmi</th>
+<td headers="Cardiometabolic stub_1_7 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num+age2</td>
+<td headers="Cardiometabolic stub_1_7 h2" class="gt_row gt_right" style="color: #293681;">1.00</td>
+<td headers="Cardiometabolic stub_1_7 ci_95" class="gt_row gt_left" style="color: #293681;">[0.83, 1.00]</td>
+<td headers="Cardiometabolic stub_1_7 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_7 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.92</td>
+<td headers="Cardiometabolic stub_1_7 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.00</td>
+<td headers="Cardiometabolic stub_1_7 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">sbp</th>
+<td headers="Cardiometabolic stub_1_8 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num+age2</td>
+<td headers="Cardiometabolic stub_1_8 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_8 ci_95" class="gt_row gt_left" style="color: #293681;">[0.52, 1.00]</td>
+<td headers="Cardiometabolic stub_1_8 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_8 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.79</td>
+<td headers="Cardiometabolic stub_1_8 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.20</td>
+<td headers="Cardiometabolic stub_1_8 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">hdl</th>
+<td headers="Cardiometabolic stub_1_9 covariates" class="gt_row gt_left" style="color: #293681;">age+sex_num+age2</td>
+<td headers="Cardiometabolic stub_1_9 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_9 ci_95" class="gt_row gt_left" style="color: #293681;">[0.53, 1.00]</td>
+<td headers="Cardiometabolic stub_1_9 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="Cardiometabolic stub_1_9 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="Cardiometabolic stub_1_9 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.19</td>
+<td headers="Cardiometabolic stub_1_9 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+</tbody>
+<tfoot><tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="8">FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction.</td>
+    </tr></tfoot>
+</table>
+</div>
 </div>
 <div class="section level2">
 <h2 id="filtering-to-a-single-model">Filtering to a single model<a class="anchor" aria-label="anchor" href="#filtering-to-a-single-model"></a>
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">covariates</span> <span class="op">==</span> <span class="st">"cov2"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">adj_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">covariates</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">covariates</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">res</span><span class="op">[</span><span class="va">res</span><span class="op">$</span><span class="va">covariates</span> <span class="op">==</span> <span class="va">adj_model</span>, <span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tbl_heritability.html">tbl_heritability</a></span><span class="op">(</span></span>
 <span>    sigma2_a <span class="op">=</span> <span class="st">"sigma2_a"</span>,</span>
 <span>    sigma2_e <span class="op">=</span> <span class="st">"sigma2_e"</span>,</span>
@@ -278,22 +878,524 @@ component column names as strings:</p>
 <span>    output   <span class="op">=</span> <span class="st">"gt"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/clerk_render.html">clerk_render</a></span><span class="op">(</span></span>
-<span>    title    <span class="op">=</span> <span class="st">"Heritability estimates (age + sex + age\u00b2)"</span>,</span>
+<span>    title    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Heritability estimates ("</span>, <span class="va">adj_model</span>, <span class="st">")"</span><span class="op">)</span>,</span>
 <span>    footnote <span class="op">=</span> <span class="st">"FDR correction applied across all traits (BH)."</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
+<div id="lfacobtmen" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lfacobtmen table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#lfacobtmen thead, #lfacobtmen tbody, #lfacobtmen tfoot, #lfacobtmen tr, #lfacobtmen td, #lfacobtmen th {
+  border-style: none;
+}
+
+#lfacobtmen p {
+  margin: 0;
+  padding: 0;
+}
+
+#lfacobtmen .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#lfacobtmen .gt_title {
+  color: #333333;
+  font-size: 13px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lfacobtmen .gt_subtitle {
+  color: #333333;
+  font-size: 11px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lfacobtmen .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #293681;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lfacobtmen .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lfacobtmen .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lfacobtmen .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lfacobtmen .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #293681;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lfacobtmen .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#lfacobtmen .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: hidden;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#lfacobtmen .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: hidden;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: hidden;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lfacobtmen .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lfacobtmen .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lfacobtmen .gt_row {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lfacobtmen .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: hidden;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lfacobtmen .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#lfacobtmen .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#lfacobtmen .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#lfacobtmen .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lfacobtmen .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#lfacobtmen .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lfacobtmen .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lfacobtmen .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lfacobtmen .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lfacobtmen .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lfacobtmen .gt_left {
+  text-align: left;
+}
+
+#lfacobtmen .gt_center {
+  text-align: center;
+}
+
+#lfacobtmen .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lfacobtmen .gt_font_normal {
+  font-weight: normal;
+}
+
+#lfacobtmen .gt_font_bold {
+  font-weight: bold;
+}
+
+#lfacobtmen .gt_font_italic {
+  font-style: italic;
+}
+
+#lfacobtmen .gt_super {
+  font-size: 65%;
+}
+
+#lfacobtmen .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#lfacobtmen .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#lfacobtmen .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#lfacobtmen .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#lfacobtmen .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#lfacobtmen .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#lfacobtmen .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#lfacobtmen .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#lfacobtmen div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Heritability estimates (age+sex_num+age2)</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="h2">h²</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="ci_95">95% CI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="p">p</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="sigma2_a">σ²a</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="sigma2_e">σ²e</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #95CCDD; color: #293681; font-weight: bold;" scope="col" id="p_fdr">p (FDR)</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" style="background-color: #D0E7E6; color: #293681; font-weight: bold;" scope="colgroup" id="All variables">All variables</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">bmi</th>
+<td headers="All variables stub_1_1 h2" class="gt_row gt_right" style="color: #293681;">1.00</td>
+<td headers="All variables stub_1_1 ci_95" class="gt_row gt_left" style="color: #293681;">[0.83, 1.00]</td>
+<td headers="All variables stub_1_1 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="All variables stub_1_1 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.92</td>
+<td headers="All variables stub_1_1 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.00</td>
+<td headers="All variables stub_1_1 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">sbp</th>
+<td headers="All variables stub_1_2 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="All variables stub_1_2 ci_95" class="gt_row gt_left" style="color: #293681;">[0.52, 1.00]</td>
+<td headers="All variables stub_1_2 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="All variables stub_1_2 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.79</td>
+<td headers="All variables stub_1_2 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.20</td>
+<td headers="All variables stub_1_2 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">hdl</th>
+<td headers="All variables stub_1_3 h2" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="All variables stub_1_3 ci_95" class="gt_row gt_left" style="color: #293681;">[0.53, 1.00]</td>
+<td headers="All variables stub_1_3 p" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+<td headers="All variables stub_1_3 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.80</td>
+<td headers="All variables stub_1_3 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.19</td>
+<td headers="All variables stub_1_3 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt;0.001</td>
+</tr>
+</tbody>
+<tfoot><tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="7">FDR correction applied across all traits (BH).</td>
+    </tr></tfoot>
+</table>
+</div>
 </div>
 <div class="section level2">
 <h2 id="html-output">HTML output<a class="anchor" aria-label="anchor" href="#html-output"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">covariates</span> <span class="op">==</span> <span class="st">"cov2"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">res</span><span class="op">[</span><span class="va">res</span><span class="op">$</span><span class="va">covariates</span> <span class="op">==</span> <span class="va">adj_model</span>, <span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tbl_heritability.html">tbl_heritability</a></span><span class="op">(</span></span>
 <span>    sigma2_a <span class="op">=</span> <span class="st">"sigma2_a"</span>,</span>
 <span>    sigma2_e <span class="op">=</span> <span class="st">"sigma2_e"</span>,</span>
 <span>    output   <span class="op">=</span> <span class="st">"html"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/clerk_render.html">clerk_render</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["bmi","sbp","hdl"],"h2":["1.00","0.80","0.80"],"ci_95":["[0.83, 1.00]","[0.52, 1.00]","[0.53, 1.00]"],"p":["<0.001","<0.001","<0.001"],"sigma2_a":["0.92","0.79","0.80"],"sigma2_e":["0.00","0.20","0.19"],"domain":["All variables","All variables","All variables"]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"h2","name":"h2","type":"character"},{"id":"ci_95","name":"ci_95","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"sigma2_a","name":"sigma2_a","type":"character"},{"id":"sigma2_e","name":"sigma2_e","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"58350ea0574286f0177e38d047ce5974"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
