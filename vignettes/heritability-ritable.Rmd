@@ -10,8 +10,7 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment  = "#>",
-  eval     = FALSE
+  comment  = "#>"
 )
 ```
 
@@ -36,7 +35,7 @@ The covariate model column is `"covariates"` in `herit_batch()` output — pass
 
 Install both packages from GitHub if you haven't already:
 
-```{r install}
+```{r install, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("circadia-bio/R-itable")
 remotes::install_github("circadia-bio/clerkR")
@@ -48,6 +47,10 @@ library(clerkR)
 ```
 
 ## 1. Simulate a family cohort
+
+We simulate 80 nuclear families (2 parents + 3 offspring each) with three
+quantitative traits at different true h² values — BMI (~0.60), systolic blood
+pressure (~0.35), and HDL cholesterol (~0.50).
 
 ```{r simulate}
 set.seed(2026)
@@ -109,8 +112,8 @@ res
 
 ## 3. Render the table
 
-Pass `model = "covariates"` and optional variance component column names as
-strings:
+Pass column names as strings — defaults already match `herit_batch()` output,
+so only `model`, `sigma2_a`, and `sigma2_e` need to be specified:
 
 ```{r table}
 res |>
