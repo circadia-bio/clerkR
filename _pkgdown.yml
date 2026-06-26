@@ -1,0 +1,194 @@
+url: https://clerkr.circadia-lab.uk
+
+template:
+  bootstrap: 5
+  bslib:
+    # ── Colours (clerkR palette) ──────────────────────────────────────────────
+    # navy #293681 | mid blue #4274D9 | light teal #95CCDD
+    # near white #D0E7E6 | terracotta #D4907E
+    bg:              "#F7FAFA"          # warm near-white
+    fg:              "#293681"          # navy
+    primary:         "#4274D9"          # mid blue
+    secondary:       "#95CCDD"          # light teal
+    success:         "#4274D9"          # mid blue
+    info:            "#D0E7E6"          # near white
+    warning:         "#D4907E"          # terracotta
+    danger:          "#D4907E"          # terracotta
+
+    # ── Fonts ─────────────────────────────────────────────────────────────────
+    base_font:       {google: "DM Sans"}
+    heading_font:    {google: "DM Sans"}
+    code_font:       {google: "JetBrains Mono"}
+
+    # ── Typography ────────────────────────────────────────────────────────────
+    font-size-base:  "1rem"
+    headings-font-weight: 700
+
+    # ── Cards / surfaces ──────────────────────────────────────────────────────
+    card-bg:         "#FFFFFF"
+    card-border-color: "#D0E7E6"
+    card-border-radius: "0.75rem"
+
+    # ── Code blocks ───────────────────────────────────────────────────────────
+    pre-bg:          "#293681"
+    pre-color:       "#D0E7E6"
+
+  includes:
+    in_header: |
+      <style>
+        /* ── Navbar ── */
+        .navbar {
+          background-color: #293681 !important;
+          border-bottom: 2px solid #95CCDD;
+        }
+        .navbar .navbar-brand,
+        .navbar-nav .nav-link,
+        .navbar-nav .nav-link:hover,
+        .navbar form .btn {
+          color: #D0E7E6 !important;
+        }
+        .navbar-nav .nav-link:hover { opacity: 0.8; }
+        .navbar-nav .nav-link.active {
+          color: #D0E7E6 !important;
+          border-bottom: 2px solid #95CCDD;
+        }
+
+        /* ── Navbar logo size ── */
+        .navbar-brand img { height: 40px; width: auto; }
+
+        /* ── Remove border under page title ── */
+        .page-header { border-bottom: none !important; }
+
+        /* ── Sidebar TOC links ── */
+        .sidebar .nav-link,
+        .sidebar a,
+        #toc a,
+        #toc .nav-link {
+          color: #293681 !important;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar a:hover,
+        #toc a:hover {
+          color: #4274D9 !important;
+        }
+        .sidebar .nav-link.active,
+        #toc .nav-link.active {
+          color: #4274D9 !important;
+          border-left: 2px solid #95CCDD;
+          font-weight: 600;
+        }
+
+        /* ── Sidebar border ── */
+        .sidebar { border-left: 3px solid #95CCDD; padding-left: 1rem; }
+
+        /* ── Reference index section headers ── */
+        .reference-index h2 {
+          color: #4274D9;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        /* ── Inline code ── */
+        code {
+          color: #293681;
+          background: #D0E7E6;
+          border-radius: 4px;
+          padding: 0.1em 0.35em;
+        }
+
+        /* ── Links ── */
+        a { color: #4274D9; }
+        a:hover { color: #293681; }
+
+        /* ── Footer ── */
+        .footer { background: #293681; color: #D0E7E6; padding: 1.5rem 0; }
+        .footer a { color: #95CCDD; }
+
+        /* ── Buttons ── */
+        .btn-primary {
+          background-color: #4274D9 !important;
+          border-color: #4274D9 !important;
+          color: #ffffff !important;
+        }
+        .btn-primary:hover {
+          background-color: #293681 !important;
+          border-color: #293681 !important;
+        }
+
+        /* ── text-muted ── */
+        .text-muted { color: #4274D9 !important; }
+      </style>
+
+home:
+  title: "clerkR — Publication-ready tables for R"
+  description: >
+    An R package for transforming data frames into publication-ready tables
+    across common biomedical and neuroscience archetypes. Renders to gt
+    (Word/PDF), reactable (HTML), and LaTeX. Built by the Circadia Lab at
+    Northumbria University.
+  links:
+  - text: Circadia Lab
+    href: https://circadia-lab.uk
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/getting-started.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/circadia-bio/clerkR
+      aria-label: GitHub
+
+reference:
+- title: "Table constructors"
+  desc: "Build publication-ready tables from data frames."
+  contents:
+  - tbl_descriptive
+
+- title: "Render"
+  desc: "Render a clerk_tbl to gt, HTML, or LaTeX."
+  contents:
+  - render
+  - render_gt
+  - render_reactable
+  - render_latex
+
+- title: "Theme & palette"
+  desc: "clerkR visual identity — colours, scales, and gt theme."
+  contents:
+  - clerk_theme
+  - clerk_palette
+  - clerk_colour
+  - clerk_diverging
+  - clerk_sequential
+
+- title: "Data"
+  desc: "Synthetic example dataset."
+  contents:
+  - clerk_example
+
+- title: "Package"
+  desc: "Package-level documentation."
+  contents:
+  - clerkR-package
+
+authors:
+  Lucas França:
+    href: https://orcid.org/0000-0003-0853-1319
+
+footer:
+  structure:
+    left: [package, developed_by]
+    right: [built_with]
+  components:
+    package: >
+      **clerkR** — Circadia Lab, Northumbria University.
+    developed_by: >
+      Lucas França.
