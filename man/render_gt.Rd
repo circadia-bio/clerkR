@@ -21,9 +21,10 @@ render_gt(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 A \code{gt_tbl} object.
 }
 \description{
-Renders a \code{clerk_tbl} as a \code{gt} table. Domain groupings become row-group
-labels; log-transformed variables receive an automatic footnote. Typically
-called indirectly via \code{render()}.
+Renders a \code{clerk_tbl} as a \code{gt} table with clerkR styling applied via
+\code{clerk_theme()}. Domain groupings become row-group labels; log-transformed
+variables receive an automatic footnote. Typically called indirectly via
+\code{render()}.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex) |>

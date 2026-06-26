@@ -49,9 +49,10 @@ render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' Render a clerk_tbl as a gt table (Word / PDF)
 #'
 #' @description
-#' Renders a `clerk_tbl` as a `gt` table. Domain groupings become row-group
-#' labels; log-transformed variables receive an automatic footnote. Typically
-#' called indirectly via `render()`.
+#' Renders a `clerk_tbl` as a `gt` table with clerkR styling applied via
+#' `clerk_theme()`. Domain groupings become row-group labels; log-transformed
+#' variables receive an automatic footnote. Typically called indirectly via
+#' `render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title.
@@ -92,28 +93,14 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
     dplyr::group_by(.data[["domain"]]) |>
     gt::gt(rowname_col = "variable") |>
     gt::cols_label(.list = col_labels) |>
-    gt::tab_style(
-      style     = gt::cell_text(weight = "bold"),
-      locations = gt::cells_row_groups()
-    ) |>
-    gt::tab_style(
-      style     = gt::cell_text(style = "italic"),
-      locations = gt::cells_stub()
-    ) |>
-    gt::tab_options(
-      table.font.size                   = gt::px(12),
-      heading.title.font.size           = gt::px(13),
-      row_group.font.weight             = "bold",
-      column_labels.font.weight         = "bold",
-      table.border.top.style            = "solid",
-      table.border.bottom.style         = "solid",
-      column_labels.border.bottom.style = "solid"
-    ) |>
-    gt::cols_hide("domain")
+    gt::cols_hide("domain") |>
+    clerk_theme()
 
+  # --- Title / subtitle -------------------------------------------------------
   if (!is.null(title) || !is.null(subtitle))
     gt_tbl <- gt_tbl |> gt::tab_header(title = title, subtitle = subtitle)
 
+  # --- Log-transform footnote -------------------------------------------------
   if (length(log_vars) > 0)
     gt_tbl <- gt_tbl |>
       gt::tab_footnote(
@@ -121,6 +108,7 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
         locations = gt::cells_stub(rows = log_vars)
       )
 
+  # --- User footnote ----------------------------------------------------------
   if (!is.null(footnote))
     gt_tbl <- gt_tbl |> gt::tab_source_note(source_note = footnote)
 
@@ -158,7 +146,6 @@ render_latex <- function(x, title = NULL, subtitle = NULL,
 render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
                                    footnote = NULL, ...) {
 
-  # Build via gt then convert — inherits all domain/footnote logic
   gt_tbl <- render_gt(x, title = title, subtitle = subtitle,
                       footnote = footnote)
 

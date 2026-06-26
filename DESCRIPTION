@@ -26,6 +26,7 @@ Imports:
     gt (>= 0.10.0),
     reactable (>= 0.4.0),
     knitr,
+    grDevices,
     stats,
     utils
 Suggests:
