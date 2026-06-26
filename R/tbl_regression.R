@@ -2,43 +2,30 @@
 #'
 #' @description
 #' Formats a tidy data frame of regression results into a publication-ready
-#' table. Designed to accept `broom::tidy()` output directly. Column-name
-#' arguments accept character strings; defaults match `broom::tidy()`.
-#'
-#' Formatting defaults are inherited from `clerk_options()` and can be
-#' overridden per call.
+#' table. Accepts `broom::tidy()` output directly. Formatting defaults
+#' inherited from `clerk_options()`.
 #'
 #' @param data A tidy data frame of regression results.
 #' @param term Character string. Model term column. Default `"term"`.
 #' @param estimate Character string. Coefficient column. Default `"estimate"`.
-#' @param std_error Character string. Standard error column. Default
-#'   `"std.error"`.
-#' @param conf_low Character string. Lower CI bound column. Default
-#'   `"conf.low"`.
-#' @param conf_high Character string. Upper CI bound column. Default
-#'   `"conf.high"`.
+#' @param std_error Character string. SE column. Default `"std.error"`.
+#' @param conf_low Character string. Lower CI column. Default `"conf.low"`.
+#' @param conf_high Character string. Upper CI column. Default `"conf.high"`.
 #' @param p Character string. P-value column. Default `"p.value"`.
-#' @param model Character string or `NULL`. Column identifying multiple models.
+#' @param model Character string or `NULL`. Multiple-model column.
 #' @param domains A named list mapping term names to domain/section labels.
 #' @param exponentiate Logical. Exponentiate estimates and CIs (default
 #'   `FALSE`).
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_within Character string or `NULL`. Column to group FDR within.
 #' @param ci_sep Character string separating CI bounds (default `", "`).
-#' @param digits Integer. Decimal places for estimates. Inherits from
-#'   `clerk_options()$digits` if `NULL`.
-#' @param p_digits Integer. Decimal places for p-values. Inherits from
-#'   `clerk_options()$p_digits` if `NULL`.
-#' @param p_style Character. P-value style. Inherits from
-#'   `clerk_options()$p_style` if `NULL`.
-#' @param stars Logical. Append significance stars. Inherits from
-#'   `clerk_options()$stars` if `NULL`.
+#' @param digits Integer. Decimal places for estimates.
+#' @param p_digits Integer. Decimal places for p-values.
+#' @param p_style Character. P-value style.
+#' @param stars Logical. Append significance stars.
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
-#'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
-#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
-#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
-#' @param output Character string. One of `"gt"` (default), `"html"`, or
-#'   `"latex"`.
+#' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
+#' @param output Character string. One of `"gt"`, `"html"`, or `"latex"`.
 #'
 #' @return A `clerk_tbl` object with type `"regression"`.
 #'
@@ -79,6 +66,12 @@ tbl_regression <- function(data,
   output <- match.arg(output)
   tbl    <- data
 
+  # Resolve all formatting options once up front
+  opts          <- .get_clerk_options()
+  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
+  fdr_label     <- opts$fdr_ns_label
+
   if (exponentiate) {
     tbl[[estimate]]  <- exp(tbl[[estimate]])
     tbl[[conf_low]]  <- exp(tbl[[conf_low]])
@@ -98,21 +91,23 @@ tbl_regression <- function(data,
 
   tbl[["beta"]] <- .fmt_stat(tbl[[estimate]], digits = digits, signed = TRUE)
   tbl[["se"]]   <- .fmt_stat(tbl[[std_error]], digits = digits)
-  tbl[["ci"]]   <- paste0(
-    "[",
-    .fmt_stat(tbl[[conf_low]],  digits = digits, signed = TRUE),
-    ci_sep,
-    .fmt_stat(tbl[[conf_high]], digits = digits, signed = TRUE),
-    "]"
-  )
+  tbl[["ci"]]   <- paste0("[",
+                           .fmt_stat(tbl[[conf_low]],  digits = digits, signed = TRUE),
+                           ci_sep,
+                           .fmt_stat(tbl[[conf_high]], digits = digits, signed = TRUE),
+                           "]")
   tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits, p_style = p_style,
                             stars = stars)
 
-  if (fdr && "p_fdr_raw" %in% names(tbl))
-    tbl[["p_fdr_fmt"]] <- .fmt_p_fdr(tbl[["p_fdr_raw"]], fdr_ns = fdr_ns,
-                                      fdr_alpha = fdr_alpha,
-                                      p_digits = p_digits, p_style = p_style,
-                                      stars = stars)
+  if (fdr && "p_fdr_raw" %in% names(tbl)) {
+    p_fdr_raw <- tbl[["p_fdr_raw"]]
+    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
+                        stars = stars)
+    if (fdr_ns_val)
+      p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
+                          fdr_label, p_fdr_fmt)
+    tbl[["p_fdr_fmt"]] <- p_fdr_fmt
+  }
 
   keep <- c(term, model, "beta", "se", "ci", "p_fmt")
   if (fdr && "p_fdr_fmt" %in% names(tbl)) keep <- c(keep, "p_fdr_fmt")
@@ -123,15 +118,9 @@ tbl_regression <- function(data,
   names(out_tbl)[names(out_tbl) == "p_fdr_fmt"] <- "p_fdr"
 
   structure(
-    list(
-      table        = out_tbl,
-      domains      = domains,
-      log_vars     = character(0),
-      type         = "regression",
-      group        = model,
-      exponentiate = exponentiate,
-      output       = output
-    ),
+    list(table = out_tbl, domains = domains, log_vars = character(0),
+         type = "regression", group = model, exponentiate = exponentiate,
+         output = output),
     class = "clerk_tbl"
   )
 }

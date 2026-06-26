@@ -2,7 +2,7 @@
 % Please edit documentation in R/options.R
 \name{.fmt_p}
 \alias{.fmt_p}
-\title{Format a p-value according to current clerk_options}
+\title{Format a p-value according to current clerk_options.}
 \usage{
 .fmt_p(
   x,
@@ -14,6 +14,6 @@
 )
 }
 \description{
-Format a p-value according to current clerk_options
+Format a p-value according to current clerk_options.
 }
 \keyword{internal}

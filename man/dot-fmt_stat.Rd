@@ -2,11 +2,11 @@
 % Please edit documentation in R/options.R
 \name{.fmt_stat}
 \alias{.fmt_stat}
-\title{Format a continuous statistic}
+\title{Format a continuous statistic.}
 \usage{
 .fmt_stat(x, digits = NULL, signed = FALSE)
 }
 \description{
-Format a continuous statistic
+Format a continuous statistic.
 }
 \keyword{internal}

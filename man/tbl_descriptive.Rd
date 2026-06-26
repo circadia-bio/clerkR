@@ -24,8 +24,7 @@ tbl_descriptive(
 \arguments{
 \item{data}{A data frame.}
 
-\item{group}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of
-the grouping variable.}
+\item{group}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Grouping variable.}
 
 \item{vars}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Variables to
 include. Defaults to all columns except \code{group}.}
@@ -34,43 +33,31 @@ include. Defaults to all columns except \code{group}.}
 
 \item{log_vars}{Character vector of log-transformed variable names.}
 
-\item{digits}{Integer. Decimal places for continuous variables. Inherits
-from \code{clerk_options()$digits} if \code{NULL}.}
+\item{digits}{Integer. Decimal places for continuous variables.}
 
-\item{p_digits}{Integer. Decimal places for p-values. Inherits from
-\code{clerk_options()$p_digits} if \code{NULL}.}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{p_style}{Character. P-value style. Inherits from
-\code{clerk_options()$p_style} if \code{NULL}.}
+\item{p_style}{Character. P-value style (\code{"apa"}, \code{"plain"}, \code{"stars"},
+\code{"stars_p"}).}
 
-\item{stars}{Logical. Append significance stars. Inherits from
-\code{clerk_options()$stars} if \code{NULL}.}
+\item{stars}{Logical. Append significance stars.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
-Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
-\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value to
-determine survival. Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
 
 \item{overall}{Logical. Include an overall column (default \code{TRUE}).}
 
-\item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
-\code{"latex"}.}
+\item{output}{Character string. One of \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }
 \value{
 A \code{clerk_tbl} object with type \code{"descriptive"}.
 }
 \description{
 Produces a descriptive/Table 1-style summary of a data frame, with optional
-group comparisons. Continuous variables are summarised as mean ± SD and
-compared with an independent-samples t-test (two groups) or one-way ANOVA
-(three or more groups). Categorical variables are summarised as n (\%) and
-compared with a chi-squared test.
-
-Formatting defaults are inherited from \code{clerk_options()} and can be
-overridden per call.
+group comparisons. Formatting defaults are inherited from \code{clerk_options()}.
 }
 \examples{
 tbl_descriptive(

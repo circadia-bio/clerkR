@@ -33,20 +33,19 @@ tbl_heritability(
 
 \item{h2}{Character string. h2 estimate column. Default \code{"h2"}.}
 
-\item{ci_low}{Character string. Lower CI bound column. Default \code{"ci_lo"}.}
+\item{ci_low}{Character string. Lower CI column. Default \code{"ci_lo"}.}
 
-\item{ci_high}{Character string. Upper CI bound column. Default \code{"ci_hi"}.}
+\item{ci_high}{Character string. Upper CI column. Default \code{"ci_hi"}.}
 
 \item{p}{Character string. P-value column. Default \code{"pval"}.}
 
 \item{sigma2_a}{Character string or \code{NULL}. Additive genetic variance
-column. Default \code{NULL}.}
+column.}
 
-\item{sigma2_e}{Character string or \code{NULL}. Residual variance column.
-Default \code{NULL}.}
+\item{sigma2_e}{Character string or \code{NULL}. Residual variance column.}
 
 \item{model}{Character string or \code{NULL}. Covariate model column. Pass
-\code{"covariates"} for \code{herit_batch()} output. Default \code{NULL}.}
+\code{"covariates"} for \code{herit_batch()} output.}
 
 \item{domains}{A named list mapping trait names to domain/section labels.}
 
@@ -54,26 +53,19 @@ Default \code{NULL}.}
 
 \item{fdr_within}{Character string or \code{NULL}. Column to group FDR within.}
 
-\item{r_digits}{Integer. Decimal places for h2 and variance components.
-Inherits from \code{clerk_options()$r_digits} if \code{NULL}.}
+\item{r_digits}{Integer. Decimal places for h2 and variance components.}
 
-\item{p_digits}{Integer. Decimal places for p-values. Inherits from
-\code{clerk_options()$p_digits} if \code{NULL}.}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{p_style}{Character. P-value style. Inherits from
-\code{clerk_options()$p_style} if \code{NULL}.}
+\item{p_style}{Character. P-value style.}
 
-\item{stars}{Logical. Append significance stars. Inherits from
-\code{clerk_options()$stars} if \code{NULL}.}
+\item{stars}{Logical. Append significance stars.}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
-Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
-\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value to
-determine survival. Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
 
-\item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
-\code{"latex"}.}
+\item{output}{Character string. One of \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }
 \value{
 A \code{clerk_tbl} object with type \code{"heritability"}.
@@ -81,10 +73,8 @@ A \code{clerk_tbl} object with type \code{"heritability"}.
 \description{
 Formats a tidy data frame of narrow-sense heritability estimates (h2) into
 a publication-ready table. Column-name defaults match
-\code{R-itable::herit_batch()} output directly.
-
-Formatting defaults are inherited from \code{clerk_options()} and can be
-overridden per call.
+\code{R-itable::herit_batch()} output directly. Formatting defaults inherited
+from \code{clerk_options()}.
 }
 \examples{
 tbl_heritability(

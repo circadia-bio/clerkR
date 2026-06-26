@@ -34,18 +34,15 @@ tbl_regression(
 
 \item{estimate}{Character string. Coefficient column. Default \code{"estimate"}.}
 
-\item{std_error}{Character string. Standard error column. Default
-\code{"std.error"}.}
+\item{std_error}{Character string. SE column. Default \code{"std.error"}.}
 
-\item{conf_low}{Character string. Lower CI bound column. Default
-\code{"conf.low"}.}
+\item{conf_low}{Character string. Lower CI column. Default \code{"conf.low"}.}
 
-\item{conf_high}{Character string. Upper CI bound column. Default
-\code{"conf.high"}.}
+\item{conf_high}{Character string. Upper CI column. Default \code{"conf.high"}.}
 
 \item{p}{Character string. P-value column. Default \code{"p.value"}.}
 
-\item{model}{Character string or \code{NULL}. Column identifying multiple models.}
+\item{model}{Character string or \code{NULL}. Multiple-model column.}
 
 \item{domains}{A named list mapping term names to domain/section labels.}
 
@@ -58,37 +55,27 @@ tbl_regression(
 
 \item{ci_sep}{Character string separating CI bounds (default \code{", "}).}
 
-\item{digits}{Integer. Decimal places for estimates. Inherits from
-\code{clerk_options()$digits} if \code{NULL}.}
+\item{digits}{Integer. Decimal places for estimates.}
 
-\item{p_digits}{Integer. Decimal places for p-values. Inherits from
-\code{clerk_options()$p_digits} if \code{NULL}.}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{p_style}{Character. P-value style. Inherits from
-\code{clerk_options()$p_style} if \code{NULL}.}
+\item{p_style}{Character. P-value style.}
 
-\item{stars}{Logical. Append significance stars. Inherits from
-\code{clerk_options()$stars} if \code{NULL}.}
+\item{stars}{Logical. Append significance stars.}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
-Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
-\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value to
-determine survival. Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
 
-\item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
-\code{"latex"}.}
+\item{output}{Character string. One of \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }
 \value{
 A \code{clerk_tbl} object with type \code{"regression"}.
 }
 \description{
 Formats a tidy data frame of regression results into a publication-ready
-table. Designed to accept \code{broom::tidy()} output directly. Column-name
-arguments accept character strings; defaults match \code{broom::tidy()}.
-
-Formatting defaults are inherited from \code{clerk_options()} and can be
-overridden per call.
+table. Accepts \code{broom::tidy()} output directly. Formatting defaults
+inherited from \code{clerk_options()}.
 }
 \examples{
 tbl_regression(

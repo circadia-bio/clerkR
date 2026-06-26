@@ -2,11 +2,11 @@
 % Please edit documentation in R/options.R
 \name{.p_stars}
 \alias{.p_stars}
-\title{Generate significance stars for a p-value vector}
+\title{Generate significance stars for a p-value vector.}
 \usage{
 .p_stars(x, thresholds = c(0.05, 0.01, 0.001))
 }
 \description{
-Generate significance stars for a p-value vector
+Generate significance stars for a p-value vector.
 }
 \keyword{internal}

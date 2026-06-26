@@ -2,11 +2,11 @@
 % Please edit documentation in R/options.R
 \name{.fmt_r}
 \alias{.fmt_r}
-\title{Format a correlation or h² coefficient}
+\title{Format a correlation or h² coefficient.}
 \usage{
 .fmt_r(x, r_digits = NULL, signed = TRUE)
 }
 \description{
-Format a correlation or h² coefficient
+Format a correlation or h² coefficient.
 }
 \keyword{internal}

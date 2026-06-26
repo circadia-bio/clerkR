@@ -2,37 +2,24 @@
 #'
 #' @description
 #' Produces a descriptive/Table 1-style summary of a data frame, with optional
-#' group comparisons. Continuous variables are summarised as mean ± SD and
-#' compared with an independent-samples t-test (two groups) or one-way ANOVA
-#' (three or more groups). Categorical variables are summarised as n (%) and
-#' compared with a chi-squared test.
-#'
-#' Formatting defaults are inherited from `clerk_options()` and can be
-#' overridden per call.
+#' group comparisons. Formatting defaults are inherited from `clerk_options()`.
 #'
 #' @param data A data frame.
-#' @param group <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of
-#'   the grouping variable.
+#' @param group <[`tidy-select`][dplyr::dplyr_tidy_select]> Grouping variable.
 #' @param vars <[`tidy-select`][dplyr::dplyr_tidy_select]> Variables to
 #'   include. Defaults to all columns except `group`.
 #' @param domains A named list mapping variable names to domain/section labels.
 #' @param log_vars Character vector of log-transformed variable names.
-#' @param digits Integer. Decimal places for continuous variables. Inherits
-#'   from `clerk_options()$digits` if `NULL`.
-#' @param p_digits Integer. Decimal places for p-values. Inherits from
-#'   `clerk_options()$p_digits` if `NULL`.
-#' @param p_style Character. P-value style. Inherits from
-#'   `clerk_options()$p_style` if `NULL`.
-#' @param stars Logical. Append significance stars. Inherits from
-#'   `clerk_options()$stars` if `NULL`.
+#' @param digits Integer. Decimal places for continuous variables.
+#' @param p_digits Integer. Decimal places for p-values.
+#' @param p_style Character. P-value style (`"apa"`, `"plain"`, `"stars"`,
+#'   `"stars_p"`).
+#' @param stars Logical. Append significance stars.
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
-#'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
-#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
-#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
 #' @param overall Logical. Include an overall column (default `TRUE`).
-#' @param output Character string. One of `"gt"` (default), `"html"`, or
-#'   `"latex"`.
+#' @param output Character string. One of `"gt"`, `"html"`, or `"latex"`.
 #'
 #' @return A `clerk_tbl` object with type `"descriptive"`.
 #'
@@ -70,6 +57,12 @@ tbl_descriptive <- function(data,
   group_nm  <- if (!rlang::quo_is_null(group_var))
     rlang::as_name(group_var) else NULL
 
+  # Resolve all formatting options once up front
+  opts          <- .get_clerk_options()
+  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
+  fdr_label     <- opts$fdr_ns_label
+
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- setdiff(names(data), group_nm)
   } else {
@@ -81,39 +74,30 @@ tbl_descriptive <- function(data,
 
   rows <- lapply(var_nms, function(v) {
     .summarise_var(
-      x        = data[[v]],
-      name     = v,
-      group    = if (!is.null(group_nm)) data[[group_nm]] else NULL,
-      is_cat   = is_cat[[v]],
-      digits   = digits,
-      p_digits = p_digits,
-      p_style  = p_style,
-      stars    = stars,
-      overall  = overall
+      x = data[[v]], name = v,
+      group = if (!is.null(group_nm)) data[[group_nm]] else NULL,
+      is_cat = is_cat[[v]], digits = digits, p_digits = p_digits,
+      p_style = p_style, stars = stars, overall = overall
     )
   })
 
   tbl <- dplyr::bind_rows(rows)
 
   if (fdr && !is.null(group_nm) && "p_raw" %in% names(tbl)) {
-    p_fdr_raw      <- stats::p.adjust(tbl[["p_raw"]], method = "BH")
-    tbl[["p_fdr"]] <- .fmt_p_fdr(p_fdr_raw, fdr_ns = fdr_ns,
-                                  fdr_alpha = fdr_alpha,
-                                  p_digits = p_digits, p_style = p_style,
-                                  stars = stars)
+    p_fdr_raw <- stats::p.adjust(tbl[["p_raw"]], method = "BH")
+    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
+                        stars = stars)
+    if (fdr_ns_val)
+      p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
+                          fdr_label, p_fdr_fmt)
+    tbl[["p_fdr"]] <- p_fdr_fmt
   }
 
   tbl[["p_raw"]] <- NULL
 
   structure(
-    list(
-      table    = tbl,
-      domains  = domains,
-      log_vars = log_vars,
-      type     = "descriptive",
-      group    = group_nm,
-      output   = output
-    ),
+    list(table = tbl, domains = domains, log_vars = log_vars,
+         type = "descriptive", group = group_nm, output = output),
     class = "clerk_tbl"
   )
 }
@@ -127,8 +111,7 @@ tbl_descriptive <- function(data,
                            p_style, stars, overall) {
 
   fmt_mean_sd <- function(v) {
-    paste0(.fmt_stat(mean(v, na.rm = TRUE), digits),
-           " \u00b1 ",
+    paste0(.fmt_stat(mean(v, na.rm = TRUE), digits), " \u00b1 ",
            .fmt_stat(stats::sd(v, na.rm = TRUE), digits))
   }
 
@@ -139,11 +122,9 @@ tbl_descriptive <- function(data,
           collapse = "; ")
   }
 
-  n_obs       <- sum(!is.na(x))
+  n_obs <- sum(!is.na(x))
   overall_str <- if (is_cat) fmt_n_pct(x) else fmt_mean_sd(x)
-  stat_str    <- NA_character_
-  p_raw       <- NA_real_
-  p_fmt       <- NA_character_
+  stat_str <- NA_character_; p_raw <- NA_real_; p_fmt <- NA_character_
 
   if (!is.null(group)) {
     grp_levels <- levels(factor(group))
@@ -164,8 +145,7 @@ tbl_descriptive <- function(data,
       if (length(grp_levels) == 2) {
         tt <- tryCatch(
           stats::t.test(x[group == grp_levels[1]], x[group == grp_levels[2]]),
-          error = function(e) NULL
-        )
+          error = function(e) NULL)
         if (!is.null(tt)) {
           stat_str <- sprintf("t = %.2f", tt$statistic)
           p_raw    <- tt$p.value
@@ -173,9 +153,8 @@ tbl_descriptive <- function(data,
                              stars = stars)
         }
       } else {
-        av <- tryCatch(
-          stats::oneway.test(x ~ factor(group)), error = function(e) NULL
-        )
+        av <- tryCatch(stats::oneway.test(x ~ factor(group)),
+                       error = function(e) NULL)
         if (!is.null(av)) {
           stat_str <- sprintf("F = %.2f", av$statistic)
           p_raw    <- av$p.value
@@ -191,11 +170,9 @@ tbl_descriptive <- function(data,
     out[["statistic"]] <- stat_str
     out[["p_raw"]]     <- p_raw
     out[["p"]]         <- p_fmt
-
   } else {
     out <- data.frame(variable = name, n = n_obs, overall = overall_str,
                       stringsAsFactors = FALSE)
   }
-
   out
 }

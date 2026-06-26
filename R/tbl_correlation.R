@@ -31,8 +31,8 @@
 #'   `clerk_options()$stars` if `NULL`.
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
-#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value to
-#'   determine survival. Inherits from `clerk_options()$fdr_alpha` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value.
+#'   Inherits from `clerk_options()$fdr_alpha` if `NULL`.
 #' @param pivot Logical. Pivot to wide format (default `FALSE`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
@@ -75,6 +75,12 @@ tbl_correlation <- function(data,
   output <- match.arg(output)
   tbl    <- data
 
+  # Resolve all formatting options once up front
+  opts          <- .get_clerk_options()
+  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
+  fdr_label     <- opts$fdr_ns_label
+
   # --- FDR correction --------------------------------------------------------
   if (fdr) {
     if (!is.null(fdr_within)) {
@@ -92,11 +98,17 @@ tbl_correlation <- function(data,
   tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits, p_style = p_style,
                             stars = stars)
 
-  if (fdr && "p_fdr_raw" %in% names(tbl))
-    tbl[["p_fdr_fmt"]] <- .fmt_p_fdr(tbl[["p_fdr_raw"]], fdr_ns = fdr_ns,
-                                      fdr_alpha = fdr_alpha,
-                                      p_digits = p_digits, p_style = p_style,
-                                      stars = stars)
+  if (fdr && "p_fdr_raw" %in% names(tbl)) {
+    p_fdr_raw <- tbl[["p_fdr_raw"]]
+    # Step 1: format the BH-adjusted p numerically
+    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
+                        stars = stars)
+    # Step 2: replace non-survivors with "ns"
+    if (fdr_ns_val)
+      p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
+                          fdr_label, p_fdr_fmt)
+    tbl[["p_fdr_fmt"]] <- p_fdr_fmt
+  }
 
   # --- Pivot or long ---------------------------------------------------------
   if (pivot) {
@@ -135,15 +147,8 @@ tbl_correlation <- function(data,
   }
 
   structure(
-    list(
-      table    = out_tbl,
-      domains  = domains,
-      log_vars = character(0),
-      type     = "correlation",
-      group    = NULL,
-      pivot    = pivot,
-      output   = output
-    ),
+    list(table = out_tbl, domains = domains, log_vars = character(0),
+         type = "correlation", group = NULL, pivot = pivot, output = output),
     class = "clerk_tbl"
   )
 }
