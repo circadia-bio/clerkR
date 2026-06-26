@@ -1,40 +1,4 @@
-Package: clerkR
-Title: Publication-Ready Tables for Biomedical Research
-Version: 0.1.0
-Authors@R: c(
-    person("Lucas G. S.", "Franca",
-           email = "lucas.franca@northumbria.ac.uk",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-0853-1319"))
-  )
-Description: Transforms standard R data frames into publication-ready tables
-    across a handful of common archetypes found in biomedical and neuroscience
-    manuscripts: descriptive/Table 1 with group comparisons, heritability and
-    variance components, correlation and partial correlation, regression
-    coefficients, and simple descriptive summaries. Provides a unified
-    rendering pipeline targeting 'gt' (Word/PDF), 'reactable' (HTML), and
-    LaTeX outputs, with consistent theming, domain/section grouping, footnote
-    handling for transformed variables, and FDR annotation.
-License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-Depends:
-    R (>= 4.1.0)
-Imports:
-    dplyr (>= 1.1.0),
-    tidyr,
-    rlang,
-    gt (>= 0.10.0),
-    reactable (>= 0.4.0),
-    knitr,
-    grDevices,
-    stats,
-    utils
 Suggests:
     testthat (>= 3.0.0),
-    rmarkdown
-Config/testthat/edition: 3
-VignetteBuilder: knitr
-URL: https://clerkr.circadia-lab.uk, https://github.com/circadia-bio/clerkR
-BugReports: https://github.com/circadia-bio/clerkR/issues
-LazyData: true
+    rmarkdown,
+    Ritable
