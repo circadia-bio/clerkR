@@ -1,0 +1,180 @@
+---
+title: "Heritability tables with R-itable and clerkR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Heritability tables with R-itable and clerkR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>",
+  eval     = FALSE
+)
+```
+
+## Overview
+
+`clerkR::tbl_heritability()` is designed to accept the output of
+`R-itable::herit_batch()` directly — no column renaming required. This
+vignette shows the full workflow from pedigree to publication-ready table.
+
+The pipeline has four steps:
+
+1. Simulate (or load) a pedigree and phenotype data frame.
+2. Build the additive genetic relationship matrix (GRM) with `build_grm()`.
+3. Run batch heritability estimation with `herit_batch()`.
+4. Pass the results straight into `tbl_heritability()` and `clerk_render()`.
+
+## Setup
+
+```{r libraries}
+library(Ritable)
+library(clerkR)
+```
+
+## 1. Simulate a family cohort
+
+We simulate 80 nuclear families (2 parents + 3 offspring each) with three
+quantitative traits at different true h² values — BMI (~0.60), systolic blood
+pressure (~0.35), and HDL cholesterol (~0.50). This mirrors the structure of a
+real family cohort study such as the Baependi Heart Study.
+
+```{r simulate}
+set.seed(2026)
+n_fam <- 80
+
+# Pedigree: founders have pat = 0 / mom = 0
+ped <- do.call(rbind, lapply(seq_len(n_fam), function(f) {
+  base <- (f - 1L) * 5L
+  data.frame(
+    id  = base + 1:5,
+    pat = c(0L, 0L, base + 1L, base + 1L, base + 1L),
+    mom = c(0L, 0L, base + 2L, base + 2L, base + 2L),
+    sex = c(1L, 2L, sample(1:2, 3, replace = TRUE))
+  )
+}))
+
+# Simulate trait values for all pedigree members
+simulate_trait <- function(ped, n_fam, h2, seed) {
+  set.seed(seed)
+  genetic  <- rep(rnorm(n_fam, 0, sqrt(h2)),      each = 5)
+  residual <- rnorm(nrow(ped),         0, sqrt(1 - h2))
+  genetic + residual
+}
+
+pheno_all <- data.frame(
+  bmi = simulate_trait(ped, n_fam, h2 = 0.60, seed = 1),
+  sbp = simulate_trait(ped, n_fam, h2 = 0.35, seed = 2),
+  hdl = simulate_trait(ped, n_fam, h2 = 0.50, seed = 3)
+)
+
+# Keep only offspring rows for the phenotype data frame
+off_rows <- ped$pat != 0L
+dat <- data.frame(
+  IID     = ped$id[off_rows],
+  age     = round(runif(sum(off_rows), 20, 75)),
+  sex_num = ped$sex[off_rows],
+  bmi     = pheno_all$bmi[off_rows],
+  sbp     = pheno_all$sbp[off_rows],
+  hdl     = pheno_all$hdl[off_rows]
+)
+dat$age2 <- dat$age^2
+```
+
+## 2. Build the GRM
+
+`build_grm()` computes the additive genetic relationship matrix from the
+pedigree. The full pedigree (founders + offspring) is passed so that shared
+ancestry can be traced correctly; only the study subjects' IDs are returned in
+the matrix.
+
+```{r grm}
+A <- build_grm(ped, study_ids = dat$IID)
+```
+
+## 3. Batch heritability estimation
+
+`herit_batch()` iterates over all trait × covariate-model combinations and
+returns a tidy data frame with one row per successfully fitted model.
+
+```{r batch}
+res <- herit_batch(
+  traits    = c("bmi", "sbp", "hdl"),
+  grm       = A,
+  data      = dat,
+  covs_list = list(
+    unadj = NULL,
+    cov1  = c("age", "sex_num"),
+    cov2  = c("age", "sex_num", "age2")
+  )
+)
+
+res
+```
+
+The output columns (`trait`, `covariates`, `h2`, `ci_lo`, `ci_hi`, `pval`,
+`sigma2_a`, `sigma2_e`) match `tbl_heritability()` defaults exactly.
+
+## 4. Render the table
+
+Pipe the `herit_batch()` output directly into `tbl_heritability()`. The only
+argument needed beyond the defaults is `model = covariates` to tell
+`tbl_heritability()` which column identifies the covariate model.
+
+```{r table}
+res |>
+  tbl_heritability(
+    model    = covariates,
+    sigma2_a = sigma2_a,
+    sigma2_e = sigma2_e,
+    domains  = list(
+      "Cardiometabolic" = c("bmi", "sbp", "hdl")
+    ),
+    fdr      = TRUE,
+    output   = "gt"
+  ) |>
+  clerk_render(
+    title    = "Heritability estimates",
+    subtitle = "Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI",
+    footnote = "FDR correction applied within each covariate model (BH). \
+p-values are one-sided LRT with chi-squared(1) boundary correction."
+  )
+```
+
+## Filtering to a single model
+
+When you want to show only one covariate model — for example the fully adjusted
+model for a main results table — filter before passing to `tbl_heritability()`:
+
+```{r filtered}
+res |>
+  subset(covariates == "cov2") |>
+  tbl_heritability(
+    sigma2_a = sigma2_a,
+    sigma2_e = sigma2_e,
+    fdr      = TRUE,
+    output   = "gt"
+  ) |>
+  clerk_render(
+    title    = "Heritability estimates (age + sex + age\u00b2)",
+    footnote = "FDR correction applied across all traits (BH)."
+  )
+```
+
+## HTML output
+
+For an interactive table, set `output = "html"` at construction time:
+
+```{r html}
+res |>
+  subset(covariates == "cov2") |>
+  tbl_heritability(
+    sigma2_a = sigma2_a,
+    sigma2_e = sigma2_e,
+    output   = "html"
+  ) |>
+  clerk_render()
+```
