@@ -28,6 +28,11 @@
 #'   (default `FALSE`).
 #' @param overall Logical. Include an overall (ungrouped) column alongside
 #'   group columns (default `TRUE`).
+#' @param output Character string specifying the render target. One of
+#'   `"gt"` (default, for Word/PDF via `gt`), `"html"` (interactive
+#'   `reactable`), or `"latex"` (LaTeX via `gt::as_latex()`). This value is
+#'   stored on the returned object and used by `render()` to dispatch to the
+#'   correct renderer automatically.
 #'
 #' @return A `clerk_tbl` object (a list with class `"clerk_tbl"`) containing:
 #'   \describe{
@@ -36,17 +41,22 @@
 #'     \item{`log_vars`}{The log-transformed variable names.}
 #'     \item{`type`}{Character string `"descriptive"`.}
 #'     \item{`group`}{Name of the grouping variable, or `NULL`.}
+#'     \item{`output`}{The render target: `"gt"`, `"html"`, or `"latex"`.}
 #'   }
 #'
 #' @examples
-#' tbl_descriptive(clerk_example, group = sex,
-#'   domains = list(
-#'     "Metabolic"      = c("hdl", "glucose", "bmi"),
-#'     "Cognitive"      = c("tmt_time", "verbal_fluency"),
-#'     "Mental health"  = c("bdi", "panas_neg")
+#' # gt output (default) — pipe into render()
+#' tbl_descriptive(
+#'   clerk_example,
+#'   group    = sex,
+#'   domains  = list(
+#'     "Metabolic"    = c("hdl", "glucose", "bmi"),
+#'     "Cognitive"    = c("tmt_time", "verbal_fluency"),
+#'     "Mental health"= c("bdi", "panas_neg")
 #'   ),
-#'   log_vars = c("tmt_time")
-#' )
+#'   log_vars = "tmt_time",
+#'   output   = "gt"
+#' ) |> render(title = "Table 1. Sample characteristics by sex")
 #'
 #' @export
 tbl_descriptive <- function(data,
@@ -57,7 +67,10 @@ tbl_descriptive <- function(data,
                             digits   = 2,
                             p_digits = 3,
                             fdr      = FALSE,
-                            overall  = TRUE) {
+                            overall  = TRUE,
+                            output   = c("gt", "html", "latex")) {
+
+  output <- match.arg(output)
 
   group_var <- rlang::enquo(group)
   group_nm  <- if (!rlang::quo_is_null(group_var))
@@ -101,7 +114,8 @@ tbl_descriptive <- function(data,
       domains  = domains,
       log_vars = log_vars,
       type     = "descriptive",
-      group    = group_nm
+      group    = group_nm,
+      output   = output
     ),
     class = "clerk_tbl"
   )
@@ -115,8 +129,8 @@ tbl_descriptive <- function(data,
 .summarise_var <- function(x, name, group, is_cat, digits, p_digits, overall) {
 
   fmt_mean_sd <- function(v, d) {
-    m  <- mean(v, na.rm = TRUE)
-    s  <- stats::sd(v, na.rm = TRUE)
+    m <- mean(v, na.rm = TRUE)
+    s <- stats::sd(v, na.rm = TRUE)
     sprintf(paste0("%.", d, "f \u00b1 %.", d, "f"), m, s)
   }
 
@@ -130,10 +144,8 @@ tbl_descriptive <- function(data,
 
   n_obs <- sum(!is.na(x))
 
-  # Overall summary
   overall_str <- if (is_cat) fmt_n_pct(x) else fmt_mean_sd(x, digits)
 
-  # Group summaries + test
   stat_str <- NA_character_
   p_val    <- NA_real_
 
@@ -144,9 +156,8 @@ tbl_descriptive <- function(data,
       if (is_cat) fmt_n_pct(xg) else fmt_mean_sd(xg, digits)
     }, character(1))
 
-    # Statistical test
     if (is_cat) {
-      ct    <- tryCatch(stats::chisq.test(table(x, group)), error = function(e) NULL)
+      ct <- tryCatch(stats::chisq.test(table(x, group)), error = function(e) NULL)
       if (!is.null(ct)) {
         stat_str <- sprintf("chi2 = %.2f", ct$statistic)
         p_val    <- ct$p.value
@@ -161,7 +172,9 @@ tbl_descriptive <- function(data,
           p_val    <- tt$p.value
         }
       } else {
-        aov_res <- tryCatch(stats::oneway.test(x ~ factor(group)), error = function(e) NULL)
+        aov_res <- tryCatch(
+          stats::oneway.test(x ~ factor(group)), error = function(e) NULL
+        )
         if (!is.null(aov_res)) {
           stat_str <- sprintf("F = %.2f", aov_res$statistic)
           p_val    <- aov_res$p.value
@@ -169,18 +182,9 @@ tbl_descriptive <- function(data,
       }
     }
 
-    out <- data.frame(
-      variable  = name,
-      n         = n_obs,
-      stringsAsFactors = FALSE
-    )
-
+    out <- data.frame(variable = name, n = n_obs, stringsAsFactors = FALSE)
     if (overall) out$overall <- overall_str
-
-    for (g in grp_levels) {
-      out[[g]] <- grp_strs[[g]]
-    }
-
+    for (g in grp_levels) out[[g]] <- grp_strs[[g]]
     out$statistic <- stat_str
     out$p         <- p_val
 

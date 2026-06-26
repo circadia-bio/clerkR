@@ -12,13 +12,12 @@ Description: Transforms standard R data frames into publication-ready tables
     manuscripts: descriptive/Table 1 with group comparisons, heritability and
     variance components, correlation and partial correlation, regression
     coefficients, and simple descriptive summaries. Provides a unified
-    rendering pipeline targeting 'gt' (Word/PDF) and 'reactable' (HTML)
-    outputs, with consistent theming, domain/section grouping, footnote
+    rendering pipeline targeting 'gt' (Word/PDF), 'reactable' (HTML), and
+    LaTeX outputs, with consistent theming, domain/section grouping, footnote
     handling for transformed variables, and FDR annotation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -26,13 +25,14 @@ Imports:
     rlang,
     gt (>= 0.10.0),
     reactable (>= 0.4.0),
+    knitr,
     stats,
     utils
 Suggests:
     testthat (>= 3.0.0),
-    knitr,
     rmarkdown
 Config/testthat/edition: 3
 URL: https://github.com/circadia-bio/clerkR
 BugReports: https://github.com/circadia-bio/clerkR/issues
 LazyData: true
+Config/roxygen2/version: 8.0.0

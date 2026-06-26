@@ -39,5 +39,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Lucas G. S. Franca \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
 
+Authors:
+\itemize{
+  \item Lucas G. S. Franca \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
+}
+
 }
 \keyword{internal}

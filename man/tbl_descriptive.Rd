@@ -13,7 +13,8 @@ tbl_descriptive(
   digits = 2,
   p_digits = 3,
   fdr = FALSE,
-  overall = TRUE
+  overall = TRUE,
+  output = c("gt", "html", "latex")
 )
 }
 \arguments{
@@ -45,6 +46,12 @@ the raw scale.}
 
 \item{overall}{Logical. Include an overall (ungrouped) column alongside
 group columns (default \code{TRUE}).}
+
+\item{output}{Character string specifying the render target. One of
+\code{"gt"} (default, for Word/PDF via \code{gt}), \code{"html"} (interactive
+\code{reactable}), or \code{"latex"} (LaTeX via \code{gt::as_latex()}). This value is
+stored on the returned object and used by \code{render()} to dispatch to the
+correct renderer automatically.}
 }
 \value{
 A \code{clerk_tbl} object (a list with class \code{"clerk_tbl"}) containing:
@@ -54,6 +61,7 @@ A \code{clerk_tbl} object (a list with class \code{"clerk_tbl"}) containing:
 \item{\code{log_vars}}{The log-transformed variable names.}
 \item{\code{type}}{Character string \code{"descriptive"}.}
 \item{\code{group}}{Name of the grouping variable, or \code{NULL}.}
+\item{\code{output}}{The render target: \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }
 }
 \description{
@@ -64,13 +72,17 @@ compared with an independent-samples t-test (two groups) or one-way ANOVA
 compared with a chi-squared test.
 }
 \examples{
-tbl_descriptive(clerk_example, group = sex,
-  domains = list(
-    "Metabolic"      = c("hdl", "glucose", "bmi"),
-    "Cognitive"      = c("tmt_time", "verbal_fluency"),
-    "Mental health"  = c("bdi", "panas_neg")
+# gt output (default) — pipe into render()
+tbl_descriptive(
+  clerk_example,
+  group    = sex,
+  domains  = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Cognitive"    = c("tmt_time", "verbal_fluency"),
+    "Mental health"= c("bdi", "panas_neg")
   ),
-  log_vars = c("tmt_time")
-)
+  log_vars = "tmt_time",
+  output   = "gt"
+) |> render(title = "Table 1. Sample characteristics by sex")
 
 }

@@ -2,19 +2,18 @@
 % Please edit documentation in R/render.R
 \name{render_gt}
 \alias{render_gt}
-\title{Render a clerk_tbl as a gt table}
+\title{Render a clerk_tbl as a gt table (Word / PDF)}
 \usage{
 render_gt(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 }
 \arguments{
-\item{x}{A \code{clerk_tbl} object produced by any \verb{tbl_*} constructor.}
+\item{x}{A \code{clerk_tbl} object.}
 
-\item{title}{Optional character string for the table title.}
+\item{title}{Optional table title.}
 
-\item{subtitle}{Optional character string for the table subtitle.}
+\item{subtitle}{Optional table subtitle.}
 
-\item{footnote}{Optional additional footnote appended after any
-auto-generated notes.}
+\item{footnote}{Optional additional footnote.}
 
 \item{...}{Reserved for future use.}
 }
@@ -22,11 +21,12 @@ auto-generated notes.}
 A \code{gt_tbl} object.
 }
 \description{
-Renders a \code{clerk_tbl} object as a \code{gt} table suitable for Word or PDF
-export. Domain groupings are rendered as row group labels; log-transformed
-variables receive an automatic footnote.
+Renders a \code{clerk_tbl} as a \code{gt} table. Domain groupings become row-group
+labels; log-transformed variables receive an automatic footnote. Typically
+called indirectly via \code{render()}.
 }
 \examples{
-tbl_descriptive(clerk_example, group = sex) |> render_gt(title = "Table 1")
+tbl_descriptive(clerk_example, group = sex) |>
+  render_gt(title = "Table 1")
 
 }

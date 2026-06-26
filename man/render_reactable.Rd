@@ -2,7 +2,7 @@
 % Please edit documentation in R/render.R
 \name{render_reactable}
 \alias{render_reactable}
-\title{Render a clerk_tbl as a reactable table}
+\title{Render a clerk_tbl as an interactive HTML table}
 \usage{
 render_reactable(x, title = NULL, ...)
 }
@@ -17,9 +17,11 @@ render_reactable(x, title = NULL, ...)
 A \code{reactable} htmlwidget.
 }
 \description{
-Renders a \code{clerk_tbl} object as a \code{reactable} interactive HTML table.
+Renders a \code{clerk_tbl} as a \code{reactable} interactive HTML table. Typically
+called indirectly via \code{render()}.
 }
 \examples{
-tbl_descriptive(clerk_example, group = sex) |> render_reactable()
+tbl_descriptive(clerk_example, group = sex, output = "html") |>
+  render()
 
 }
