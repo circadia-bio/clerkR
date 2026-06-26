@@ -6,12 +6,12 @@
 \usage{
 tbl_regression(
   data,
-  term = term,
-  estimate = estimate,
-  std_error = std.error,
-  conf_low = conf.low,
-  conf_high = conf.high,
-  p = p.value,
+  term = "term",
+  estimate = "estimate",
+  std_error = "std.error",
+  conf_low = "conf.low",
+  conf_high = "conf.high",
+  p = "p.value",
   model = NULL,
   domains = list(),
   exponentiate = FALSE,
@@ -26,25 +26,26 @@ tbl_regression(
 \arguments{
 \item{data}{A tidy data frame of regression results with one row per term.}
 
-\item{term}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of
-the model term column. Default \code{term}.}
+\item{term}{Character string. Name of the model term column.
+Default \code{"term"}.}
 
-\item{estimate}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the coefficient column. Default \code{estimate}.}
+\item{estimate}{Character string. Name of the coefficient column.
+Default \code{"estimate"}.}
 
-\item{std_error}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the standard error column. Default \code{std.error}.}
+\item{std_error}{Character string. Name of the standard error column.
+Default \code{"std.error"}.}
 
-\item{conf_low}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the lower CI bound column. Default \code{conf.low}.}
+\item{conf_low}{Character string. Name of the lower CI bound column.
+Default \code{"conf.low"}.}
 
-\item{conf_high}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the upper CI bound column. Default \code{conf.high}.}
+\item{conf_high}{Character string. Name of the upper CI bound column.
+Default \code{"conf.high"}.}
 
-\item{p}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of the
-p-value column. Default \code{p.value}.}
+\item{p}{Character string. Name of the p-value column.
+Default \code{"p.value"}.}
 
-\item{model}{Optional unquoted name of a column identifying multiple models.}
+\item{model}{Character string or \code{NULL}. Name of a column identifying
+multiple models. Default \code{NULL}.}
 
 \item{domains}{A named list mapping term names to domain/section labels.}
 
@@ -53,7 +54,8 @@ p-value column. Default \code{p.value}.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Optional unquoted column to group FDR correction within.}
+\item{fdr_within}{Character string or \code{NULL}. Column name to group FDR
+correction within.}
 
 \item{ci_sep}{Character string separating CI bounds (default \code{", "}).}
 
@@ -69,19 +71,15 @@ A \code{clerk_tbl} object with type \code{"regression"}.
 }
 \description{
 Formats a tidy data frame of regression results into a publication-ready
-table. Designed to accept output from \code{broom::tidy()} directly, or any
-data frame with one row per model term.
+table. Designed to accept the output of \code{broom::tidy()} directly.
+
+Column-name arguments accept \strong{character strings} (quoted names). Defaults
+match \code{broom::tidy(model, conf.int = TRUE)} output.
 }
 \examples{
 tbl_regression(
   clerk_reg_example,
-  term      = term,
-  estimate  = estimate,
-  std_error = std.error,
-  conf_low  = conf.low,
-  conf_high = conf.high,
-  p         = p.value,
-  domains   = list(
+  domains = list(
     "Cardiometabolic" = c("bmi", "waist", "systolic_bp"),
     "Mental health"   = c("bdi", "panas_neg")
   ),

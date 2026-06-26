@@ -24,16 +24,6 @@
 #' @keywords internal
 "_PACKAGE"
 
-# Declare bare names used as default arguments or in tidy-eval contexts so
-# R CMD CHECK does not flag them as undefined globals.
-utils::globalVariables(c(
-  # tbl_correlation defaults
-  "variable", "outcome", "r", "p", "n",
-  # tbl_regression defaults
-  "term", "estimate", "std.error", "conf.low", "conf.high", "p.value",
-  # tbl_heritability defaults (matching herit_batch() output)
-  "trait", "h2", "ci_lo", "ci_hi", "pval", "sigma2_a", "sigma2_e",
-  "covariates",
-  # tidy-eval pronoun
-  ".data"
-))
+# Declare bare names used in tidy-eval contexts so R CMD CHECK does not flag
+# them as undefined globals.
+utils::globalVariables(c(".data"))

@@ -1,0 +1,153 @@
+---
+title: "Correlation and partial correlation tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Correlation and partial correlation tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+```
+
+```{r load}
+library(clerkR)
+```
+
+## Overview
+
+`tbl_correlation()` formats a tidy data frame of (partial) correlation results
+into a publication-ready table. It expects **pre-computed** coefficients as a
+tidy data frame with one row per predictor x outcome pair.
+
+Column-name arguments take **quoted strings**. Defaults match a typical
+correlation results frame with columns named `variable`, `outcome`, `r`, `p`:
+
+```{r data}
+head(clerk_cor_example)
+```
+
+## Basic long-format table
+
+Since `clerk_cor_example` already matches all defaults, a minimal call suffices:
+
+```{r long}
+tbl_correlation(
+  clerk_cor_example,
+  output = "gt"
+) |>
+  clerk_render(title = "Partial correlations (age + sex controlled)")
+```
+
+## Including sample size
+
+Pass the column name as a string to `n`:
+
+```{r n}
+tbl_correlation(
+  clerk_cor_example,
+  n      = "n",
+  output = "gt"
+) |>
+  clerk_render(title = "Partial correlations (age + sex controlled)")
+```
+
+## Domain grouping
+
+```{r domains}
+tbl_correlation(
+  clerk_cor_example,
+  n       = "n",
+  domains = list(
+    "Metabolic"      = c("hdl", "glucose", "bmi"),
+    "Anthropometric" = c("waist", "systolic_bp"),
+    "Mental health"  = c("bdi", "panas_neg", "life_satisfaction")
+  ),
+  output = "gt"
+) |>
+  clerk_render(title = "Partial correlations (age + sex controlled)")
+```
+
+## FDR correction
+
+Set `fdr = TRUE` to add a BH-corrected `p_fdr` column. Use `fdr_within` to
+correct separately within each outcome:
+
+```{r fdr}
+tbl_correlation(
+  clerk_cor_example,
+  fdr        = TRUE,
+  fdr_within = "outcome",
+  output     = "gt"
+) |>
+  clerk_render(
+    title    = "Partial correlations (age + sex controlled)",
+    footnote = "FDR correction applied within each outcome (BH)."
+  )
+```
+
+## Wide (pivoted) format
+
+Set `pivot = TRUE` to show one column per outcome, with r (p) values in each cell:
+
+```{r pivot}
+tbl_correlation(
+  clerk_cor_example,
+  domains = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
+  ),
+  fdr    = TRUE,
+  pivot  = TRUE,
+  output = "gt"
+) |>
+  clerk_render(
+    title    = "Partial correlations (age + sex controlled)",
+    footnote = "Values shown as r (p FDR). FDR-corrected p-value (BH)."
+  )
+```
+
+## Custom column names
+
+When your results frame uses different column names, pass them as strings:
+
+```{r custom, eval=FALSE}
+my_results <- data.frame(
+  predictor_var = c("bmi", "hdl"),
+  outcome_var   = c("tmt_time", "tmt_time"),
+  rho           = c(0.12, -0.08),
+  pval          = c(0.021, 0.140),
+  sample_n      = c(249, 249)
+)
+
+tbl_correlation(
+  my_results,
+  predictor = "predictor_var",
+  outcome   = "outcome_var",
+  r         = "rho",
+  p         = "pval",
+  n         = "sample_n",
+  fdr       = TRUE,
+  output    = "gt"
+) |>
+  clerk_render(title = "Partial correlations (age + sex controlled)")
+```
+
+## HTML output
+
+```{r html}
+tbl_correlation(
+  clerk_cor_example,
+  domains = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
+  ),
+  fdr    = TRUE,
+  output = "html"
+) |>
+  clerk_render()
+```

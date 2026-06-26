@@ -1,0 +1,100 @@
+---
+title: "Simple descriptive tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simple descriptive tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+```
+
+```{r load}
+library(clerkR)
+```
+
+## Overview
+
+`tbl_simple()` produces a concise descriptive summary — mean ± SD for
+continuous variables and n (%) for categorical variables — without any group
+comparisons or statistical tests. It is the right choice for supplementary
+tables, sub-cohort descriptions, or any context where you need a clean summary
+without inference.
+
+## Basic usage
+
+```{r basic}
+tbl_simple(
+  clerk_example,
+  output = "gt"
+) |>
+  clerk_render(title = "Sample characteristics")
+```
+
+## Selecting variables
+
+```{r vars}
+tbl_simple(
+  clerk_example,
+  vars   = c(age, hdl, glucose, bmi, waist),
+  output = "gt"
+) |>
+  clerk_render(title = "Metabolic and anthropometric characteristics")
+```
+
+## Domain grouping
+
+```{r domains}
+tbl_simple(
+  clerk_example,
+  domains = list(
+    "Metabolic"      = c("hdl", "glucose", "bmi"),
+    "Anthropometric" = c("waist", "systolic_bp"),
+    "Cognitive"      = c("tmt_time", "verbal_fluency"),
+    "Mental health"  = c("bdi", "panas_neg", "life_satisfaction")
+  ),
+  output = "gt"
+) |>
+  clerk_render(title = "Sample characteristics")
+```
+
+## Log-transformed variables
+
+```{r logvars}
+tbl_simple(
+  clerk_example,
+  domains  = list("Cognitive" = c("tmt_time", "verbal_fluency")),
+  log_vars = "tmt_time",
+  output   = "gt"
+) |>
+  clerk_render(
+    title    = "Cognitive variables",
+    footnote = "Values shown on raw scale."
+  )
+```
+
+## HTML output
+
+```{r html}
+tbl_simple(
+  clerk_example,
+  domains = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
+  ),
+  output = "html"
+) |>
+  clerk_render()
+```
+
+## When to use `tbl_simple()` vs `tbl_descriptive()`
+
+Use `tbl_simple()` when there is no meaningful group comparison — for example a
+single-arm cohort, a subset table, or a supplementary overview. Use
+`tbl_descriptive()` when comparing two or more groups and you want statistical
+test columns alongside the summaries.

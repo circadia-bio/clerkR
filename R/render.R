@@ -82,7 +82,7 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
   domains  <- x$domains
   log_vars <- x$log_vars
 
-  tbl <- .attach_domains(tbl, domains)
+  tbl        <- .attach_domains(tbl, domains)
   col_labels <- .clerk_col_labels(names(tbl), x$group)
 
   gt_tbl <- tbl |>
@@ -168,8 +168,11 @@ render_reactable <- function(x, title = NULL, ...) {
 
 #' @export
 render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
+  # Attach domains so groupBy has the column it needs
+  tbl <- .attach_domains(x$table, x$domains)
+
   reactable::reactable(
-    x$table,
+    tbl,
     groupBy    = if (length(x$domains) > 0) "domain" else NULL,
     searchable = TRUE,
     striped    = TRUE,

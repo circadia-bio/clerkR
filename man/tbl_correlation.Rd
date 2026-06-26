@@ -6,10 +6,10 @@
 \usage{
 tbl_correlation(
   data,
-  predictor = variable,
-  outcome = outcome,
-  r = r,
-  p = p,
+  predictor = "variable",
+  outcome = "outcome",
+  r = "r",
+  p = "p",
   n = NULL,
   extra_cols = NULL,
   domains = list(),
@@ -22,31 +22,32 @@ tbl_correlation(
 )
 }
 \arguments{
-\item{data}{A tidy data frame of correlation results with one row per
-predictor x outcome pair.}
+\item{data}{A tidy data frame of correlation results.}
 
-\item{predictor}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name
-of the column identifying the predictor variable.}
+\item{predictor}{Character string. Name of the predictor variable column.
+Default \code{"variable"}.}
 
-\item{outcome}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of
-the column identifying the outcome variable.}
+\item{outcome}{Character string. Name of the outcome variable column.
+Default \code{"outcome"}.}
 
-\item{r}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of the
-correlation coefficient column.}
+\item{r}{Character string. Name of the correlation coefficient column.
+Default \code{"r"}.}
 
-\item{p}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Unquoted name of the
-p-value column.}
+\item{p}{Character string. Name of the p-value column. Default \code{"p"}.}
 
-\item{n}{Optional unquoted name of the sample size column.}
+\item{n}{Character string or \code{NULL}. Name of the sample size column.
+Default \code{NULL} (omitted).}
 
-\item{extra_cols}{Optional character vector of additional column names to
-carry through (e.g. hemisphere, lobe).}
+\item{extra_cols}{Character vector of additional column names to carry
+through (e.g. \code{"hemisphere"}, \code{"lobe"}).}
 
-\item{domains}{A named list mapping predictor names to domain/section labels.}
+\item{domains}{A named list mapping predictor variable names to
+domain/section labels.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Optional unquoted column to group FDR correction within.}
+\item{fdr_within}{Character string or \code{NULL}. Column name to group FDR
+correction within (e.g. \code{"outcome"}).}
 
 \item{digits}{Integer. Decimal places for r (default \code{3}).}
 
@@ -63,19 +64,17 @@ A \code{clerk_tbl} object with type \code{"correlation"}.
 }
 \description{
 Formats a tidy data frame of (partial) correlation results into a
-publication-ready table. Expects pre-computed coefficients — typically the
-output of \code{stats::cor.test()}, \code{ppcor::pcor.test()}, or a custom loop — as
-a tidy data frame with one row per variable pair.
+publication-ready table. Expects pre-computed coefficients as a tidy data
+frame with one row per predictor x outcome pair.
+
+Column-name arguments accept \strong{character strings} (quoted names). Defaults
+match a typical correlation results frame with columns named \code{variable},
+\code{outcome}, \code{r}, and \code{p}.
 }
 \examples{
 tbl_correlation(
   clerk_cor_example,
-  predictor = variable,
-  outcome   = outcome,
-  r         = r,
-  p         = p,
-  n         = n,
-  domains   = list(
+  domains = list(
     "Metabolic"      = c("hdl", "glucose", "bmi"),
     "Anthropometric" = c("waist", "systolic_bp"),
     "Mental health"  = c("bdi", "panas_neg")

@@ -1,0 +1,141 @@
+---
+title: "Getting started with clerkR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with clerkR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+```
+
+## Overview
+
+`clerkR` turns standard R data frames into publication-ready tables for
+biomedical and neuroscience manuscripts. It covers five table archetypes that
+together account for the large majority of results tables in a typical paper:
+
+| Function | Purpose |
+|---|---|
+| `tbl_descriptive()` | Sample characteristics by group (Table 1) |
+| `tbl_simple()` | Descriptive summary without inferential tests |
+| `tbl_correlation()` | Partial correlations — r, p, FDR-corrected p |
+| `tbl_regression()` | Regression coefficients — β, SE, CI, p |
+| `tbl_heritability()` | Heritability estimates — h², CI, LRT p, σ²a/σ²e |
+
+Every function follows the same two-step pattern:
+
+1. **Construct** — call a `tbl_*()` function to build a `clerk_tbl` object.
+2. **Render** — pipe into `clerk_render()` to produce the output format you
+   need: `gt` for Word/PDF, `html` for an interactive table, or `latex` for a
+   manuscript compiled with a LaTeX engine.
+
+```{r pattern, eval=FALSE}
+tbl_*(data, ..., output = "gt") |>
+  clerk_render(title = "My table")
+```
+
+The output format is set once at construction time via the `output` argument
+and travels with the object, so `clerk_render()` always knows what to produce.
+
+## Installation
+
+```{r install, eval=FALSE}
+remotes::install_github("circadia-bio/clerkR")
+```
+
+## The example datasets
+
+`clerkR` ships with four synthetic datasets — all values are simulated and bear
+no relation to any real study.
+
+```{r load}
+library(clerkR)
+```
+
+```{r datasets}
+# 300 participants, demographic + metabolic + cognitive + mental health
+head(clerk_example, 3)
+
+# 16 predictor × outcome partial correlation results
+head(clerk_cor_example, 3)
+
+# 7 regression terms (broom::tidy() format)
+clerk_reg_example
+
+# 12 heritability estimates (herit_batch() format)
+head(clerk_h2_example, 3)
+```
+
+## A minimal Table 1
+
+```{r table1}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  output = "gt"
+) |>
+  clerk_render(title = "Table 1. Sample characteristics by sex")
+```
+
+## Adding domain grouping
+
+Group rows under section labels with the `domains` argument — a named list
+mapping variable names to section headers.
+
+```{r domains}
+tbl_descriptive(
+  clerk_example,
+  group   = sex,
+  domains = list(
+    "Metabolic"      = c("hdl", "glucose", "bmi"),
+    "Anthropometric" = c("waist", "systolic_bp"),
+    "Cognitive"      = c("tmt_time", "verbal_fluency"),
+    "Mental health"  = c("bdi", "panas_neg", "life_satisfaction")
+  ),
+  log_vars = "tmt_time",
+  fdr      = TRUE,
+  output   = "gt"
+) |>
+  clerk_render(title = "Table 1. Sample characteristics by sex")
+```
+
+## Changing the output format
+
+Swap `output = "gt"` for `output = "html"` to get an interactive
+`reactable` table, or `output = "latex"` for LaTeX source.
+
+```{r html}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  output = "html"
+) |>
+  clerk_render()
+```
+
+## The clerkR palette
+
+All tables are styled with the clerkR colour palette automatically via
+`clerk_theme()`. You can also access the palette directly for use in figures:
+
+```{r palette}
+clerk_palette()
+clerk_diverging(n = 9)   # terracotta → off-white → navy
+clerk_sequential(n = 7)  # near-white → navy
+```
+
+## What next?
+
+Each archetype has its own vignette with a full worked example:
+
+- **`vignette("descriptive-table1")`** — Table 1 with group comparisons
+- **`vignette("simple-descriptive")`** — Summary table without tests
+- **`vignette("correlation")`** — Partial correlation results
+- **`vignette("regression")`** — Regression coefficient tables
+- **`vignette("heritability-ritable")`** — Heritability with R-itable

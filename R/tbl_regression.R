@@ -2,28 +2,32 @@
 #'
 #' @description
 #' Formats a tidy data frame of regression results into a publication-ready
-#' table. Designed to accept output from `broom::tidy()` directly, or any
-#' data frame with one row per model term.
+#' table. Designed to accept the output of `broom::tidy()` directly.
+#'
+#' Column-name arguments accept **character strings** (quoted names). Defaults
+#' match `broom::tidy(model, conf.int = TRUE)` output.
 #'
 #' @param data A tidy data frame of regression results with one row per term.
-#' @param term <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of
-#'   the model term column. Default `term`.
-#' @param estimate <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name
-#'   of the coefficient column. Default `estimate`.
-#' @param std_error <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name
-#'   of the standard error column. Default `std.error`.
-#' @param conf_low <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name
-#'   of the lower CI bound column. Default `conf.low`.
-#' @param conf_high <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name
-#'   of the upper CI bound column. Default `conf.high`.
-#' @param p <[`tidy-select`][dplyr::dplyr_tidy_select]> Unquoted name of the
-#'   p-value column. Default `p.value`.
-#' @param model Optional unquoted name of a column identifying multiple models.
+#' @param term Character string. Name of the model term column.
+#'   Default `"term"`.
+#' @param estimate Character string. Name of the coefficient column.
+#'   Default `"estimate"`.
+#' @param std_error Character string. Name of the standard error column.
+#'   Default `"std.error"`.
+#' @param conf_low Character string. Name of the lower CI bound column.
+#'   Default `"conf.low"`.
+#' @param conf_high Character string. Name of the upper CI bound column.
+#'   Default `"conf.high"`.
+#' @param p Character string. Name of the p-value column.
+#'   Default `"p.value"`.
+#' @param model Character string or `NULL`. Name of a column identifying
+#'   multiple models. Default `NULL`.
 #' @param domains A named list mapping term names to domain/section labels.
 #' @param exponentiate Logical. Exponentiate estimates and CIs (default
 #'   `FALSE`).
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
-#' @param fdr_within Optional unquoted column to group FDR correction within.
+#' @param fdr_within Character string or `NULL`. Column name to group FDR
+#'   correction within.
 #' @param ci_sep Character string separating CI bounds (default `", "`).
 #' @param digits Integer. Decimal places for estimates (default `3`).
 #' @param p_digits Integer. Decimal places for p-values (default `3`).
@@ -35,13 +39,7 @@
 #' @examples
 #' tbl_regression(
 #'   clerk_reg_example,
-#'   term      = term,
-#'   estimate  = estimate,
-#'   std_error = std.error,
-#'   conf_low  = conf.low,
-#'   conf_high = conf.high,
-#'   p         = p.value,
-#'   domains   = list(
+#'   domains = list(
 #'     "Cardiometabolic" = c("bmi", "waist", "systolic_bp"),
 #'     "Mental health"   = c("bdi", "panas_neg")
 #'   ),
@@ -52,12 +50,12 @@
 #' @importFrom rlang .data
 #' @export
 tbl_regression <- function(data,
-                           term         = term,
-                           estimate     = estimate,
-                           std_error    = std.error,
-                           conf_low     = conf.low,
-                           conf_high    = conf.high,
-                           p            = p.value,
+                           term         = "term",
+                           estimate     = "estimate",
+                           std_error    = "std.error",
+                           conf_low     = "conf.low",
+                           conf_high    = "conf.high",
+                           p            = "p.value",
                            model        = NULL,
                            domains      = list(),
                            exponentiate = FALSE,
@@ -69,35 +67,23 @@ tbl_regression <- function(data,
                            output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
-
-  term_nm  <- rlang::as_name(rlang::enquo(term))
-  est_nm   <- rlang::as_name(rlang::enquo(estimate))
-  se_nm    <- rlang::as_name(rlang::enquo(std_error))
-  cil_nm   <- rlang::as_name(rlang::enquo(conf_low))
-  cih_nm   <- rlang::as_name(rlang::enquo(conf_high))
-  p_nm     <- rlang::as_name(rlang::enquo(p))
-  mod_nm   <- if (!rlang::quo_is_null(rlang::enquo(model)))
-    rlang::as_name(rlang::enquo(model)) else NULL
-  fw_nm    <- if (!rlang::quo_is_null(rlang::enquo(fdr_within)))
-    rlang::as_name(rlang::enquo(fdr_within)) else NULL
-
-  tbl <- data
+  tbl    <- data
 
   if (exponentiate) {
-    tbl[[est_nm]] <- exp(tbl[[est_nm]])
-    tbl[[cil_nm]] <- exp(tbl[[cil_nm]])
-    tbl[[cih_nm]] <- exp(tbl[[cih_nm]])
+    tbl[[estimate]]  <- exp(tbl[[estimate]])
+    tbl[[conf_low]]  <- exp(tbl[[conf_low]])
+    tbl[[conf_high]] <- exp(tbl[[conf_high]])
   }
 
   if (fdr) {
-    if (!is.null(fw_nm)) {
+    if (!is.null(fdr_within)) {
       tbl <- tbl |>
-        dplyr::group_by(.data[[fw_nm]]) |>
-        dplyr::mutate(p_fdr = stats::p.adjust(.data[[p_nm]], method = "BH")) |>
+        dplyr::group_by(.data[[fdr_within]]) |>
+        dplyr::mutate(p_fdr = stats::p.adjust(.data[[p]], method = "BH")) |>
         dplyr::ungroup()
     } else {
       tbl <- tbl |>
-        dplyr::mutate(p_fdr = stats::p.adjust(.data[[p_nm]], method = "BH"))
+        dplyr::mutate(p_fdr = stats::p.adjust(.data[[p]], method = "BH"))
     }
   }
 
@@ -109,30 +95,28 @@ tbl_regression <- function(data,
 
   tbl <- tbl |>
     dplyr::mutate(
-      beta  = fmt_est(.data[[est_nm]]),
-      se    = sprintf(paste0("%.", digits, "f"), .data[[se_nm]]),
+      beta  = fmt_est(.data[[estimate]]),
+      se    = sprintf(paste0("%.", digits, "f"), .data[[std_error]]),
       ci    = paste0(
         "[",
-        sprintf(paste0("%+.", digits, "f"), .data[[cil_nm]]),
+        sprintf(paste0("%+.", digits, "f"), .data[[conf_low]]),
         ci_sep,
-        sprintf(paste0("%+.", digits, "f"), .data[[cih_nm]]),
+        sprintf(paste0("%+.", digits, "f"), .data[[conf_high]]),
         "]"
       ),
-      p_fmt = fmt_p(.data[[p_nm]])
+      p_fmt = fmt_p(.data[[p]])
     )
 
   if (fdr && "p_fdr" %in% names(tbl))
     tbl <- tbl |> dplyr::mutate(p_fdr_fmt = fmt_p(.data[["p_fdr"]]))
 
-  keep <- c(term_nm, mod_nm, "beta", "se", "ci", "p_fmt")
+  keep <- c(term, model, "beta", "se", "ci", "p_fmt")
   if (fdr && "p_fdr_fmt" %in% names(tbl)) keep <- c(keep, "p_fdr_fmt")
 
-  out_tbl <- tbl |>
-    dplyr::select(dplyr::all_of(keep)) |>
-    dplyr::rename(variable = dplyr::all_of(term_nm))
-
-  names(out_tbl)[names(out_tbl) == "p_fmt"]     <- "p"
-  names(out_tbl)[names(out_tbl) == "p_fdr_fmt"] <- "p_fdr"
+  out_tbl <- tbl |> dplyr::select(dplyr::all_of(keep))
+  names(out_tbl)[names(out_tbl) == term]       <- "variable"
+  names(out_tbl)[names(out_tbl) == "p_fmt"]    <- "p"
+  names(out_tbl)[names(out_tbl) == "p_fdr_fmt"]<- "p_fdr"
 
   structure(
     list(
@@ -140,7 +124,7 @@ tbl_regression <- function(data,
       domains      = domains,
       log_vars     = character(0),
       type         = "regression",
-      group        = mod_nm,
+      group        = model,
       exponentiate = exponentiate,
       output       = output
     ),

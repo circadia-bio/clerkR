@@ -1,0 +1,147 @@
+---
+title: "Descriptive tables (Table 1)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Descriptive tables (Table 1)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+```
+
+```{r load}
+library(clerkR)
+```
+
+## Overview
+
+`tbl_descriptive()` produces a Table 1-style sample characteristics summary.
+Continuous variables are shown as mean ± SD; categorical variables as n (%).
+Group comparisons use independent-samples t-tests (two groups) or one-way ANOVA
+(three or more groups) for continuous variables and chi-squared tests for
+categorical variables.
+
+## Basic usage
+
+The minimum call needs only a data frame. Without a `group` argument you get an
+overall summary column.
+
+```{r basic}
+tbl_descriptive(
+  clerk_example,
+  output = "gt"
+) |>
+  clerk_render(title = "Sample characteristics")
+```
+
+## Group comparisons
+
+Pass an unquoted column name to `group` to add per-group columns and a
+statistical test.
+
+```{r grouped}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  output = "gt"
+) |>
+  clerk_render(title = "Sample characteristics by sex")
+```
+
+## Domain grouping
+
+Use the `domains` argument to organise rows under labelled section headers. Any
+variable not mentioned in `domains` is placed under "Other".
+
+```{r domains}
+tbl_descriptive(
+  clerk_example,
+  group   = sex,
+  domains = list(
+    "Metabolic"      = c("hdl", "glucose", "bmi"),
+    "Anthropometric" = c("waist", "systolic_bp"),
+    "Cognitive"      = c("tmt_time", "verbal_fluency"),
+    "Mental health"  = c("bdi", "panas_neg", "life_satisfaction")
+  ),
+  output = "gt"
+) |>
+  clerk_render(title = "Table 1. Sample characteristics by sex")
+```
+
+## Log-transformed variables
+
+Use `log_vars` to flag variables that were log-transformed before analysis but
+are shown on the raw scale. A footnote is added automatically.
+
+```{r logvars}
+tbl_descriptive(
+  clerk_example,
+  group    = sex,
+  domains  = list(
+    "Cognitive" = c("tmt_time", "verbal_fluency")
+  ),
+  log_vars = "tmt_time",
+  output   = "gt"
+) |>
+  clerk_render(
+    title    = "Cognitive variables by sex",
+    footnote = "Continuous variables: mean \u00b1 SD. Group comparisons: t-test."
+  )
+```
+
+## FDR correction
+
+Set `fdr = TRUE` to apply Benjamini-Hochberg FDR correction across all
+p-values. A `p_fdr` column is added to the table.
+
+```{r fdr}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  fdr    = TRUE,
+  output = "gt"
+) |>
+  clerk_render(title = "Sample characteristics by sex (FDR-corrected)")
+```
+
+## Selecting variables
+
+Use `vars` with `dplyr` selection helpers to include only a subset of columns.
+
+```{r vars}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  vars   = dplyr::any_of(c("age", "hdl", "glucose", "bmi")),
+  output = "gt"
+) |>
+  clerk_render(title = "Metabolic variables by sex")
+```
+
+## HTML output
+
+Set `output = "html"` for an interactive searchable table.
+
+```{r html}
+tbl_descriptive(
+  clerk_example,
+  group  = sex,
+  output = "html"
+) |>
+  clerk_render()
+```
+
+## Inspecting the underlying data
+
+The `clerk_tbl` object is a plain list. Access `$table` to see the formatted
+data frame before rendering.
+
+```{r inspect}
+result <- tbl_descriptive(clerk_example, group = sex)
+head(result$table)
+```

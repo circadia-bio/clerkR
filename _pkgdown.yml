@@ -97,7 +97,7 @@ navbar:
   components:
     intro:
       text: Get started
-      href: articles/heritability-ritable.html
+      href: articles/getting-started.html
     github:
       icon: fab fa-github
       href: https://github.com/circadia-bio/clerkR
@@ -144,9 +144,18 @@ reference:
   - clerkR-package
 
 articles:
-- title: "Workflows"
+- title: "Getting started"
   navbar: ~
   contents:
+  - getting-started
+
+- title: "Table archetypes"
+  navbar: "Archetypes"
+  contents:
+  - descriptive-table1
+  - simple-descriptive
+  - correlation
+  - regression
   - heritability-ritable
 
 authors:

@@ -31,6 +31,7 @@ to dispatch to \code{gt} (Word/PDF), \code{reactable} (HTML), or LaTeX output.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://clerkr.circadia-lab.uk}
   \item \url{https://github.com/circadia-bio/clerkR}
   \item Report bugs at \url{https://github.com/circadia-bio/clerkR/issues}
 }
