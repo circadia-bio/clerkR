@@ -2,14 +2,10 @@ Package: clerkR
 Title: Publication-Ready Tables for Biomedical Research
 Version: 0.1.0
 Authors@R: c(
-    person("Lucas", "França",
+    person("Lucas G. S.", "Franca",
            email = "lucas.franca@northumbria.ac.uk",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-0853-1319")),
-    person("Mario", "Leocadio-Miguel",
-           email = "mario.miguel@northumbria.ac.uk",
-           role = "aut",
-           comment = c(ORCID = "0000-0002-7248-3529"))
+           comment = c(ORCID = "0000-0003-0853-1319"))
   )
 Description: Transforms standard R data frames into publication-ready tables
     across a handful of common archetypes found in biomedical and neuroscience
@@ -26,6 +22,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0),
+    tidyr,
     rlang,
     gt (>= 0.10.0),
     reactable (>= 0.4.0),
@@ -37,7 +34,7 @@ Suggests:
     testthat (>= 3.0.0),
     rmarkdown
 Config/testthat/edition: 3
-URL: https://clerkr.circadia-lab.uk
+URL: https://github.com/circadia-bio/clerkR
 BugReports: https://github.com/circadia-bio/clerkR/issues
 LazyData: true
 Config/roxygen2/version: 8.0.0

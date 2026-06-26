@@ -216,9 +216,12 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
     variable  = "Variable",
     n         = "n",
     overall   = "Overall",
+    summary   = "Summary",
     statistic = "Statistic",
     p         = "p",
-    p_fdr     = "p (FDR)"
+    p_fdr     = "p (FDR)",
+    r         = "r",
+    outcome   = "Outcome"
   )
   fixed[intersect(names(fixed), nms)]
 }
