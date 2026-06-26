@@ -34,7 +34,7 @@
 #' @param fdr_alpha Numeric. Alpha level applied to the **FDR-corrected**
 #'   p-value to determine survival. Cells where `p(FDR) >= fdr_alpha` are
 #'   replaced with `fdr_ns_label` when `fdr_ns = TRUE` (default `0.05`).
-#'   Note: this is compared against the BH-adjusted p-value, not the raw p.
+#'   Compared against the BH-adjusted p-value, not the raw p.
 #' @param fdr_ns_label Character string displayed when a FDR-corrected p-value
 #'   does not survive `fdr_alpha` (default `"ns"`).
 #' @param reset Logical. If `TRUE`, restore all options to factory defaults
@@ -128,11 +128,16 @@ clerk_options <- function(digits          = NULL,
   options(opts)
 }
 
+#' Get current clerk options, falling back to built-in defaults if an option
+#' has not been set (e.g. before .onLoad has run in a load_all() session).
 #' @keywords internal
 .get_clerk_options <- function() {
-  nms  <- paste0("clerkR.", names(.clerk_defaults))
-  vals <- lapply(nms, getOption)
-  stats::setNames(vals, names(.clerk_defaults))
+  lapply(
+    stats::setNames(names(.clerk_defaults), names(.clerk_defaults)),
+    function(nm) {
+      getOption(paste0("clerkR.", nm), default = .clerk_defaults[[nm]])
+    }
+  )
 }
 
 #' @keywords internal
@@ -195,13 +200,9 @@ clerk_options <- function(digits          = NULL,
   formatted
 }
 
-#' Format a BH-adjusted p-value, replacing non-survivors with ns label
-#'
-#' @param x Numeric vector of **BH-adjusted** p-values.
-#' @param fdr_ns Logical override.
-#' @param fdr_alpha Numeric override. Compared against the BH-adjusted p-value.
-#' @param fdr_ns_label Character override.
-#' @param ... Passed to `.fmt_p()` for numeric formatting.
+#' Format a BH-adjusted p-value, replacing non-survivors with ns label.
+#' x must be the BH-adjusted p-value — it is compared directly against
+#' fdr_alpha, not against the raw p.
 #' @keywords internal
 .fmt_p_fdr <- function(x,
                        fdr_ns       = NULL,
@@ -214,9 +215,9 @@ clerk_options <- function(digits          = NULL,
   fdr_alpha    <- fdr_alpha    %||% opts$fdr_alpha
   fdr_ns_label <- fdr_ns_label %||% opts$fdr_ns_label
 
-  # x is already the BH-adjusted p-value — compare directly against fdr_alpha
   formatted <- .fmt_p(x, ...)
 
+  # Replace non-surviving FDR cells: p(FDR) >= fdr_alpha → "ns"
   if (isTRUE(fdr_ns)) {
     formatted <- ifelse(
       !is.na(x) & x >= fdr_alpha,
