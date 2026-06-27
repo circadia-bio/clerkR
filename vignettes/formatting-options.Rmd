@@ -73,7 +73,6 @@ Three separate options control decimal places for different value types:
 | `p_digits` | `3` | P-values |
 
 ```{r digits}
-# More decimal places for p-values, fewer for statistics
 tbl_descriptive(clerk_example, group = sex, output = "gt",
                 digits = 1, p_digits = 2) |>
   clerk_render(title = "digits = 1, p_digits = 2")
@@ -84,7 +83,6 @@ as `< {threshold}` rather than as a decimal. The default is `0.001`. It is
 set via `clerk_options()` rather than per-table:
 
 ```{r threshold}
-# Show < 0.01 instead of < 0.001
 clerk_options(p_threshold = 0.01)
 tbl_descriptive(clerk_example, group = sex, output = "gt") |>
   clerk_render(title = "p_threshold = 0.01")
@@ -129,7 +127,6 @@ results are displayed:
 | `fdr_ns_label` | `"ns"` | The label shown for non-surviving cells |
 
 ```{r fdr-ns}
-# Default: non-survivors labelled "ns"
 tbl_descriptive(clerk_example, group = sex, fdr = TRUE, output = "gt") |>
   clerk_render(title = "FDR with ns label (default)")
 ```
@@ -182,11 +179,12 @@ default for that call only:
 clerk_options(p_style = "plain")
 
 # This table uses plain (from session)
-tbl_simple(clerk_example, output = "gt") |>
+tbl_descriptive(clerk_example, group = sex, output = "gt") |>
   clerk_render(title = "Session default: plain")
 
 # This table overrides back to APA for this call only
-tbl_simple(clerk_example, output = "gt", p_style = "apa") |>
+tbl_descriptive(clerk_example, group = sex, output = "gt",
+                p_style = "apa") |>
   clerk_render(title = "Per-call override: apa")
 
 # Reset to factory defaults
