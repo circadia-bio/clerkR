@@ -12,6 +12,8 @@
 #' @param log_vars Character vector of log-transformed variable names.
 #' @param digits Integer. Decimal places for continuous variables.
 #' @param p_digits Integer. Decimal places for p-values.
+#' @param p_threshold Numeric. P-values below this are shown as
+#'   `"< {threshold}"`. Inherits from `clerk_options()$p_threshold` if `NULL`.
 #' @param p_style Character. P-value style (`"apa"`, `"plain"`, `"stars"`,
 #'   `"stars_p"`).
 #' @param stars Logical. Append significance stars.
@@ -19,8 +21,8 @@
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
 #' @param domain_other Character string. Label for variables not assigned to
-#'   any domain, and for all variables when `domains = list()`. Default `""`
-#'   (blank — no section header). Inherits from `clerk_options()$domain_other`.
+#'   any domain. Default `""` (blank). Inherits from
+#'   `clerk_options()$domain_other`.
 #' @param overall Logical. Include an overall column (default `TRUE`).
 #' @param output Character string. One of `"gt"`, `"html"`, or `"latex"`.
 #'
@@ -47,6 +49,7 @@ tbl_descriptive <- function(data,
                             log_vars     = character(0),
                             digits       = NULL,
                             p_digits     = NULL,
+                            p_threshold  = NULL,
                             p_style      = NULL,
                             stars        = NULL,
                             fdr          = FALSE,
@@ -61,11 +64,12 @@ tbl_descriptive <- function(data,
   group_nm  <- if (!rlang::quo_is_null(group_var))
     rlang::as_name(group_var) else NULL
 
-  opts             <- .get_clerk_options()
-  fdr_ns_val       <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
-  fdr_alpha_val    <- fdr_alpha    %||% opts$fdr_alpha
-  fdr_label        <- opts$fdr_ns_label
-  domain_other_val <- domain_other %||% opts$domain_other
+  opts              <- .get_clerk_options()
+  fdr_ns_val        <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val     <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_label         <- opts$fdr_ns_label
+  domain_other_val  <- domain_other %||% opts$domain_other
+  p_threshold_val   <- p_threshold  %||% opts$p_threshold
 
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- setdiff(names(data), group_nm)
@@ -81,7 +85,8 @@ tbl_descriptive <- function(data,
       x = data[[v]], name = v,
       group = if (!is.null(group_nm)) data[[group_nm]] else NULL,
       is_cat = is_cat[[v]], digits = digits, p_digits = p_digits,
-      p_style = p_style, stars = stars, overall = overall
+      p_threshold = p_threshold_val, p_style = p_style, stars = stars,
+      overall = overall
     )
   })
 
@@ -89,8 +94,9 @@ tbl_descriptive <- function(data,
 
   if (fdr && !is.null(group_nm) && "p_raw" %in% names(tbl)) {
     p_fdr_raw <- stats::p.adjust(tbl[["p_raw"]], method = "BH")
-    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
-                        stars = stars)
+    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits,
+                        p_threshold = p_threshold_val,
+                        p_style = p_style, stars = stars)
     if (fdr_ns_val)
       p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
                           fdr_label, p_fdr_fmt)
@@ -113,7 +119,7 @@ tbl_descriptive <- function(data,
 
 #' @keywords internal
 .summarise_var <- function(x, name, group, is_cat, digits, p_digits,
-                           p_style, stars, overall) {
+                           p_threshold, p_style, stars, overall) {
 
   fmt_mean_sd <- function(v) {
     paste0(.fmt_stat(mean(v, na.rm = TRUE), digits), " \u00b1 ",
@@ -143,8 +149,9 @@ tbl_descriptive <- function(data,
       if (!is.null(ct)) {
         stat_str <- sprintf("chi2 = %.2f", ct$statistic)
         p_raw    <- ct$p.value
-        p_fmt    <- .fmt_p(p_raw, p_digits = p_digits, p_style = p_style,
-                           stars = stars)
+        p_fmt    <- .fmt_p(p_raw, p_digits = p_digits,
+                           p_threshold = p_threshold,
+                           p_style = p_style, stars = stars)
       }
     } else {
       if (length(grp_levels) == 2) {
@@ -154,8 +161,9 @@ tbl_descriptive <- function(data,
         if (!is.null(tt)) {
           stat_str <- sprintf("t = %.2f", tt$statistic)
           p_raw    <- tt$p.value
-          p_fmt    <- .fmt_p(p_raw, p_digits = p_digits, p_style = p_style,
-                             stars = stars)
+          p_fmt    <- .fmt_p(p_raw, p_digits = p_digits,
+                             p_threshold = p_threshold,
+                             p_style = p_style, stars = stars)
         }
       } else {
         av <- tryCatch(stats::oneway.test(x ~ factor(group)),
@@ -163,8 +171,9 @@ tbl_descriptive <- function(data,
         if (!is.null(av)) {
           stat_str <- sprintf("F = %.2f", av$statistic)
           p_raw    <- av$p.value
-          p_fmt    <- .fmt_p(p_raw, p_digits = p_digits, p_style = p_style,
-                             stars = stars)
+          p_fmt    <- .fmt_p(p_raw, p_digits = p_digits,
+                             p_threshold = p_threshold,
+                             p_style = p_style, stars = stars)
         }
       }
     }

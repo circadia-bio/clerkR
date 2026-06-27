@@ -22,6 +22,8 @@
 #' @param fdr_within Character string or `NULL`. Column to group FDR within.
 #' @param r_digits Integer. Decimal places for h2 and variance components.
 #' @param p_digits Integer. Decimal places for p-values.
+#' @param p_threshold Numeric. P-values below this are shown as
+#'   `"< {threshold}"`. Inherits from `clerk_options()$p_threshold` if `NULL`.
 #' @param p_style Character. P-value style.
 #' @param stars Logical. Append significance stars.
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
@@ -59,6 +61,7 @@ tbl_heritability <- function(data,
                              fdr_within   = NULL,
                              r_digits     = NULL,
                              p_digits     = NULL,
+                             p_threshold  = NULL,
                              p_style      = NULL,
                              stars        = NULL,
                              fdr_ns       = NULL,
@@ -69,11 +72,12 @@ tbl_heritability <- function(data,
   output <- match.arg(output)
   tbl    <- data
 
-  opts             <- .get_clerk_options()
-  fdr_ns_val       <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
-  fdr_alpha_val    <- fdr_alpha    %||% opts$fdr_alpha
-  fdr_label        <- opts$fdr_ns_label
-  domain_other_val <- domain_other %||% opts$domain_other
+  opts              <- .get_clerk_options()
+  fdr_ns_val        <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val     <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_label         <- opts$fdr_ns_label
+  domain_other_val  <- domain_other %||% opts$domain_other
+  p_threshold_val   <- p_threshold  %||% opts$p_threshold
 
   if (fdr) {
     if (!is.null(fdr_within)) {
@@ -92,8 +96,9 @@ tbl_heritability <- function(data,
                              ", ",
                              .fmt_r(tbl[[ci_high]], r_digits = r_digits, signed = FALSE),
                              "]")
-  tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits, p_style = p_style,
-                            stars = stars)
+  tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits,
+                            p_threshold = p_threshold_val,
+                            p_style = p_style, stars = stars)
 
   if (!is.null(sigma2_a))
     tbl[["sigma2_a_fmt"]] <- .fmt_r(tbl[[sigma2_a]], r_digits = r_digits,
@@ -104,8 +109,9 @@ tbl_heritability <- function(data,
 
   if (fdr && "p_fdr_raw" %in% names(tbl)) {
     p_fdr_raw <- tbl[["p_fdr_raw"]]
-    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
-                        stars = stars)
+    p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits,
+                        p_threshold = p_threshold_val,
+                        p_style = p_style, stars = stars)
     if (fdr_ns_val)
       p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
                           fdr_label, p_fdr_fmt)
