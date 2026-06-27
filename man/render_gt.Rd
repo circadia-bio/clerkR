@@ -4,7 +4,14 @@
 \alias{render_gt}
 \title{Render a clerk_tbl as a gt table (Word / PDF)}
 \usage{
-render_gt(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+render_gt(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  fdr_footnote = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{clerk_tbl} object.}
@@ -15,6 +22,9 @@ render_gt(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 
 \item{footnote}{Optional additional footnote.}
 
+\item{fdr_footnote}{Logical. Add an automatic FDR source note when a
+\code{p_fdr} column is present (default \code{TRUE}).}
+
 \item{...}{Reserved for future use.}
 }
 \value{
@@ -23,8 +33,8 @@ A \code{gt_tbl} object.
 \description{
 Renders a \code{clerk_tbl} as a \code{gt} table with clerkR styling applied via
 \code{clerk_theme()}. Domain groupings become row-group labels; log-transformed
-variables receive an automatic footnote. Typically called indirectly via
-\code{clerk_render()}.
+variables receive an automatic footnote; FDR-corrected tables receive an
+automatic source note. Typically called indirectly via \code{clerk_render()}.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex) |>

@@ -23,6 +23,7 @@ tbl_heritability(
   stars = NULL,
   fdr_ns = NULL,
   fdr_alpha = NULL,
+  domain_other = NULL,
   output = c("gt", "html", "latex")
 )
 }
@@ -64,6 +65,10 @@ column.}
 \item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
 \item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
 
 \item{output}{Character string. One of \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }

@@ -17,6 +17,7 @@ tbl_descriptive(
   fdr = FALSE,
   fdr_ns = NULL,
   fdr_alpha = NULL,
+  domain_other = NULL,
   overall = TRUE,
   output = c("gt", "html", "latex")
 )
@@ -47,6 +48,10 @@ include. Defaults to all columns except \code{group}.}
 \item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
 \item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain, and for all variables when \code{domains = list()}. Default \code{""}
+(blank — no section header). Inherits from \code{clerk_options()$domain_other}.}
 
 \item{overall}{Logical. Include an overall column (default \code{TRUE}).}
 

@@ -21,6 +21,7 @@ tbl_correlation(
   stars = NULL,
   fdr_ns = NULL,
   fdr_alpha = NULL,
+  domain_other = NULL,
   pivot = FALSE,
   output = c("gt", "html", "latex")
 )
@@ -48,23 +49,21 @@ labels.}
 
 \item{fdr_within}{Character string or \code{NULL}. Column to group FDR within.}
 
-\item{r_digits}{Integer. Decimal places for r. Inherits from
-\code{clerk_options()$r_digits} if \code{NULL}.}
+\item{r_digits}{Integer. Decimal places for r.}
 
-\item{p_digits}{Integer. Decimal places for p-values. Inherits from
-\code{clerk_options()$p_digits} if \code{NULL}.}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{p_style}{Character. P-value style. Inherits from
-\code{clerk_options()$p_style} if \code{NULL}.}
+\item{p_style}{Character. P-value style.}
 
-\item{stars}{Logical. Append significance stars. Inherits from
-\code{clerk_options()$stars} if \code{NULL}.}
+\item{stars}{Logical. Append significance stars.}
 
-\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.
-Inherits from \code{clerk_options()$fdr_ns} if \code{NULL}.}
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
 
-\item{fdr_alpha}{Numeric. Alpha level applied to the BH-adjusted p-value.
-Inherits from \code{clerk_options()$fdr_alpha} if \code{NULL}.}
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
 
 \item{pivot}{Logical. Pivot to wide format (default \code{FALSE}).}
 

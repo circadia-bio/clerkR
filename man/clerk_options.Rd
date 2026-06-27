@@ -15,6 +15,7 @@ clerk_options(
   fdr_ns = NULL,
   fdr_alpha = NULL,
   fdr_ns_label = NULL,
+  domain_other = NULL,
   reset = FALSE
 )
 }
@@ -53,6 +54,11 @@ Cells where \code{p(FDR) >= fdr_alpha} show \code{fdr_ns_label} (default \code{0
 \item{fdr_ns_label}{Character string for non-surviving FDR cells
 (default \code{"ns"}).}
 
+\item{domain_other}{Character string used as the domain label for variables
+not assigned to any domain, and for all variables when no domains are
+specified. Default \code{""} (blank — no section header shown). Set to e.g.
+\code{"Other"} to collect unassigned variables under a named section.}
+
 \item{reset}{Logical. Restore factory defaults (default \code{FALSE}).}
 }
 \value{
@@ -71,6 +77,7 @@ defaults.
 clerk_options()
 clerk_options(p_style = "apa", stars = TRUE)
 clerk_options(fdr_alpha = 0.01)
+clerk_options(domain_other = "Other")
 clerk_options(reset = TRUE)
 
 }

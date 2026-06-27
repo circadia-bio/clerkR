@@ -4,7 +4,14 @@
 \alias{clerk_render}
 \title{Render a clerk_tbl to its target output format}
 \usage{
-clerk_render(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+clerk_render(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  fdr_footnote = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{clerk_tbl} object.}
@@ -13,14 +20,18 @@ clerk_render(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 
 \item{subtitle}{Optional character string for the table subtitle.}
 
-\item{footnote}{Optional additional footnote text.}
+\item{footnote}{Optional additional footnote text. Appended after any
+automatic footnotes (log-transform, FDR).}
+
+\item{fdr_footnote}{Logical. Automatically add a source note explaining the
+FDR correction when a \code{p_fdr} column is present (default \code{TRUE}).}
 
 \item{...}{Passed to the underlying \code{render_gt()}, \code{render_reactable()}, or
 \code{render_latex()}.}
 }
 \value{
-A \code{gt_tbl}, \code{reactable}, or \code{knit_asis} object depending on the
-\code{output} slot of \code{x}.
+A \code{gt_tbl}, \code{htmltools::tagList}, or \code{knit_asis} object depending
+on the \code{output} slot of \code{x}.
 }
 \description{
 Dispatches to the correct renderer based on the \code{output} slot set at
@@ -29,10 +40,10 @@ All render arguments (\code{title}, \code{subtitle}, \code{footnote}) can be sup
 and are forwarded to the underlying renderer.
 }
 \examples{
-tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>
   clerk_render(title = "Table 1")
 
 tbl_descriptive(clerk_example, group = sex, output = "html") |>
-  clerk_render()
+  clerk_render(title = "Sample characteristics")
 
 }
