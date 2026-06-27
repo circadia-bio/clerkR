@@ -80,13 +80,15 @@ tbl_descriptive(clerk_example, group = sex, output = "gt",
 ```
 
 The `p_threshold` option controls the value below which p-values are shown
-as `< {threshold}` rather than as a decimal. The default is `0.001`:
+as `< {threshold}` rather than as a decimal. The default is `0.001`. It is
+set via `clerk_options()` rather than per-table:
 
 ```{r threshold}
 # Show < 0.01 instead of < 0.001
-tbl_descriptive(clerk_example, group = sex, output = "gt",
-                p_threshold = 0.01) |>
+clerk_options(p_threshold = 0.01)
+tbl_descriptive(clerk_example, group = sex, output = "gt") |>
   clerk_render(title = "p_threshold = 0.01")
+clerk_options(reset = TRUE)
 ```
 
 ---
@@ -200,7 +202,7 @@ clerk_options(
   digits          = 2,        # continuous stats decimal places
   r_digits        = 3,        # correlations / h² decimal places
   p_digits        = 3,        # p-value decimal places
-  p_threshold     = 0.001,    # below this → "< 0.001"
+  p_threshold     = 0.001,    # below this → "< 0.001" (session-level only)
   p_style         = "apa",    # "apa" | "plain" | "stars" | "stars_p"
   stars           = FALSE,    # append * ** ***
   star_thresholds = c(0.05, 0.01, 0.001),
