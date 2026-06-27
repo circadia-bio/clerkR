@@ -3,18 +3,17 @@
 #' @description
 #' Produces a concise descriptive summary — mean ± SD for continuous variables
 #' and n (%) for categorical variables — with no group comparisons or
-#' statistical tests.
-#'
-#' Formatting defaults are inherited from `clerk_options()` and can be
-#' overridden per call.
+#' statistical tests. Formatting defaults inherited from `clerk_options()`.
 #'
 #' @param data A data frame.
 #' @param vars <[`tidy-select`][dplyr::dplyr_tidy_select]> Variables to
 #'   include. Defaults to all columns.
 #' @param domains A named list mapping variable names to domain/section labels.
 #' @param log_vars Character vector of log-transformed variable names.
-#' @param digits Integer. Decimal places for continuous variables. Inherits
-#'   from `clerk_options()$digits` if `NULL`.
+#' @param digits Integer. Decimal places for continuous variables.
+#' @param domain_other Character string. Label for variables not assigned to
+#'   any domain. Default `""` (blank). Inherits from
+#'   `clerk_options()$domain_other`.
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
 #'
@@ -33,13 +32,17 @@
 #'
 #' @export
 tbl_simple <- function(data,
-                       vars     = NULL,
-                       domains  = list(),
-                       log_vars = character(0),
-                       digits   = NULL,
-                       output   = c("gt", "html", "latex")) {
+                       vars         = NULL,
+                       domains      = list(),
+                       log_vars     = character(0),
+                       digits       = NULL,
+                       domain_other = NULL,
+                       output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
+
+  opts             <- .get_clerk_options()
+  domain_other_val <- domain_other %||% opts$domain_other
 
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- names(data)
@@ -72,14 +75,9 @@ tbl_simple <- function(data,
   })
 
   structure(
-    list(
-      table    = dplyr::bind_rows(rows),
-      domains  = domains,
-      log_vars = log_vars,
-      type     = "simple",
-      group    = NULL,
-      output   = output
-    ),
+    list(table = dplyr::bind_rows(rows), domains = domains,
+         log_vars = log_vars, type = "simple", group = NULL,
+         domain_other = domain_other_val, output = output),
     class = "clerk_tbl"
   )
 }

@@ -78,11 +78,12 @@ render_gt <- function(x, title = NULL, subtitle = NULL,
 render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
                                 footnote = NULL, ...) {
 
-  tbl      <- x$table
-  domains  <- x$domains
-  log_vars <- x$log_vars
+  tbl          <- x$table
+  domains      <- x$domains
+  log_vars     <- x$log_vars
+  domain_other <- x$domain_other %||% ""
 
-  tbl        <- .attach_domains(tbl, domains)
+  tbl        <- .attach_domains(tbl, domains, domain_other)
   col_labels <- .clerk_col_labels(names(tbl), x$group)
 
   gt_tbl <- tbl |>
@@ -168,7 +169,8 @@ render_reactable <- function(x, title = NULL, ...) {
 
 #' @export
 render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
-  tbl <- .attach_domains(x$table, x$domains)
+  domain_other <- x$domain_other %||% ""
+  tbl          <- .attach_domains(x$table, x$domains, domain_other)
 
   reactable::reactable(
     tbl,
@@ -187,14 +189,14 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
 # ------------------------------------------------------------------------------
 
 #' @keywords internal
-.attach_domains <- function(tbl, domains) {
+.attach_domains <- function(tbl, domains, domain_other = "") {
   if (length(domains) > 0) {
     domain_map <- utils::stack(lapply(domains, function(v) v))
     names(domain_map) <- c("variable", "domain")
     tbl <- dplyr::left_join(tbl, domain_map, by = "variable")
-    tbl[["domain"]][is.na(tbl[["domain"]])] <- "Other"
+    tbl[["domain"]][is.na(tbl[["domain"]])] <- domain_other
   } else {
-    tbl[["domain"]] <- rep("All variables", nrow(tbl))
+    tbl[["domain"]] <- rep(domain_other, nrow(tbl))
   }
   tbl
 }

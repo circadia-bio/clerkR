@@ -18,6 +18,9 @@
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
+#' @param domain_other Character string. Label for variables not assigned to
+#'   any domain, and for all variables when `domains = list()`. Default `""`
+#'   (blank — no section header). Inherits from `clerk_options()$domain_other`.
 #' @param overall Logical. Include an overall column (default `TRUE`).
 #' @param output Character string. One of `"gt"`, `"html"`, or `"latex"`.
 #'
@@ -38,30 +41,31 @@
 #'
 #' @export
 tbl_descriptive <- function(data,
-                            group     = NULL,
-                            vars      = NULL,
-                            domains   = list(),
-                            log_vars  = character(0),
-                            digits    = NULL,
-                            p_digits  = NULL,
-                            p_style   = NULL,
-                            stars     = NULL,
-                            fdr       = FALSE,
-                            fdr_ns    = NULL,
-                            fdr_alpha = NULL,
-                            overall   = TRUE,
-                            output    = c("gt", "html", "latex")) {
+                            group        = NULL,
+                            vars         = NULL,
+                            domains      = list(),
+                            log_vars     = character(0),
+                            digits       = NULL,
+                            p_digits     = NULL,
+                            p_style      = NULL,
+                            stars        = NULL,
+                            fdr          = FALSE,
+                            fdr_ns       = NULL,
+                            fdr_alpha    = NULL,
+                            domain_other = NULL,
+                            overall      = TRUE,
+                            output       = c("gt", "html", "latex")) {
 
   output    <- match.arg(output)
   group_var <- rlang::enquo(group)
   group_nm  <- if (!rlang::quo_is_null(group_var))
     rlang::as_name(group_var) else NULL
 
-  # Resolve all formatting options once up front
-  opts          <- .get_clerk_options()
-  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
-  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
-  fdr_label     <- opts$fdr_ns_label
+  opts             <- .get_clerk_options()
+  fdr_ns_val       <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val    <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_label        <- opts$fdr_ns_label
+  domain_other_val <- domain_other %||% opts$domain_other
 
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- setdiff(names(data), group_nm)
@@ -97,7 +101,8 @@ tbl_descriptive <- function(data,
 
   structure(
     list(table = tbl, domains = domains, log_vars = log_vars,
-         type = "descriptive", group = group_nm, output = output),
+         type = "descriptive", group = group_nm,
+         domain_other = domain_other_val, output = output),
     class = "clerk_tbl"
   )
 }

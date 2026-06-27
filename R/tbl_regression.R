@@ -25,6 +25,9 @@
 #' @param stars Logical. Append significance stars.
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
 #' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
+#' @param domain_other Character string. Label for variables not assigned to
+#'   any domain. Default `""` (blank). Inherits from
+#'   `clerk_options()$domain_other`.
 #' @param output Character string. One of `"gt"`, `"html"`, or `"latex"`.
 #'
 #' @return A `clerk_tbl` object with type `"regression"`.
@@ -61,16 +64,17 @@ tbl_regression <- function(data,
                            stars        = NULL,
                            fdr_ns       = NULL,
                            fdr_alpha    = NULL,
+                           domain_other = NULL,
                            output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
   tbl    <- data
 
-  # Resolve all formatting options once up front
-  opts          <- .get_clerk_options()
-  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
-  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
-  fdr_label     <- opts$fdr_ns_label
+  opts             <- .get_clerk_options()
+  fdr_ns_val       <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val    <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_label        <- opts$fdr_ns_label
+  domain_other_val <- domain_other %||% opts$domain_other
 
   if (exponentiate) {
     tbl[[estimate]]  <- exp(tbl[[estimate]])
@@ -120,7 +124,7 @@ tbl_regression <- function(data,
   structure(
     list(table = out_tbl, domains = domains, log_vars = character(0),
          type = "regression", group = model, exponentiate = exponentiate,
-         output = output),
+         domain_other = domain_other_val, output = output),
     class = "clerk_tbl"
   )
 }

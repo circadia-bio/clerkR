@@ -33,6 +33,10 @@
 #'   Cells where `p(FDR) >= fdr_alpha` show `fdr_ns_label` (default `0.05`).
 #' @param fdr_ns_label Character string for non-surviving FDR cells
 #'   (default `"ns"`).
+#' @param domain_other Character string used as the domain label for variables
+#'   not assigned to any domain, and for all variables when no domains are
+#'   specified. Default `""` (blank — no section header shown). Set to e.g.
+#'   `"Other"` to collect unassigned variables under a named section.
 #' @param reset Logical. Restore factory defaults (default `FALSE`).
 #'
 #' @return A named list of current option values, returned invisibly.
@@ -41,6 +45,7 @@
 #' clerk_options()
 #' clerk_options(p_style = "apa", stars = TRUE)
 #' clerk_options(fdr_alpha = 0.01)
+#' clerk_options(domain_other = "Other")
 #' clerk_options(reset = TRUE)
 #'
 #' @export
@@ -54,6 +59,7 @@ clerk_options <- function(digits          = NULL,
                           fdr_ns          = NULL,
                           fdr_alpha       = NULL,
                           fdr_ns_label    = NULL,
+                          domain_other    = NULL,
                           reset           = FALSE) {
 
   if (reset) {
@@ -71,7 +77,8 @@ clerk_options <- function(digits          = NULL,
     star_thresholds = star_thresholds,
     fdr_ns          = fdr_ns,
     fdr_alpha       = fdr_alpha,
-    fdr_ns_label    = fdr_ns_label
+    fdr_ns_label    = fdr_ns_label,
+    domain_other    = domain_other
   )
   new_vals <- Filter(Negate(is.null), new_vals)
 
@@ -100,7 +107,8 @@ clerk_options <- function(digits          = NULL,
   star_thresholds = c(0.05, 0.01, 0.001),
   fdr_ns          = TRUE,
   fdr_alpha       = 0.05,
-  fdr_ns_label    = "ns"
+  fdr_ns_label    = "ns",
+  domain_other    = ""
 )
 
 #' @keywords internal

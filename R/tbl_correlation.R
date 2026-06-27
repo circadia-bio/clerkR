@@ -21,18 +21,15 @@
 #'   labels.
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_within Character string or `NULL`. Column to group FDR within.
-#' @param r_digits Integer. Decimal places for r. Inherits from
-#'   `clerk_options()$r_digits` if `NULL`.
-#' @param p_digits Integer. Decimal places for p-values. Inherits from
-#'   `clerk_options()$p_digits` if `NULL`.
-#' @param p_style Character. P-value style. Inherits from
-#'   `clerk_options()$p_style` if `NULL`.
-#' @param stars Logical. Append significance stars. Inherits from
-#'   `clerk_options()$stars` if `NULL`.
+#' @param r_digits Integer. Decimal places for r.
+#' @param p_digits Integer. Decimal places for p-values.
+#' @param p_style Character. P-value style.
+#' @param stars Logical. Append significance stars.
 #' @param fdr_ns Logical. Replace non-surviving FDR p-values with `"ns"`.
-#'   Inherits from `clerk_options()$fdr_ns` if `NULL`.
-#' @param fdr_alpha Numeric. Alpha level applied to the BH-adjusted p-value.
-#'   Inherits from `clerk_options()$fdr_alpha` if `NULL`.
+#' @param fdr_alpha Numeric. Alpha level for FDR survival (BH-adjusted p).
+#' @param domain_other Character string. Label for variables not assigned to
+#'   any domain. Default `""` (blank). Inherits from
+#'   `clerk_options()$domain_other`.
 #' @param pivot Logical. Pivot to wide format (default `FALSE`).
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
@@ -54,34 +51,34 @@
 #' @importFrom rlang .data
 #' @export
 tbl_correlation <- function(data,
-                            predictor  = "variable",
-                            outcome    = "outcome",
-                            r          = "r",
-                            p          = "p",
-                            n          = NULL,
-                            extra_cols = NULL,
-                            domains    = list(),
-                            fdr        = FALSE,
-                            fdr_within = NULL,
-                            r_digits   = NULL,
-                            p_digits   = NULL,
-                            p_style    = NULL,
-                            stars      = NULL,
-                            fdr_ns     = NULL,
-                            fdr_alpha  = NULL,
-                            pivot      = FALSE,
-                            output     = c("gt", "html", "latex")) {
+                            predictor    = "variable",
+                            outcome      = "outcome",
+                            r            = "r",
+                            p            = "p",
+                            n            = NULL,
+                            extra_cols   = NULL,
+                            domains      = list(),
+                            fdr          = FALSE,
+                            fdr_within   = NULL,
+                            r_digits     = NULL,
+                            p_digits     = NULL,
+                            p_style      = NULL,
+                            stars        = NULL,
+                            fdr_ns       = NULL,
+                            fdr_alpha    = NULL,
+                            domain_other = NULL,
+                            pivot        = FALSE,
+                            output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
   tbl    <- data
 
-  # Resolve all formatting options once up front
-  opts          <- .get_clerk_options()
-  fdr_ns_val    <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
-  fdr_alpha_val <- fdr_alpha %||% opts$fdr_alpha
-  fdr_label     <- opts$fdr_ns_label
+  opts             <- .get_clerk_options()
+  fdr_ns_val       <- if (!is.null(fdr_ns)) fdr_ns else isTRUE(opts$fdr_ns)
+  fdr_alpha_val    <- fdr_alpha    %||% opts$fdr_alpha
+  fdr_label        <- opts$fdr_ns_label
+  domain_other_val <- domain_other %||% opts$domain_other
 
-  # --- FDR correction --------------------------------------------------------
   if (fdr) {
     if (!is.null(fdr_within)) {
       tbl <- tbl |>
@@ -93,24 +90,20 @@ tbl_correlation <- function(data,
     }
   }
 
-  # --- Format r and p --------------------------------------------------------
   tbl[["r_fmt"]] <- .fmt_r(tbl[[r]], r_digits = r_digits)
   tbl[["p_fmt"]] <- .fmt_p(tbl[[p]], p_digits = p_digits, p_style = p_style,
                             stars = stars)
 
   if (fdr && "p_fdr_raw" %in% names(tbl)) {
     p_fdr_raw <- tbl[["p_fdr_raw"]]
-    # Step 1: format the BH-adjusted p numerically
     p_fdr_fmt <- .fmt_p(p_fdr_raw, p_digits = p_digits, p_style = p_style,
                         stars = stars)
-    # Step 2: replace non-survivors with "ns"
     if (fdr_ns_val)
       p_fdr_fmt <- ifelse(!is.na(p_fdr_raw) & p_fdr_raw >= fdr_alpha_val,
                           fdr_label, p_fdr_fmt)
     tbl[["p_fdr_fmt"]] <- p_fdr_fmt
   }
 
-  # --- Pivot or long ---------------------------------------------------------
   if (pivot) {
     cell_col <- if (fdr && "p_fdr_fmt" %in% names(tbl)) "p_fdr_fmt" else "p_fmt"
     tbl[["cell"]] <- paste0(tbl[["r_fmt"]], " (", tbl[[cell_col]], ")")
@@ -148,7 +141,8 @@ tbl_correlation <- function(data,
 
   structure(
     list(table = out_tbl, domains = domains, log_vars = character(0),
-         type = "correlation", group = NULL, pivot = pivot, output = output),
+         type = "correlation", group = NULL, pivot = pivot,
+         domain_other = domain_other_val, output = output),
     class = "clerk_tbl"
   )
 }
