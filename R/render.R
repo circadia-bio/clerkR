@@ -16,15 +16,15 @@
 #' @param ... Passed to the underlying `render_gt()`, `render_reactable()`, or
 #'   `render_latex()`.
 #'
-#' @return A `gt_tbl`, `reactable`, or `knit_asis` object depending on the
-#'   `output` slot of `x`.
+#' @return A `gt_tbl`, `htmltools::tagList`, or `knit_asis` object depending
+#'   on the `output` slot of `x`.
 #'
 #' @examples
 #' tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>
 #'   clerk_render(title = "Table 1")
 #'
 #' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   clerk_render()
+#'   clerk_render(title = "Sample characteristics")
 #'
 #' @importFrom utils stack
 #' @importFrom rlang .data
@@ -44,7 +44,8 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
     gt    = render_gt(x,        title = title, subtitle = subtitle,
                                 footnote = footnote,
                                 fdr_footnote = fdr_footnote, ...),
-    html  = render_reactable(x, title = title, ...),
+    html  = render_reactable(x, title = title, subtitle = subtitle,
+                                footnote = footnote, ...),
     latex = render_latex(x,     title = title, subtitle = subtitle,
                                 footnote = footnote,
                                 fdr_footnote = fdr_footnote, ...)
@@ -164,30 +165,40 @@ render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' Render a clerk_tbl as an interactive HTML table
 #'
 #' @description
-#' Renders a `clerk_tbl` as a `reactable` interactive HTML table. Typically
-#' called indirectly via `clerk_render()`.
+#' Renders a `clerk_tbl` as a `reactable` interactive HTML table with optional
+#' title and subtitle rendered above the widget. Typically called indirectly
+#' via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
-#' @param title Optional character string displayed above the table.
+#' @param title Optional character string displayed as a heading above the
+#'   table.
+#' @param subtitle Optional character string displayed as a subheading.
+#' @param footnote Optional character string displayed as a note below the
+#'   table.
 #' @param ... Passed to `reactable::reactable()`.
 #'
-#' @return A `reactable` htmlwidget.
+#' @return An `htmltools::tagList` containing the title, reactable widget, and
+#'   optional footnote, or a bare `reactable` if no title/subtitle/footnote
+#'   are provided.
 #'
 #' @examples
-#' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   clerk_render()
+#' tbl_correlation(clerk_cor_example, output = "html") |>
+#'   clerk_render(title = "Partial correlations", subtitle = "age + sex controlled")
 #'
+#' @importFrom htmltools tagList tags
 #' @export
-render_reactable <- function(x, title = NULL, ...) {
+render_reactable <- function(x, title = NULL, subtitle = NULL,
+                             footnote = NULL, ...) {
   UseMethod("render_reactable")
 }
 
 #' @export
-render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
+render_reactable.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
+                                       footnote = NULL, ...) {
   domain_other <- x$domain_other %||% ""
   tbl          <- .attach_domains(x$table, x$domains, domain_other)
 
-  reactable::reactable(
+  widget <- reactable::reactable(
     tbl,
     groupBy    = if (length(x$domains) > 0) "domain" else NULL,
     searchable = TRUE,
@@ -196,6 +207,37 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
     bordered   = FALSE,
     compact    = TRUE,
     ...
+  )
+
+  has_chrome <- !is.null(title) || !is.null(subtitle) || !is.null(footnote)
+  if (!has_chrome) return(widget)
+
+  htmltools::tagList(
+    if (!is.null(title))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:14px; font-weight:600; color:#293681;",
+          "margin:0 0 2px 0; font-family:'DM Sans',sans-serif;"
+        ),
+        title
+      ),
+    if (!is.null(subtitle))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:12px; color:#4274D9;",
+          "margin:0 0 8px 0; font-family:'DM Sans',sans-serif;"
+        ),
+        subtitle
+      ),
+    widget,
+    if (!is.null(footnote))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:11px; color:#888; margin:4px 0 0 0;",
+          "font-family:'DM Sans',sans-serif;"
+        ),
+        footnote
+      )
   )
 }
 

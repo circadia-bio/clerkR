@@ -30,6 +30,7 @@ Imports:
     rlang,
     gt (>= 0.10.0),
     reactable (>= 0.4.0),
+    htmltools,
     knitr,
     grDevices,
     stats,
@@ -42,3 +43,4 @@ VignetteBuilder: knitr
 URL: https://clerkr.circadia-lab.uk, https://github.com/circadia-bio/clerkR
 BugReports: https://github.com/circadia-bio/clerkR/issues
 LazyData: true
+Config/roxygen2/version: 8.0.0
