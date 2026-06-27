@@ -1,0 +1,212 @@
+---
+title: "Formatting options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formatting options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>"
+)
+library(clerkR)
+```
+
+## Overview
+
+All `tbl_*` constructors inherit their formatting defaults from
+`clerk_options()`. Defaults follow biomed/APA conventions and are loaded
+automatically when the package is attached — no setup required. You can
+inspect the current settings at any time:
+
+```{r inspect}
+clerk_options()
+```
+
+Options can be changed session-wide with a single call, or overridden
+per-table by passing the same arguments directly to any `tbl_*` function.
+
+---
+
+## P-value style
+
+The `p_style` option controls how p-values are displayed. Four styles are
+available:
+
+| Style | Example output | Use case |
+|---|---|---|
+| `"apa"` | `= 0.032`, `< 0.001` | APA manuscripts (default) |
+| `"plain"` | `0.032`, `< 0.001` | Plain decimal |
+| `"stars"` | `**` | Stars only, no numeric p |
+| `"stars_p"` | `= 0.032 **` | Stars alongside numeric p |
+
+```{r p-style}
+# APA style (default)
+tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+  clerk_render(title = "APA style (default)")
+
+# Plain decimal
+tbl_descriptive(clerk_example, group = sex, output = "gt",
+                p_style = "plain") |>
+  clerk_render(title = "Plain decimal")
+```
+
+To set a different default for the whole session:
+
+```{r set-style, eval = FALSE}
+clerk_options(p_style = "plain")
+```
+
+---
+
+## Decimal places
+
+Three separate options control decimal places for different value types:
+
+| Option | Default | Controls |
+|---|---|---|
+| `digits` | `2` | Continuous statistics (mean, SD, β, SE) |
+| `r_digits` | `3` | Correlations and h² estimates |
+| `p_digits` | `3` | P-values |
+
+```{r digits}
+# More decimal places for p-values, fewer for statistics
+tbl_descriptive(clerk_example, group = sex, output = "gt",
+                digits = 1, p_digits = 2) |>
+  clerk_render(title = "digits = 1, p_digits = 2")
+```
+
+The `p_threshold` option controls the value below which p-values are shown
+as `< {threshold}` rather than as a decimal. The default is `0.001`:
+
+```{r threshold}
+# Show < 0.01 instead of < 0.001
+tbl_descriptive(clerk_example, group = sex, output = "gt",
+                p_threshold = 0.01) |>
+  clerk_render(title = "p_threshold = 0.01")
+```
+
+---
+
+## Significance stars
+
+Stars are off by default. Enable them with `stars = TRUE`:
+
+```{r stars}
+tbl_correlation(clerk_cor_example, fdr = TRUE, output = "gt",
+                stars = TRUE) |>
+  clerk_render(title = "With significance stars")
+```
+
+The thresholds for `*`, `**`, and `***` are set by `star_thresholds`
+(default `c(0.05, 0.01, 0.001)`). For stars-only output use
+`p_style = "stars"`, or combine stars with numeric p-values using
+`p_style = "stars_p"`:
+
+```{r stars-p}
+tbl_regression(clerk_reg_example, output = "gt",
+               p_style = "stars_p") |>
+  clerk_render(title = "Stars alongside p-values")
+```
+
+---
+
+## FDR display
+
+When `fdr = TRUE` is passed to a `tbl_*` function, a `p (FDR)` column is
+added containing BH-adjusted p-values. Three options control how non-surviving
+results are displayed:
+
+| Option | Default | Effect |
+|---|---|---|
+| `fdr_ns` | `TRUE` | Replace non-surviving cells with `fdr_ns_label` |
+| `fdr_alpha` | `0.05` | Alpha level applied to the **BH-adjusted** p-value |
+| `fdr_ns_label` | `"ns"` | The label shown for non-surviving cells |
+
+```{r fdr-ns}
+# Default: non-survivors labelled "ns"
+tbl_descriptive(clerk_example, group = sex, fdr = TRUE, output = "gt") |>
+  clerk_render(title = "FDR with ns label (default)")
+```
+
+Disable the replacement to always show the numeric FDR value:
+
+```{r fdr-numeric}
+tbl_descriptive(clerk_example, group = sex, fdr = TRUE, output = "gt",
+                fdr_ns = FALSE) |>
+  clerk_render(title = "FDR numeric values always shown")
+```
+
+Use a stricter survival threshold:
+
+```{r fdr-strict}
+tbl_correlation(clerk_cor_example, fdr = TRUE, output = "gt",
+                fdr_alpha = 0.01) |>
+  clerk_render(title = "FDR survival at \u03b1 = 0.01")
+```
+
+---
+
+## Domain labels for unassigned variables
+
+When a `domains` list is supplied, variables not assigned to any domain receive
+a blank section header by default (`domain_other = ""`). Set it to a string
+to collect them under a named section:
+
+```{r domain-other}
+tbl_descriptive(
+  clerk_example,
+  group        = sex,
+  domains      = list("Metabolic" = c("hdl", "glucose", "bmi")),
+  domain_other = "Other",
+  output       = "gt"
+) |>
+  clerk_render(title = "Unassigned variables under 'Other'")
+```
+
+---
+
+## Session-wide vs per-call options
+
+Options set via `clerk_options()` apply to all subsequent tables in the
+session. Arguments passed directly to a `tbl_*` function override the session
+default for that call only:
+
+```{r session-vs-call}
+# Change session default to plain style
+clerk_options(p_style = "plain")
+
+# This table uses plain (from session)
+tbl_simple(clerk_example, output = "gt") |>
+  clerk_render(title = "Session default: plain")
+
+# This table overrides back to APA for this call only
+tbl_simple(clerk_example, output = "gt", p_style = "apa") |>
+  clerk_render(title = "Per-call override: apa")
+
+# Reset to factory defaults
+clerk_options(reset = TRUE)
+```
+
+---
+
+## Full option reference
+
+```{r reference, eval = FALSE}
+clerk_options(
+  digits          = 2,        # continuous stats decimal places
+  r_digits        = 3,        # correlations / h² decimal places
+  p_digits        = 3,        # p-value decimal places
+  p_threshold     = 0.001,    # below this → "< 0.001"
+  p_style         = "apa",    # "apa" | "plain" | "stars" | "stars_p"
+  stars           = FALSE,    # append * ** ***
+  star_thresholds = c(0.05, 0.01, 0.001),
+  fdr_ns          = TRUE,     # replace non-surviving FDR with label
+  fdr_alpha       = 0.05,     # applied to BH-adjusted p, not raw p
+  fdr_ns_label    = "ns",     # label for non-surviving FDR cells
+  domain_other    = ""        # label for unassigned variables
+)
+```
