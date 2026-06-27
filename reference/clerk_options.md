@@ -44,9 +44,8 @@ clerk_options(
 
 - p_threshold:
 
-  Numeric. Raw p-values **below** this are shown as `"< {threshold}"`
-  rather than as a decimal (default `0.001`). Display only — not a
-  significance threshold.
+  Numeric. Raw p-values below this are shown as `"< {threshold}"`
+  (default `0.001`). Display only, not a significance threshold.
 
 - p_style:
 
@@ -70,25 +69,22 @@ clerk_options(
 
 - stars:
 
-  Logical. Append significance stars (`*`/`**`/`***`) to p-value cells
-  (default `FALSE`).
+  Logical. Append significance stars (default `FALSE`).
 
 - star_thresholds:
 
-  Numeric vector of length 3. P-value cutoffs for one, two, and three
-  stars respectively (default `c(0.05, 0.01, 0.001)`).
+  Numeric vector of length 3. Cutoffs for `*`, `**`, `***` (default
+  `c(0.05, 0.01, 0.001)`).
 
 - fdr_ns:
 
-  Logical. Replace the FDR-corrected p-value cell with `fdr_ns_label`
-  when `p(FDR) >= fdr_alpha` (default `TRUE`). The raw p-value column is
-  unaffected.
+  Logical. Replace the FDR p-value cell with `fdr_ns_label` when
+  `p(FDR) >= fdr_alpha` (default `TRUE`).
 
 - fdr_alpha:
 
-  Numeric. Alpha level applied to the **BH-adjusted** p-value. Cells
-  where `p(FDR) >= fdr_alpha` are labelled `fdr_ns_label` (default
-  `0.05`). Compared against the BH-adjusted p, not the raw p.
+  Numeric. Alpha applied to the BH-adjusted p-value. Cells where
+  `p(FDR) >= fdr_alpha` show `fdr_ns_label` (default `0.05`).
 
 - fdr_ns_label:
 

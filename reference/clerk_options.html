@@ -150,9 +150,9 @@ estimates (default <code>3</code>).</p></dd>
 
 
 <dt id="arg-p-threshold">p_threshold<a class="anchor" aria-label="anchor" href="#arg-p-threshold"></a></dt>
-<dd><p>Numeric. Raw p-values <strong>below</strong> this are shown as
-<code>"&lt; {threshold}"</code> rather than as a decimal (default <code>0.001</code>). Display
-only — not a significance threshold.</p></dd>
+<dd><p>Numeric. Raw p-values below this are shown as
+<code>"&lt; {threshold}"</code> (default <code>0.001</code>). Display only, not a significance
+threshold.</p></dd>
 
 
 <dt id="arg-p-style">p_style<a class="anchor" aria-label="anchor" href="#arg-p-style"></a></dt>
@@ -173,25 +173,22 @@ only — not a significance threshold.</p></dd>
 
 
 <dt id="arg-stars">stars<a class="anchor" aria-label="anchor" href="#arg-stars"></a></dt>
-<dd><p>Logical. Append significance stars (<code>*</code>/<code>**</code>/<code>***</code>) to p-value
-cells (default <code>FALSE</code>).</p></dd>
+<dd><p>Logical. Append significance stars (default <code>FALSE</code>).</p></dd>
 
 
 <dt id="arg-star-thresholds">star_thresholds<a class="anchor" aria-label="anchor" href="#arg-star-thresholds"></a></dt>
-<dd><p>Numeric vector of length 3. P-value cutoffs for one,
-two, and three stars respectively (default <code>c(0.05, 0.01, 0.001)</code>).</p></dd>
+<dd><p>Numeric vector of length 3. Cutoffs for <code>*</code>, <code>**</code>,
+<code>***</code> (default <code>c(0.05, 0.01, 0.001)</code>).</p></dd>
 
 
 <dt id="arg-fdr-ns">fdr_ns<a class="anchor" aria-label="anchor" href="#arg-fdr-ns"></a></dt>
-<dd><p>Logical. Replace the FDR-corrected p-value cell with
-<code>fdr_ns_label</code> when <code>p(FDR) &gt;= fdr_alpha</code> (default <code>TRUE</code>). The raw
-p-value column is unaffected.</p></dd>
+<dd><p>Logical. Replace the FDR p-value cell with <code>fdr_ns_label</code>
+when <code>p(FDR) &gt;= fdr_alpha</code> (default <code>TRUE</code>).</p></dd>
 
 
 <dt id="arg-fdr-alpha">fdr_alpha<a class="anchor" aria-label="anchor" href="#arg-fdr-alpha"></a></dt>
-<dd><p>Numeric. Alpha level applied to the <strong>BH-adjusted</strong>
-p-value. Cells where <code>p(FDR) &gt;= fdr_alpha</code> are labelled <code>fdr_ns_label</code>
-(default <code>0.05</code>). Compared against the BH-adjusted p, not the raw p.</p></dd>
+<dd><p>Numeric. Alpha applied to the BH-adjusted p-value.
+Cells where <code>p(FDR) &gt;= fdr_alpha</code> show <code>fdr_ns_label</code> (default <code>0.05</code>).</p></dd>
 
 
 <dt id="arg-fdr-ns-label">fdr_ns_label<a class="anchor" aria-label="anchor" href="#arg-fdr-ns-label"></a></dt>
