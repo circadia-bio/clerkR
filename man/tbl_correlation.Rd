@@ -17,6 +17,7 @@ tbl_correlation(
   fdr_within = NULL,
   r_digits = NULL,
   p_digits = NULL,
+  p_threshold = NULL,
   p_style = NULL,
   stars = NULL,
   fdr_ns = NULL,
@@ -52,6 +53,9 @@ labels.}
 \item{r_digits}{Integer. Decimal places for r.}
 
 \item{p_digits}{Integer. Decimal places for p-values.}
+
+\item{p_threshold}{Numeric. P-values below this are shown as
+\code{"< {threshold}"}. Inherits from \code{clerk_options()$p_threshold} if \code{NULL}.}
 
 \item{p_style}{Character. P-value style.}
 

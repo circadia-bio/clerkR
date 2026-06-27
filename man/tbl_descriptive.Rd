@@ -12,6 +12,7 @@ tbl_descriptive(
   log_vars = character(0),
   digits = NULL,
   p_digits = NULL,
+  p_threshold = NULL,
   p_style = NULL,
   stars = NULL,
   fdr = FALSE,
@@ -38,6 +39,9 @@ include. Defaults to all columns except \code{group}.}
 
 \item{p_digits}{Integer. Decimal places for p-values.}
 
+\item{p_threshold}{Numeric. P-values below this are shown as
+\code{"< {threshold}"}. Inherits from \code{clerk_options()$p_threshold} if \code{NULL}.}
+
 \item{p_style}{Character. P-value style (\code{"apa"}, \code{"plain"}, \code{"stars"},
 \code{"stars_p"}).}
 
@@ -50,8 +54,8 @@ include. Defaults to all columns except \code{group}.}
 \item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
 
 \item{domain_other}{Character string. Label for variables not assigned to
-any domain, and for all variables when \code{domains = list()}. Default \code{""}
-(blank — no section header). Inherits from \code{clerk_options()$domain_other}.}
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
 
 \item{overall}{Logical. Include an overall column (default \code{TRUE}).}
 
