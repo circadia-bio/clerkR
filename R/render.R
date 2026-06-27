@@ -9,7 +9,10 @@
 #' @param x A `clerk_tbl` object.
 #' @param title Optional character string for the table title.
 #' @param subtitle Optional character string for the table subtitle.
-#' @param footnote Optional additional footnote text.
+#' @param footnote Optional additional footnote text. Appended after any
+#'   automatic footnotes (log-transform, FDR).
+#' @param fdr_footnote Logical. Automatically add a source note explaining the
+#'   FDR correction when a `p_fdr` column is present (default `TRUE`).
 #' @param ... Passed to the underlying `render_gt()`, `render_reactable()`, or
 #'   `render_latex()`.
 #'
@@ -17,7 +20,7 @@
 #'   `output` slot of `x`.
 #'
 #' @examples
-#' tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+#' tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>
 #'   clerk_render(title = "Table 1")
 #'
 #' tbl_descriptive(clerk_example, group = sex, output = "html") |>
@@ -29,20 +32,22 @@
 #' @importFrom reactable reactable
 #' @export
 clerk_render <- function(x, title = NULL, subtitle = NULL,
-                         footnote = NULL, ...) {
+                         footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("clerk_render")
 }
 
 #' @export
 clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                   footnote = NULL, ...) {
+                                   footnote = NULL, fdr_footnote = TRUE, ...) {
   switch(
     x$output,
     gt    = render_gt(x,        title = title, subtitle = subtitle,
-                                footnote = footnote, ...),
+                                footnote = footnote,
+                                fdr_footnote = fdr_footnote, ...),
     html  = render_reactable(x, title = title, ...),
     latex = render_latex(x,     title = title, subtitle = subtitle,
-                                footnote = footnote, ...)
+                                footnote = footnote,
+                                fdr_footnote = fdr_footnote, ...)
   )
 }
 
@@ -53,13 +58,15 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' @description
 #' Renders a `clerk_tbl` as a `gt` table with clerkR styling applied via
 #' `clerk_theme()`. Domain groupings become row-group labels; log-transformed
-#' variables receive an automatic footnote. Typically called indirectly via
-#' `clerk_render()`.
+#' variables receive an automatic footnote; FDR-corrected tables receive an
+#' automatic source note. Typically called indirectly via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title.
 #' @param subtitle Optional table subtitle.
 #' @param footnote Optional additional footnote.
+#' @param fdr_footnote Logical. Add an automatic FDR source note when a
+#'   `p_fdr` column is present (default `TRUE`).
 #' @param ... Reserved for future use.
 #'
 #' @return A `gt_tbl` object.
@@ -70,13 +77,13 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @export
 render_gt <- function(x, title = NULL, subtitle = NULL,
-                      footnote = NULL, ...) {
+                      footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("render_gt")
 }
 
 #' @export
 render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                footnote = NULL, ...) {
+                                footnote = NULL, fdr_footnote = TRUE, ...) {
 
   tbl          <- x$table
   domains      <- x$domains
@@ -103,6 +110,12 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
         locations = gt::cells_stub(rows = log_vars)
       )
 
+  if (isTRUE(fdr_footnote) && "p_fdr" %in% names(tbl))
+    gt_tbl <- gt_tbl |>
+      gt::tab_source_note(
+        source_note = "p (FDR): Benjamini-Hochberg false discovery rate correction applied."
+      )
+
   if (!is.null(footnote))
     gt_tbl <- gt_tbl |> gt::tab_source_note(source_note = footnote)
 
@@ -121,6 +134,8 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' @param title Optional table title (used as the `\caption{}`).
 #' @param subtitle Optional subtitle appended to the caption.
 #' @param footnote Optional additional footnote.
+#' @param fdr_footnote Logical. Add an automatic FDR source note (default
+#'   `TRUE`).
 #' @param ... Reserved for future use.
 #'
 #' @return A `knit_asis` character object containing the LaTeX table source.
@@ -131,15 +146,15 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @export
 render_latex <- function(x, title = NULL, subtitle = NULL,
-                         footnote = NULL, ...) {
+                         footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("render_latex")
 }
 
 #' @export
 render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                   footnote = NULL, ...) {
+                                   footnote = NULL, fdr_footnote = TRUE, ...) {
   gt_tbl    <- render_gt(x, title = title, subtitle = subtitle,
-                         footnote = footnote)
+                         footnote = footnote, fdr_footnote = fdr_footnote)
   latex_out <- gt::as_latex(gt_tbl)
   knitr::asis_output(as.character(latex_out))
 }
