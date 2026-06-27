@@ -28,14 +28,17 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::., github::circadia-bio/R-itable
+          extra-packages: any::pkgdown, local::.
           needs: website
 
       - name: Install GitHub-only vignette dependencies
         run: |
-          install.packages("remotes")
-          remotes::install_github("circadia-bio/R-itable")
-        shell: Rscript {0}
+          for i in 1 2 3; do
+            Rscript -e "remotes::install_github('circadia-bio/R-itable', quiet = TRUE)" && break
+            echo "Attempt $i failed, retrying in 30s..."
+            sleep 30
+          done
+        shell: bash
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
