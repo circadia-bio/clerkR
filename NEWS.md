@@ -1,5 +1,53 @@
 # clerkR NEWS
 
+## clerkR 0.1.2
+
+### New features
+
+* `domain_other` parameter added to all five `tbl_*` functions and to
+  `clerk_options()`. Controls the label applied to variables not assigned to
+  any domain, and to all variables when no `domains` list is supplied.
+  Default is `""` (blank — no section header shown). Set to e.g. `"Other"`
+  to collect unassigned variables under a named section.
+
+* `render_gt()` and `render_latex()` now automatically add a source note
+  explaining BH FDR correction whenever a `p_fdr` column is present. Suppress
+  with `fdr_footnote = FALSE` or override with a custom `footnote =` string.
+
+* `render_reactable()` now renders `title`, `subtitle`, and `footnote` as
+  HTML elements above and below the widget. Previously the `title` argument
+  was accepted but silently ignored.
+
+* `htmltools` added to `Imports` to support the reactable title/footnote
+  rendering.
+
+### Documentation
+
+* New vignette: *Formatting options* — covers `p_style`, decimal places,
+  significance stars, FDR display, `domain_other`, and session-wide vs
+  per-call option overrides.
+
+* `pkgdown` site now has a **Customisation** navbar section linking to the
+  formatting options vignette.
+
+### Tests
+
+* Test suite expanded to cover all five table archetypes (`tbl_simple`,
+  `tbl_correlation`, `tbl_regression`, `tbl_heritability`), `.fmt_p()`
+  vector formatting, `clerk_options()` get/set/reset, `domain_other`
+  storage, and the automatic FDR source note.
+
+### Bug fixes
+
+* `domain_other` replaces the previous hardcoded `"Other"` label for
+  unmatched variables and `"All variables"` for tables without a domain list.
+  Both now default to `""`.
+
+* `pkgdown` directory added to `.Rbuildignore` to suppress the
+  `Non-standard file/directory found at top level` NOTE.
+
+---
+
 ## clerkR 0.1.1
 
 ### Bug fixes
