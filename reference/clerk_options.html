@@ -68,7 +68,7 @@ defaults."><meta property="og:image" content="https://clerkr.circadia-lab.uk/log
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,11 @@ defaults."><meta property="og:image" content="https://clerkr.circadia-lab.uk/log
     <li><a class="dropdown-item" href="../articles/correlation.html">Correlation and partial correlation tables</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression coefficient tables</a></li>
     <li><a class="dropdown-item" href="../articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Customisation</h6></li>
+    <li><a class="dropdown-item" href="../articles/formatting-options.html">Formatting options</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/circadia-bio/clerkR" aria-label="GitHub"><span class="fa fab fa-github"></span></a></li>
@@ -126,6 +130,7 @@ defaults.</p>
 <span>  fdr_ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_ns_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  domain_other <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reset <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -195,6 +200,13 @@ Cells where <code>p(FDR) &gt;= fdr_alpha</code> show <code>fdr_ns_label</code> (
 (default <code>"ns"</code>).</p></dd>
 
 
+<dt id="arg-domain-other">domain_other<a class="anchor" aria-label="anchor" href="#arg-domain-other"></a></dt>
+<dd><p>Character string used as the domain label for variables
+not assigned to any domain, and for all variables when no domains are
+specified. Default <code>""</code> (blank — no section header shown). Set to e.g.
+<code>"Other"</code> to collect unassigned variables under a named section.</p></dd>
+
+
 <dt id="arg-reset">reset<a class="anchor" aria-label="anchor" href="#arg-reset"></a></dt>
 <dd><p>Logical. Restore factory defaults (default <code>FALSE</code>).</p></dd>
 
@@ -209,6 +221,7 @@ Cells where <code>p(FDR) &gt;= fdr_alpha</code> show <code>fdr_ns_label</code> (
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">clerk_options</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">clerk_options</span><span class="op">(</span>p_style <span class="op">=</span> <span class="st">"apa"</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">clerk_options</span><span class="op">(</span>fdr_alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">clerk_options</span><span class="op">(</span>domain_other <span class="op">=</span> <span class="st">"Other"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">clerk_options</span><span class="op">(</span>reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

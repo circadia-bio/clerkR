@@ -55,7 +55,7 @@ tbl_regression(
 | Linear regression: TMT completion time (log s) |  |  |  |  |
 |----|----|----|----|----|
 |  | β | SE | 95% CI | p |
-| All variables |  |  |  |  |
+|  |  |  |  |  |
 | bmi | +0.02 | 0.02 | \[-0.02, +0.07\] | = 0.012 |
 | waist | -0.02 | 0.02 | \[-0.07, +0.03\] | = 0.048 |
 | systolic_bp | +0.01 | 0.01 | \[-0.01, +0.03\] | = 0.210 |
@@ -77,8 +77,8 @@ tbl_regression(
   output = "gt"
 ) |>
   clerk_render(title = "Linear regression: TMT completion time (log s)")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Linear regression: TMT completion time (log s) |  |  |  |  |
@@ -112,8 +112,8 @@ tbl_regression(
     title    = "Linear regression: TMT completion time (log s)",
     footnote = "FDR correction applied across all terms (BH)."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Linear regression: TMT completion time (log s) |  |  |  |  |  |
@@ -129,6 +129,7 @@ tbl_regression(
 | NA |  |  |  |  |  |
 | age | +0.00 | 0.01 | \[-0.03, +0.03\] | = 0.610 | ns |
 | sexMale | -0.04 | 0.02 | \[-0.08, -0.01\] | = 0.003 | = 0.021 |
+| p (FDR): Benjamini-Hochberg false discovery rate correction applied. |  |  |  |  |  |
 | FDR correction applied across all terms (BH). |  |  |  |  |  |
 
 ## Using `broom::tidy()` directly

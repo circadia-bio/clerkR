@@ -25,10 +25,12 @@ tbl_correlation(
   fdr_within = NULL,
   r_digits = NULL,
   p_digits = NULL,
+  p_threshold = NULL,
   p_style = NULL,
   stars = NULL,
   fdr_ns = NULL,
   fdr_alpha = NULL,
+  domain_other = NULL,
   pivot = FALSE,
   output = c("gt", "html", "latex")
 )
@@ -78,33 +80,37 @@ tbl_correlation(
 
 - r_digits:
 
-  Integer. Decimal places for r. Inherits from
-  `clerk_options()$r_digits` if `NULL`.
+  Integer. Decimal places for r.
 
 - p_digits:
 
-  Integer. Decimal places for p-values. Inherits from
-  `clerk_options()$p_digits` if `NULL`.
+  Integer. Decimal places for p-values.
+
+- p_threshold:
+
+  Numeric. P-values below this are shown as `"< {threshold}"`. Inherits
+  from `clerk_options()$p_threshold` if `NULL`.
 
 - p_style:
 
-  Character. P-value style. Inherits from `clerk_options()$p_style` if
-  `NULL`.
+  Character. P-value style.
 
 - stars:
 
-  Logical. Append significance stars. Inherits from
-  `clerk_options()$stars` if `NULL`.
+  Logical. Append significance stars.
 
 - fdr_ns:
 
-  Logical. Replace non-surviving FDR p-values with `"ns"`. Inherits from
-  `clerk_options()$fdr_ns` if `NULL`.
+  Logical. Replace non-surviving FDR p-values with `"ns"`.
 
 - fdr_alpha:
 
-  Numeric. Alpha level applied to the BH-adjusted p-value. Inherits from
-  `clerk_options()$fdr_alpha` if `NULL`.
+  Numeric. Alpha level for FDR survival (BH-adjusted p).
+
+- domain_other:
+
+  Character string. Label for variables not assigned to any domain.
+  Default `""` (blank). Inherits from `clerk_options()$domain_other`.
 
 - pivot:
 

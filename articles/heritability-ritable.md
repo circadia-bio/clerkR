@@ -149,8 +149,8 @@ res |>
     subtitle = "Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI",
     footnote = "FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Heritability estimates |  |  |  |  |  |  |  |
@@ -167,6 +167,7 @@ res |>
 | bmi | age+sex_num+age2 | 0.999 | \[0.828, 1.000\] | \< 0.001 | 0.924 | 0.001 | \< 0.001 |
 | sbp | age+sex_num+age2 | 0.800 | \[0.523, 1.000\] | \< 0.001 | 0.788 | 0.197 | \< 0.001 |
 | hdl | age+sex_num+age2 | 0.804 | \[0.526, 1.000\] | \< 0.001 | 0.795 | 0.194 | \< 0.001 |
+| p (FDR): Benjamini-Hochberg false discovery rate correction applied. |  |  |  |  |  |  |  |
 | FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction. |  |  |  |  |  |  |  |
 
 ## Filtering to a single model
@@ -191,10 +192,11 @@ res[res$covariates == adj_model, ] |>
 | Heritability estimates (age+sex_num+age2) |  |  |  |  |  |  |
 |----|----|----|----|----|----|----|
 |  | h² | 95% CI | p | σ²a | σ²e | p (FDR) |
-| All variables |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |
 | bmi | 0.999 | \[0.828, 1.000\] | \< 0.001 | 0.924 | 0.001 | \< 0.001 |
 | sbp | 0.800 | \[0.523, 1.000\] | \< 0.001 | 0.788 | 0.197 | \< 0.001 |
 | hdl | 0.804 | \[0.526, 1.000\] | \< 0.001 | 0.795 | 0.194 | \< 0.001 |
+| p (FDR): Benjamini-Hochberg false discovery rate correction applied. |  |  |  |  |  |  |
 | FDR correction applied across all traits (BH). |  |  |  |  |  |  |
 
 ## HTML output

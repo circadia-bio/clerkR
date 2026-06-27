@@ -9,7 +9,14 @@ forwarded to the underlying renderer.
 ## Usage
 
 ``` r
-clerk_render(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+clerk_render(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  fdr_footnote = TRUE,
+  ...
+)
 ```
 
 ## Arguments
@@ -28,7 +35,13 @@ clerk_render(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 
 - footnote:
 
-  Optional additional footnote text.
+  Optional additional footnote text. Appended after any automatic
+  footnotes (log-transform, FDR).
+
+- fdr_footnote:
+
+  Logical. Automatically add a source note explaining the FDR correction
+  when a `p_fdr` column is present (default `TRUE`).
 
 - ...:
 
@@ -40,13 +53,14 @@ clerk_render(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 
 ## Value
 
-A `gt_tbl`, `reactable`, or `knit_asis` object depending on the `output`
-slot of `x`.
+A `gt_tbl`,
+[`htmltools::tagList`](https://rstudio.github.io/htmltools/reference/tagList.html),
+or `knit_asis` object depending on the `output` slot of `x`.
 
 ## Examples
 
 ``` r
-tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>
   clerk_render(title = "Table 1")
 
 

@@ -15,11 +15,13 @@ tbl_descriptive(
   log_vars = character(0),
   digits = NULL,
   p_digits = NULL,
+  p_threshold = NULL,
   p_style = NULL,
   stars = NULL,
   fdr = FALSE,
   fdr_ns = NULL,
   fdr_alpha = NULL,
+  domain_other = NULL,
   overall = TRUE,
   output = c("gt", "html", "latex")
 )
@@ -57,6 +59,11 @@ tbl_descriptive(
 
   Integer. Decimal places for p-values.
 
+- p_threshold:
+
+  Numeric. P-values below this are shown as `"< {threshold}"`. Inherits
+  from `clerk_options()$p_threshold` if `NULL`.
+
 - p_style:
 
   Character. P-value style (`"apa"`, `"plain"`, `"stars"`, `"stars_p"`).
@@ -76,6 +83,11 @@ tbl_descriptive(
 - fdr_alpha:
 
   Numeric. Alpha level for FDR survival (BH-adjusted p).
+
+- domain_other:
+
+  Character string. Label for variables not assigned to any domain.
+  Default `""` (blank). Inherits from `clerk_options()$domain_other`.
 
 - overall:
 

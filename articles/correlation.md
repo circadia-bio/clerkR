@@ -45,7 +45,7 @@ tbl_correlation(
 | Partial correlations (age + sex controlled) |                |        |         |
 |---------------------------------------------|----------------|--------|---------|
 |                                             | Outcome        | r      | p       |
-| All variables                               |                |        |         |
+|                                             |                |        |         |
 | hdl                                         | tmt_time       | +0.190 | = 0.008 |
 | glucose                                     | tmt_time       | -0.229 | = 0.398 |
 | bmi                                         | tmt_time       | -0.086 | = 0.013 |
@@ -80,7 +80,7 @@ tbl_correlation(
 | Partial correlations (age + sex controlled) |  |  |  |  |
 |----|----|----|----|----|
 |  | Outcome | n | r | p |
-| All variables |  |  |  |  |
+|  |  |  |  |  |
 | hdl | tmt_time | 270 | +0.190 | = 0.008 |
 | glucose | tmt_time | 254 | -0.229 | = 0.398 |
 | bmi | tmt_time | 290 | -0.086 | = 0.013 |
@@ -113,8 +113,8 @@ tbl_correlation(
   output = "gt"
 ) |>
   clerk_render(title = "Partial correlations (age + sex controlled)")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Partial correlations (age + sex controlled) |  |  |  |  |
@@ -162,7 +162,7 @@ tbl_correlation(
 | Partial correlations (age + sex controlled) |  |  |  |  |
 |----|----|----|----|----|
 |  | Outcome | r | p | p (FDR) |
-| All variables |  |  |  |  |
+|  |  |  |  |  |
 | hdl | tmt_time | +0.190 | = 0.008 | = 0.021 |
 | glucose | tmt_time | -0.229 | = 0.398 | ns |
 | bmi | tmt_time | -0.086 | = 0.013 | = 0.026 |
@@ -179,6 +179,7 @@ tbl_correlation(
 | bdi | verbal_fluency | -0.176 | = 0.070 | ns |
 | panas_neg | verbal_fluency | +0.232 | = 0.117 | ns |
 | life_satisfaction | verbal_fluency | +0.201 | = 0.234 | ns |
+| p (FDR): Benjamini-Hochberg false discovery rate correction applied. |  |  |  |  |
 | FDR correction applied within each outcome (BH). |  |  |  |  |
 
 ## Wide (pivoted) format
@@ -202,8 +203,8 @@ tbl_correlation(
     title    = "Partial correlations (age + sex controlled)",
     footnote = "Values shown as r (p FDR). FDR-corrected p-value (BH)."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Partial correlations (age + sex controlled) |  |  |
@@ -264,6 +265,6 @@ tbl_correlation(
   output = "html"
 ) |>
   clerk_render()
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```

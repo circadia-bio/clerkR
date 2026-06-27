@@ -1,4 +1,4 @@
-# 🧪 clerkR
+# 📋 clerkR
 
 **A clerk keeps tabs — `clerkR` keeps yours publication-ready.**
 

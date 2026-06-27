@@ -88,7 +88,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,8 +110,12 @@
     <li><a class="dropdown-item" href="../articles/correlation.html">Correlation and partial correlation tables</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression coefficient tables</a></li>
     <li><a class="dropdown-item" href="../articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Customisation</h6></li>
+    <li><a class="dropdown-item" href="../articles/formatting-options.html">Formatting options</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -306,8 +310,8 @@ specified:</p>
 <span>    subtitle <span class="op">=</span> <span class="st">"Narrow-sense h\u00b2 \u00b1 95% profile-likelihood CI"</span>,</span>
 <span>    footnote <span class="op">=</span> <span class="st">"FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction."</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):</span></span>
-<span><span class="co">#&gt; invalid factor level, NA generated</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid</span></span>
+<span><span class="co">#&gt; factor level, NA generated</span></span></code></pre></div>
 <div id="njwdqtaadp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#njwdqtaadp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -871,9 +875,14 @@ specified:</p>
 <td headers="Cardiometabolic stub_1_9 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
 </tr>
 </tbody>
-<tfoot><tr class="gt_sourcenotes">
+<tfoot>
+<tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="8">p (FDR): Benjamini-Hochberg false discovery rate correction applied.</td>
+    </tr>
+<tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="8">FDR correction applied within each covariate model (BH). p-values are one-sided LRT with chi-squared(1) boundary correction.</td>
-    </tr></tfoot>
+    </tr>
+</tfoot>
 </table>
 </div>
 </div>
@@ -1360,39 +1369,44 @@ specified:</p>
 </thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
-<th colspan="7" class="gt_group_heading" style="background-color: #D0E7E6; color: #293681; font-weight: bold;" scope="colgroup" id="All variables">All variables</th>
+<th colspan="7" class="gt_empty_group_heading" style="background-color: #D0E7E6; color: #293681; font-weight: bold;" scope="colgroup"></th>
     </tr>
 <tr class="gt_row_group_first">
 <th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">bmi</th>
-<td headers="All variables stub_1_1 h2" class="gt_row gt_right" style="color: #293681;">0.999</td>
-<td headers="All variables stub_1_1 ci_95" class="gt_row gt_left" style="color: #293681;">[0.828, 1.000]</td>
-<td headers="All variables stub_1_1 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
-<td headers="All variables stub_1_1 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.924</td>
-<td headers="All variables stub_1_1 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.001</td>
-<td headers="All variables stub_1_1 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_1 h2" class="gt_row gt_right" style="color: #293681;">0.999</td>
+<td headers=" stub_1_1 ci_95" class="gt_row gt_left" style="color: #293681;">[0.828, 1.000]</td>
+<td headers=" stub_1_1 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_1 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.924</td>
+<td headers=" stub_1_1 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.001</td>
+<td headers=" stub_1_1 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">sbp</th>
-<td headers="All variables stub_1_2 h2" class="gt_row gt_right" style="color: #293681;">0.800</td>
-<td headers="All variables stub_1_2 ci_95" class="gt_row gt_left" style="color: #293681;">[0.523, 1.000]</td>
-<td headers="All variables stub_1_2 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
-<td headers="All variables stub_1_2 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.788</td>
-<td headers="All variables stub_1_2 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.197</td>
-<td headers="All variables stub_1_2 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_2 h2" class="gt_row gt_right" style="color: #293681;">0.800</td>
+<td headers=" stub_1_2 ci_95" class="gt_row gt_left" style="color: #293681;">[0.523, 1.000]</td>
+<td headers=" stub_1_2 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_2 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.788</td>
+<td headers=" stub_1_2 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.197</td>
+<td headers=" stub_1_2 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub" style="color: #293681; font-style: italic;">hdl</th>
-<td headers="All variables stub_1_3 h2" class="gt_row gt_right" style="color: #293681;">0.804</td>
-<td headers="All variables stub_1_3 ci_95" class="gt_row gt_left" style="color: #293681;">[0.526, 1.000]</td>
-<td headers="All variables stub_1_3 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
-<td headers="All variables stub_1_3 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.795</td>
-<td headers="All variables stub_1_3 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.194</td>
-<td headers="All variables stub_1_3 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_3 h2" class="gt_row gt_right" style="color: #293681;">0.804</td>
+<td headers=" stub_1_3 ci_95" class="gt_row gt_left" style="color: #293681;">[0.526, 1.000]</td>
+<td headers=" stub_1_3 p" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
+<td headers=" stub_1_3 sigma2_a" class="gt_row gt_right" style="color: #293681;">0.795</td>
+<td headers=" stub_1_3 sigma2_e" class="gt_row gt_right" style="color: #293681;">0.194</td>
+<td headers=" stub_1_3 p_fdr" class="gt_row gt_left" style="color: #293681;">&lt; 0.001</td>
 </tr>
 </tbody>
-<tfoot><tr class="gt_sourcenotes">
+<tfoot>
+<tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="7">p (FDR): Benjamini-Hochberg false discovery rate correction applied.</td>
+    </tr>
+<tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="7">FDR correction applied across all traits (BH).</td>
-    </tr></tfoot>
+    </tr>
+</tfoot>
 </table>
 </div>
 </div>
@@ -1408,7 +1422,7 @@ specified:</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/clerk_render.html">clerk_render</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="reactable html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["bmi","sbp","hdl"],"h2":["0.999","0.800","0.804"],"ci_95":["[0.828, 1.000]","[0.523, 1.000]","[0.526, 1.000]"],"p":["< 0.001","< 0.001","< 0.001"],"sigma2_a":["0.924","0.788","0.795"],"sigma2_e":["0.001","0.197","0.194"],"domain":["All variables","All variables","All variables"]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"h2","name":"h2","type":"character"},{"id":"ci_95","name":"ci_95","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"sigma2_a","name":"sigma2_a","type":"character"},{"id":"sigma2_e","name":"sigma2_e","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"64c478bf9e383123396aee2f49e635b3"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["bmi","sbp","hdl"],"h2":["0.999","0.800","0.804"],"ci_95":["[0.828, 1.000]","[0.523, 1.000]","[0.526, 1.000]"],"p":["< 0.001","< 0.001","< 0.001"],"sigma2_a":["0.924","0.788","0.795"],"sigma2_e":["0.001","0.197","0.194"],"domain":["","",""]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"h2","name":"h2","type":"character"},{"id":"ci_95","name":"ci_95","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"sigma2_a","name":"sigma2_a","type":"character"},{"id":"sigma2_e","name":"sigma2_e","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"c07a24fa43cbb3a91ea49f5ab1850012"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

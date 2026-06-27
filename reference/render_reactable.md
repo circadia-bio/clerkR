@@ -1,13 +1,14 @@
 # Render a clerk_tbl as an interactive HTML table
 
-Renders a `clerk_tbl` as a `reactable` interactive HTML table. Typically
-called indirectly via
+Renders a `clerk_tbl` as a `reactable` interactive HTML table with
+optional title and subtitle rendered above the widget. Typically called
+indirectly via
 [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md).
 
 ## Usage
 
 ``` r
-render_reactable(x, title = NULL, ...)
+render_reactable(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 ```
 
 ## Arguments
@@ -18,7 +19,15 @@ render_reactable(x, title = NULL, ...)
 
 - title:
 
-  Optional character string displayed above the table.
+  Optional character string displayed as a heading above the table.
+
+- subtitle:
+
+  Optional character string displayed as a subheading.
+
+- footnote:
+
+  Optional character string displayed as a note below the table.
 
 - ...:
 
@@ -27,13 +36,18 @@ render_reactable(x, title = NULL, ...)
 
 ## Value
 
-A `reactable` htmlwidget.
+An
+[`htmltools::tagList`](https://rstudio.github.io/htmltools/reference/tagList.html)
+containing the title, reactable widget, and optional footnote, or a bare
+`reactable` if no title/subtitle/footnote are provided.
 
 ## Examples
 
 ``` r
-tbl_descriptive(clerk_example, group = sex, output = "html") |>
-  clerk_render()
-
-{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["age","hdl","glucose","bmi","waist","systolic_bp","tmt_time","verbal_fluency","bdi","panas_neg","life_satisfaction"],"n":[300,300,300,300,300,300,300,300,300,300,300],"overall":["46.76 ± 14.15","46.81 ± 10.11","91.68 ± 24.65","26.15 ± 4.91","92.07 ± 11.56","123.25 ± 17.77","129.24 ± 64.98","14.98 ± 4.63","13.64 ± 9.26","20.98 ± 7.48","18.02 ± 4.23"],"Female":["46.42 ± 13.63","48.32 ± 9.78","92.61 ± 24.49","26.43 ± 4.84","92.14 ± 11.32","120.36 ± 17.86","132.81 ± 66.77","15.08 ± 4.44","15.07 ± 8.97","22.50 ± 7.27","17.40 ± 4.25"],"Male":["47.35 ± 15.09","44.08 ± 10.18","90.01 ± 24.96","25.64 ± 5.01","91.93 ± 12.03","128.48 ± 16.45","122.81 ± 61.40","14.79 ± 4.97","11.05 ± 9.26","18.25 ± 7.09","19.14 ± 3.99"],"statistic":["t = -0.53","t = 3.50","t = 0.87","t = 1.32","t = 0.15","t = -3.97","t = 1.31","t = 0.52","t = 3.65","t = 4.92","t = -3.54"],"p":["= 0.599","< 0.001","= 0.386","= 0.190","= 0.879","< 0.001","= 0.192","= 0.606","< 0.001","< 0.001","< 0.001"],"domain":["All variables","All variables","All variables","All variables","All variables","All variables","All variables","All variables","All variables","All variables","All variables"]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"n","name":"n","type":"numeric"},{"id":"overall","name":"overall","type":"character"},{"id":"Female","name":"Female","type":"character"},{"id":"Male","name":"Male","type":"character"},{"id":"statistic","name":"statistic","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"512b445f69691c6e820ee804dd65e297"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}
+tbl_correlation(clerk_cor_example, output = "html") |>
+  clerk_render(title = "Partial correlations", subtitle = "age + sex controlled")
+#> <p style="font-size:14px; font-weight:600; color:#293681;margin:0 0 2px 0; font-family:&#39;DM Sans&#39;,sans-serif;">Partial correlations</p>
+#> <p style="font-size:12px; color:#4274D9;margin:0 0 8px 0; font-family:&#39;DM Sans&#39;,sans-serif;">age + sex controlled</p>
+#> <div class="reactable html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:auto;height:auto;"></div>
+#> <script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction","hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction"],"outcome":["tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency"],"r":["+0.190","-0.229","-0.086","+0.279","+0.195","+0.096","+0.157","+0.247","+0.078","+0.216","+0.022","+0.047","-0.105","-0.176","+0.232","+0.201"],"p":["= 0.008","= 0.398","= 0.013","= 0.002","= 0.379","= 0.109","= 0.006","= 0.117","= 0.072","= 0.003","= 0.207","= 0.185","= 0.077","= 0.070","= 0.117","= 0.234"],"domain":["","","","","","","","","","","","","","","",""]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"outcome","name":"outcome","type":"character"},{"id":"r","name":"r","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"47d4f166a5d7d8299ba0fae6e969ed5a"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 ```

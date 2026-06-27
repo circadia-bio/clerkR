@@ -60,7 +60,7 @@ group comparisons. Formatting defaults are inherited from clerk_options()."><met
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,11 @@ group comparisons. Formatting defaults are inherited from clerk_options()."><met
     <li><a class="dropdown-item" href="../articles/correlation.html">Correlation and partial correlation tables</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression coefficient tables</a></li>
     <li><a class="dropdown-item" href="../articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Customisation</h6></li>
+    <li><a class="dropdown-item" href="../articles/formatting-options.html">Formatting options</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/circadia-bio/clerkR" aria-label="GitHub"><span class="fa fab fa-github"></span></a></li>
@@ -111,11 +115,13 @@ group comparisons. Formatting defaults are inherited from <code><a href="clerk_o
 <span>  log_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  p_threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  fdr_ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  domain_other <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overall <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gt"</span>, <span class="st">"html"</span>, <span class="st">"latex"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -154,6 +160,11 @@ include. Defaults to all columns except <code>group</code>.</p></dd>
 <dd><p>Integer. Decimal places for p-values.</p></dd>
 
 
+<dt id="arg-p-threshold">p_threshold<a class="anchor" aria-label="anchor" href="#arg-p-threshold"></a></dt>
+<dd><p>Numeric. P-values below this are shown as
+<code>"&lt; {threshold}"</code>. Inherits from <code>clerk_options()$p_threshold</code> if <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-p-style">p_style<a class="anchor" aria-label="anchor" href="#arg-p-style"></a></dt>
 <dd><p>Character. P-value style (<code>"apa"</code>, <code>"plain"</code>, <code>"stars"</code>,
 <code>"stars_p"</code>).</p></dd>
@@ -173,6 +184,12 @@ include. Defaults to all columns except <code>group</code>.</p></dd>
 
 <dt id="arg-fdr-alpha">fdr_alpha<a class="anchor" aria-label="anchor" href="#arg-fdr-alpha"></a></dt>
 <dd><p>Numeric. Alpha level for FDR survival (BH-adjusted p).</p></dd>
+
+
+<dt id="arg-domain-other">domain_other<a class="anchor" aria-label="anchor" href="#arg-domain-other"></a></dt>
+<dd><p>Character string. Label for variables not assigned to
+any domain. Default <code>""</code> (blank). Inherits from
+<code>clerk_options()$domain_other</code>.</p></dd>
 
 
 <dt id="arg-overall">overall<a class="anchor" aria-label="anchor" href="#arg-overall"></a></dt>

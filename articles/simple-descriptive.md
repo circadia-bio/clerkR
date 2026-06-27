@@ -28,7 +28,7 @@ tbl_simple(
 | Sample characteristics |     |                                        |
 |------------------------|-----|----------------------------------------|
 |                        | n   | Summary                                |
-| All variables          |     |                                        |
+|                        |     |                                        |
 | sex                    | 300 | Female: 193 (64.3%); Male: 107 (35.7%) |
 | age                    | 300 | 46.76 ± 14.15                          |
 | hdl                    | 300 | 46.81 ± 10.11                          |
@@ -57,7 +57,7 @@ tbl_simple(
 | Metabolic and anthropometric characteristics |     |               |
 |----------------------------------------------|-----|---------------|
 |                                              | n   | Summary       |
-| All variables                                |     |               |
+|                                              |     |               |
 | age                                          | 300 | 46.76 ± 14.15 |
 | hdl                                          | 300 | 46.81 ± 10.11 |
 | glucose                                      | 300 | 91.68 ± 24.65 |
@@ -79,8 +79,8 @@ tbl_simple(
   output = "gt"
 ) |>
   clerk_render(title = "Sample characteristics")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Sample characteristics |     |                                        |
@@ -118,8 +118,8 @@ tbl_simple(
     title    = "Cognitive variables",
     footnote = "Values shown on raw scale."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 | Cognitive variables |  |  |
@@ -155,8 +155,8 @@ tbl_simple(
   output = "html"
 ) |>
   clerk_render()
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
+#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
+#> factor level, NA generated
 ```
 
 ## When to use `tbl_simple()` vs `tbl_descriptive()`

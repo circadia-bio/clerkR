@@ -17,3 +17,8 @@
   tables](https://clerkr.circadia-lab.uk/articles/regression.md):
 - [Heritability tables with R-itable and
   clerkR](https://clerkr.circadia-lab.uk/articles/heritability-ritable.md):
+
+### Customisation
+
+- [Formatting
+  options](https://clerkr.circadia-lab.uk/articles/formatting-options.md):

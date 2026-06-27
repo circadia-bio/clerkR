@@ -22,6 +22,7 @@ clerk_options(
   fdr_ns = NULL,
   fdr_alpha = NULL,
   fdr_ns_label = NULL,
+  domain_other = NULL,
   reset = FALSE
 )
 ```
@@ -90,6 +91,13 @@ clerk_options(
 
   Character string for non-surviving FDR cells (default `"ns"`).
 
+- domain_other:
+
+  Character string used as the domain label for variables not assigned
+  to any domain, and for all variables when no domains are specified.
+  Default `""` (blank — no section header shown). Set to e.g. `"Other"`
+  to collect unassigned variables under a named section.
+
 - reset:
 
   Logical. Restore factory defaults (default `FALSE`).
@@ -104,5 +112,6 @@ A named list of current option values, returned invisibly.
 clerk_options()
 clerk_options(p_style = "apa", stars = TRUE)
 clerk_options(fdr_alpha = 0.01)
+clerk_options(domain_other = "Other")
 clerk_options(reset = TRUE)
 ```

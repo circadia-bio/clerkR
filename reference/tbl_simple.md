@@ -2,11 +2,8 @@
 
 Produces a concise descriptive summary — mean ± SD for continuous
 variables and n (%) for categorical variables — with no group
-comparisons or statistical tests.
-
-Formatting defaults are inherited from
-[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md)
-and can be overridden per call.
+comparisons or statistical tests. Formatting defaults inherited from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md).
 
 ## Usage
 
@@ -17,6 +14,7 @@ tbl_simple(
   domains = list(),
   log_vars = character(0),
   digits = NULL,
+  domain_other = NULL,
   output = c("gt", "html", "latex")
 )
 ```
@@ -42,8 +40,12 @@ tbl_simple(
 
 - digits:
 
-  Integer. Decimal places for continuous variables. Inherits from
-  `clerk_options()$digits` if `NULL`.
+  Integer. Decimal places for continuous variables.
+
+- domain_other:
+
+  Character string. Label for variables not assigned to any domain.
+  Default `""` (blank). Inherits from `clerk_options()$domain_other`.
 
 - output:
 

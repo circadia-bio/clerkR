@@ -68,7 +68,7 @@ overridden per call."><meta property="og:image" content="https://clerkr.circadia
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,11 @@ overridden per call."><meta property="og:image" content="https://clerkr.circadia
     <li><a class="dropdown-item" href="../articles/correlation.html">Correlation and partial correlation tables</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression coefficient tables</a></li>
     <li><a class="dropdown-item" href="../articles/heritability-ritable.html">Heritability tables with R-itable and clerkR</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Customisation</h6></li>
+    <li><a class="dropdown-item" href="../articles/formatting-options.html">Formatting options</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/circadia-bio/clerkR" aria-label="GitHub"><span class="fa fab fa-github"></span></a></li>
@@ -128,10 +132,12 @@ overridden per call.</p>
 <span>  fdr_within <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  r_digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  p_threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  domain_other <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pivot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gt"</span>, <span class="st">"html"</span>, <span class="st">"latex"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -184,33 +190,38 @@ labels.</p></dd>
 
 
 <dt id="arg-r-digits">r_digits<a class="anchor" aria-label="anchor" href="#arg-r-digits"></a></dt>
-<dd><p>Integer. Decimal places for r. Inherits from
-<code>clerk_options()$r_digits</code> if <code>NULL</code>.</p></dd>
+<dd><p>Integer. Decimal places for r.</p></dd>
 
 
 <dt id="arg-p-digits">p_digits<a class="anchor" aria-label="anchor" href="#arg-p-digits"></a></dt>
-<dd><p>Integer. Decimal places for p-values. Inherits from
-<code>clerk_options()$p_digits</code> if <code>NULL</code>.</p></dd>
+<dd><p>Integer. Decimal places for p-values.</p></dd>
+
+
+<dt id="arg-p-threshold">p_threshold<a class="anchor" aria-label="anchor" href="#arg-p-threshold"></a></dt>
+<dd><p>Numeric. P-values below this are shown as
+<code>"&lt; {threshold}"</code>. Inherits from <code>clerk_options()$p_threshold</code> if <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-p-style">p_style<a class="anchor" aria-label="anchor" href="#arg-p-style"></a></dt>
-<dd><p>Character. P-value style. Inherits from
-<code>clerk_options()$p_style</code> if <code>NULL</code>.</p></dd>
+<dd><p>Character. P-value style.</p></dd>
 
 
 <dt id="arg-stars">stars<a class="anchor" aria-label="anchor" href="#arg-stars"></a></dt>
-<dd><p>Logical. Append significance stars. Inherits from
-<code>clerk_options()$stars</code> if <code>NULL</code>.</p></dd>
+<dd><p>Logical. Append significance stars.</p></dd>
 
 
 <dt id="arg-fdr-ns">fdr_ns<a class="anchor" aria-label="anchor" href="#arg-fdr-ns"></a></dt>
-<dd><p>Logical. Replace non-surviving FDR p-values with <code>"ns"</code>.
-Inherits from <code>clerk_options()$fdr_ns</code> if <code>NULL</code>.</p></dd>
+<dd><p>Logical. Replace non-surviving FDR p-values with <code>"ns"</code>.</p></dd>
 
 
 <dt id="arg-fdr-alpha">fdr_alpha<a class="anchor" aria-label="anchor" href="#arg-fdr-alpha"></a></dt>
-<dd><p>Numeric. Alpha level applied to the BH-adjusted p-value.
-Inherits from <code>clerk_options()$fdr_alpha</code> if <code>NULL</code>.</p></dd>
+<dd><p>Numeric. Alpha level for FDR survival (BH-adjusted p).</p></dd>
+
+
+<dt id="arg-domain-other">domain_other<a class="anchor" aria-label="anchor" href="#arg-domain-other"></a></dt>
+<dd><p>Character string. Label for variables not assigned to
+any domain. Default <code>""</code> (blank). Inherits from
+<code>clerk_options()$domain_other</code>.</p></dd>
 
 
 <dt id="arg-pivot">pivot<a class="anchor" aria-label="anchor" href="#arg-pivot"></a></dt>
@@ -316,7 +327,8 @@ Inherits from <code>clerk_options()$fdr_alpha</code> if <code>NULL</code>.</p></
 <td headers="NA stub_1_16 outcome" class="gt_row gt_left" style="border-style: none; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; color: #293681;" valign="middle" align="left">verbal_fluency</td>
 <td headers="NA stub_1_16 r" class="gt_row gt_right" style="border-style: none; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; color: #293681;" valign="middle" align="right">+0.201</td>
 <td headers="NA stub_1_16 p" class="gt_row gt_left" style="border-style: none; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; color: #293681;" valign="middle" align="left">= 0.234</td>
-<td headers="NA stub_1_16 p_fdr" class="gt_row gt_left" style="border-style: none; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; color: #293681;" valign="middle" align="left">ns</td></tr></tbody></table></div></div><span class="r-in"><span></span></span>
+<td headers="NA stub_1_16 p_fdr" class="gt_row gt_left" style="border-style: none; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; color: #293681;" valign="middle" align="left">ns</td></tr></tbody><tfoot style="border-style: none;"><tr class="gt_sourcenotes" style="border-style: none; color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3;" bgcolor="#FFFFFF"><td class="gt_sourcenote" colspan="5" style="border-style: none; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px;">p (FDR): Benjamini-Hochberg false discovery rate correction applied.</td>
+    </tr></tfoot></table></div></div><span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
