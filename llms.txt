@@ -223,6 +223,14 @@ Render a clerk_tbl to gt, HTML, or LaTeX.
 - [`render_latex()`](https://clerkr.circadia-lab.uk/reference/render_latex.md)
   : Render a clerk_tbl as a LaTeX table
 
+## Options
+
+Session-level formatting defaults — p-value style, decimal places, FDR
+display.
+
+- [`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md)
+  : clerkR session options
+
 ## Theme & palette
 
 clerkR visual identity — colours, scales, and gt theme.

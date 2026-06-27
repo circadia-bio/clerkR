@@ -1,10 +1,8 @@
 # Descriptive summary table with group comparisons (Table 1)
 
 Produces a descriptive/Table 1-style summary of a data frame, with
-optional group comparisons. Continuous variables are summarised as mean
-± SD and compared with an independent-samples t-test (two groups) or
-one-way ANOVA (three or more groups). Categorical variables are
-summarised as n (%) and compared with a chi-squared test.
+optional group comparisons. Formatting defaults are inherited from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md).
 
 ## Usage
 
@@ -15,9 +13,13 @@ tbl_descriptive(
   vars = NULL,
   domains = list(),
   log_vars = character(0),
-  digits = 2,
-  p_digits = 3,
+  digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
   fdr = FALSE,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
   overall = TRUE,
   output = c("gt", "html", "latex")
 )
@@ -32,8 +34,7 @@ tbl_descriptive(
 - group:
 
   \<[`tidy-select`](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)\>
-  Unquoted name of the grouping variable. If `NULL` (default) the
-  overall sample is summarised without a comparison column.
+  Grouping variable.
 
 - vars:
 
@@ -42,80 +43,59 @@ tbl_descriptive(
 
 - domains:
 
-  A named list mapping variable names to domain/section labels, e.g.
-  `list("Metabolic" = c("hdl", "glucose"), "Anthropometric" = c("bmi", "waist"))`.
-  Variables not mentioned are placed in an "Other" section.
+  A named list mapping variable names to domain/section labels.
 
 - log_vars:
 
-  Character vector of variable names that were log-transformed prior to
-  analysis. A footnote is appended noting that values are shown on the
-  raw scale.
+  Character vector of log-transformed variable names.
 
 - digits:
 
-  Integer. Number of decimal places for continuous variables (default
-  `2`).
+  Integer. Decimal places for continuous variables.
 
 - p_digits:
 
-  Integer. Number of decimal places for p-values (default `3`).
+  Integer. Decimal places for p-values.
+
+- p_style:
+
+  Character. P-value style (`"apa"`, `"plain"`, `"stars"`, `"stars_p"`).
+
+- stars:
+
+  Logical. Append significance stars.
 
 - fdr:
 
-  Logical. Apply BH FDR correction to p-values across all tests (default
-  `FALSE`).
+  Logical. Apply BH FDR correction (default `FALSE`).
+
+- fdr_ns:
+
+  Logical. Replace non-surviving FDR p-values with `"ns"`.
+
+- fdr_alpha:
+
+  Numeric. Alpha level for FDR survival (BH-adjusted p).
 
 - overall:
 
-  Logical. Include an overall (ungrouped) column alongside group columns
-  (default `TRUE`).
+  Logical. Include an overall column (default `TRUE`).
 
 - output:
 
-  Character string specifying the render target. One of `"gt"` (default,
-  for Word/PDF via `gt`), `"html"` (interactive `reactable`), or
-  `"latex"` (LaTeX via
-  [`gt::as_latex()`](https://gt.rstudio.com/reference/as_latex.html)).
-  This value is stored on the returned object and used by
-  [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
-  to dispatch to the correct renderer automatically.
+  Character string. One of `"gt"`, `"html"`, or `"latex"`.
 
 ## Value
 
-A `clerk_tbl` object (a list with class `"clerk_tbl"`) containing:
-
-- `table`:
-
-  A data frame with one row per variable.
-
-- `domains`:
-
-  The domain list supplied by the user.
-
-- `log_vars`:
-
-  The log-transformed variable names.
-
-- `type`:
-
-  Character string `"descriptive"`.
-
-- `group`:
-
-  Name of the grouping variable, or `NULL`.
-
-- `output`:
-
-  The render target: `"gt"`, `"html"`, or `"latex"`.
+A `clerk_tbl` object with type `"descriptive"`.
 
 ## Examples
 
 ``` r
 tbl_descriptive(
   clerk_example,
-  group    = sex,
-  domains  = list(
+  group   = sex,
+  domains = list(
     "Metabolic"    = c("hdl", "glucose", "bmi"),
     "Cognitive"    = c("tmt_time", "verbal_fluency"),
     "Mental health"= c("bdi", "panas_neg")

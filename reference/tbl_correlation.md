@@ -1,12 +1,13 @@
 # Correlation / partial correlation table
 
 Formats a tidy data frame of (partial) correlation results into a
-publication-ready table. Expects pre-computed coefficients as a tidy
-data frame with one row per predictor x outcome pair.
-
-Column-name arguments accept **character strings** (quoted names).
+publication-ready table. Column-name arguments accept character strings.
 Defaults match a typical correlation results frame with columns named
 `variable`, `outcome`, `r`, and `p`.
+
+Formatting defaults are inherited from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md)
+and can be overridden per call.
 
 ## Usage
 
@@ -22,8 +23,12 @@ tbl_correlation(
   domains = list(),
   fdr = FALSE,
   fdr_within = NULL,
-  digits = 3,
-  p_digits = 3,
+  r_digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
   pivot = FALSE,
   output = c("gt", "html", "latex")
 )
@@ -37,37 +42,31 @@ tbl_correlation(
 
 - predictor:
 
-  Character string. Name of the predictor variable column. Default
-  `"variable"`.
+  Character string. Predictor column name. Default `"variable"`.
 
 - outcome:
 
-  Character string. Name of the outcome variable column. Default
-  `"outcome"`.
+  Character string. Outcome column name. Default `"outcome"`.
 
 - r:
 
-  Character string. Name of the correlation coefficient column. Default
-  `"r"`.
+  Character string. Correlation coefficient column. Default `"r"`.
 
 - p:
 
-  Character string. Name of the p-value column. Default `"p"`.
+  Character string. P-value column. Default `"p"`.
 
 - n:
 
-  Character string or `NULL`. Name of the sample size column. Default
-  `NULL` (omitted).
+  Character string or `NULL`. Sample size column. Default `NULL`.
 
 - extra_cols:
 
-  Character vector of additional column names to carry through (e.g.
-  `"hemisphere"`, `"lobe"`).
+  Character vector of additional columns to carry through.
 
 - domains:
 
-  A named list mapping predictor variable names to domain/section
-  labels.
+  A named list mapping predictor names to domain/section labels.
 
 - fdr:
 
@@ -75,21 +74,41 @@ tbl_correlation(
 
 - fdr_within:
 
-  Character string or `NULL`. Column name to group FDR correction within
-  (e.g. `"outcome"`).
+  Character string or `NULL`. Column to group FDR within.
 
-- digits:
+- r_digits:
 
-  Integer. Decimal places for r (default `3`).
+  Integer. Decimal places for r. Inherits from
+  `clerk_options()$r_digits` if `NULL`.
 
 - p_digits:
 
-  Integer. Decimal places for p-values (default `3`).
+  Integer. Decimal places for p-values. Inherits from
+  `clerk_options()$p_digits` if `NULL`.
+
+- p_style:
+
+  Character. P-value style. Inherits from `clerk_options()$p_style` if
+  `NULL`.
+
+- stars:
+
+  Logical. Append significance stars. Inherits from
+  `clerk_options()$stars` if `NULL`.
+
+- fdr_ns:
+
+  Logical. Replace non-surviving FDR p-values with `"ns"`. Inherits from
+  `clerk_options()$fdr_ns` if `NULL`.
+
+- fdr_alpha:
+
+  Numeric. Alpha level applied to the BH-adjusted p-value. Inherits from
+  `clerk_options()$fdr_alpha` if `NULL`.
 
 - pivot:
 
-  Logical. Pivot to wide format with one column per outcome (default
-  `FALSE`).
+  Logical. Pivot to wide format (default `FALSE`).
 
 - output:
 

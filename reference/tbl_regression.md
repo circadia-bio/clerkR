@@ -1,10 +1,9 @@
 # Regression coefficients table
 
 Formats a tidy data frame of regression results into a publication-ready
-table. Designed to accept the output of `broom::tidy()` directly.
-
-Column-name arguments accept **character strings** (quoted names).
-Defaults match `broom::tidy(model, conf.int = TRUE)` output.
+table. Accepts `broom::tidy()` output directly. Formatting defaults
+inherited from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md).
 
 ## Usage
 
@@ -23,8 +22,12 @@ tbl_regression(
   fdr = FALSE,
   fdr_within = NULL,
   ci_sep = ", ",
-  digits = 3,
-  p_digits = 3,
+  digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
   output = c("gt", "html", "latex")
 )
 ```
@@ -33,40 +36,35 @@ tbl_regression(
 
 - data:
 
-  A tidy data frame of regression results with one row per term.
+  A tidy data frame of regression results.
 
 - term:
 
-  Character string. Name of the model term column. Default `"term"`.
+  Character string. Model term column. Default `"term"`.
 
 - estimate:
 
-  Character string. Name of the coefficient column. Default
-  `"estimate"`.
+  Character string. Coefficient column. Default `"estimate"`.
 
 - std_error:
 
-  Character string. Name of the standard error column. Default
-  `"std.error"`.
+  Character string. SE column. Default `"std.error"`.
 
 - conf_low:
 
-  Character string. Name of the lower CI bound column. Default
-  `"conf.low"`.
+  Character string. Lower CI column. Default `"conf.low"`.
 
 - conf_high:
 
-  Character string. Name of the upper CI bound column. Default
-  `"conf.high"`.
+  Character string. Upper CI column. Default `"conf.high"`.
 
 - p:
 
-  Character string. Name of the p-value column. Default `"p.value"`.
+  Character string. P-value column. Default `"p.value"`.
 
 - model:
 
-  Character string or `NULL`. Name of a column identifying multiple
-  models. Default `NULL`.
+  Character string or `NULL`. Multiple-model column.
 
 - domains:
 
@@ -82,8 +80,7 @@ tbl_regression(
 
 - fdr_within:
 
-  Character string or `NULL`. Column name to group FDR correction
-  within.
+  Character string or `NULL`. Column to group FDR within.
 
 - ci_sep:
 
@@ -91,15 +88,31 @@ tbl_regression(
 
 - digits:
 
-  Integer. Decimal places for estimates (default `3`).
+  Integer. Decimal places for estimates.
 
 - p_digits:
 
-  Integer. Decimal places for p-values (default `3`).
+  Integer. Decimal places for p-values.
+
+- p_style:
+
+  Character. P-value style.
+
+- stars:
+
+  Logical. Append significance stars.
+
+- fdr_ns:
+
+  Logical. Replace non-surviving FDR p-values with `"ns"`.
+
+- fdr_alpha:
+
+  Numeric. Alpha level for FDR survival (BH-adjusted p).
 
 - output:
 
-  Character string. One of `"gt"` (default), `"html"`, or `"latex"`.
+  Character string. One of `"gt"`, `"html"`, or `"latex"`.
 
 ## Value
 

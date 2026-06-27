@@ -1,8 +1,12 @@
 # Simple descriptive summary table (no inferential tests)
 
-Produces a concise descriptive summary of a data frame — mean ± SD for
-continuous variables and n (%) for categorical variables — with no group
+Produces a concise descriptive summary — mean ± SD for continuous
+variables and n (%) for categorical variables — with no group
 comparisons or statistical tests.
+
+Formatting defaults are inherited from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md)
+and can be overridden per call.
 
 ## Usage
 
@@ -12,7 +16,7 @@ tbl_simple(
   vars = NULL,
   domains = list(),
   log_vars = character(0),
-  digits = 2,
+  digits = NULL,
   output = c("gt", "html", "latex")
 )
 ```
@@ -38,7 +42,8 @@ tbl_simple(
 
 - digits:
 
-  Integer. Decimal places for continuous variables (default `2`).
+  Integer. Decimal places for continuous variables. Inherits from
+  `clerk_options()$digits` if `NULL`.
 
 - output:
 
@@ -53,10 +58,9 @@ A `clerk_tbl` object with type `"simple"`.
 ``` r
 tbl_simple(
   clerk_example,
-  domains = list(
-    "Metabolic"     = c("hdl", "glucose", "bmi"),
-    "Cognitive"     = c("tmt_time", "verbal_fluency"),
-    "Mental health" = c("bdi", "panas_neg", "life_satisfaction")
+  domains  = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
   ),
   log_vars = "tmt_time",
   output   = "gt"

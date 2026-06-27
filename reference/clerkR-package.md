@@ -34,6 +34,13 @@ All constructors return a `clerk_tbl` S3 object. Pass to
 [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
 to dispatch to `gt` (Word/PDF), `reactable` (HTML), or LaTeX output.
 
+### Options
+
+Formatting defaults (decimal places, p-value style, FDR display) are
+controlled via
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md).
+Biomed/APA defaults are loaded automatically on package attach.
+
 ## See also
 
 Useful links:

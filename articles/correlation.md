@@ -42,26 +42,26 @@ tbl_correlation(
   clerk_render(title = "Partial correlations (age + sex controlled)")
 ```
 
-| Partial correlations (age + sex controlled) |                |        |       |
-|---------------------------------------------|----------------|--------|-------|
-|                                             | Outcome        | r      | p     |
-| All variables                               |                |        |       |
-| hdl                                         | tmt_time       | +0.190 | 0.008 |
-| glucose                                     | tmt_time       | -0.229 | 0.398 |
-| bmi                                         | tmt_time       | -0.086 | 0.013 |
-| waist                                       | tmt_time       | +0.279 | 0.002 |
-| systolic_bp                                 | tmt_time       | +0.195 | 0.379 |
-| bdi                                         | tmt_time       | +0.096 | 0.109 |
-| panas_neg                                   | tmt_time       | +0.157 | 0.006 |
-| life_satisfaction                           | tmt_time       | +0.247 | 0.117 |
-| hdl                                         | verbal_fluency | +0.078 | 0.072 |
-| glucose                                     | verbal_fluency | +0.216 | 0.003 |
-| bmi                                         | verbal_fluency | +0.022 | 0.207 |
-| waist                                       | verbal_fluency | +0.047 | 0.185 |
-| systolic_bp                                 | verbal_fluency | -0.105 | 0.077 |
-| bdi                                         | verbal_fluency | -0.176 | 0.070 |
-| panas_neg                                   | verbal_fluency | +0.232 | 0.117 |
-| life_satisfaction                           | verbal_fluency | +0.201 | 0.234 |
+| Partial correlations (age + sex controlled) |                |        |         |
+|---------------------------------------------|----------------|--------|---------|
+|                                             | Outcome        | r      | p       |
+| All variables                               |                |        |         |
+| hdl                                         | tmt_time       | +0.190 | = 0.008 |
+| glucose                                     | tmt_time       | -0.229 | = 0.008 |
+| bmi                                         | tmt_time       | -0.086 | = 0.008 |
+| waist                                       | tmt_time       | +0.279 | = 0.008 |
+| systolic_bp                                 | tmt_time       | +0.195 | = 0.008 |
+| bdi                                         | tmt_time       | +0.096 | = 0.008 |
+| panas_neg                                   | tmt_time       | +0.157 | = 0.008 |
+| life_satisfaction                           | tmt_time       | +0.247 | = 0.008 |
+| hdl                                         | verbal_fluency | +0.078 | = 0.008 |
+| glucose                                     | verbal_fluency | +0.216 | = 0.008 |
+| bmi                                         | verbal_fluency | +0.022 | = 0.008 |
+| waist                                       | verbal_fluency | +0.047 | = 0.008 |
+| systolic_bp                                 | verbal_fluency | -0.105 | = 0.008 |
+| bdi                                         | verbal_fluency | -0.176 | = 0.008 |
+| panas_neg                                   | verbal_fluency | +0.232 | = 0.008 |
+| life_satisfaction                           | verbal_fluency | +0.201 | = 0.008 |
 
 ## Including sample size
 
@@ -77,26 +77,26 @@ tbl_correlation(
   clerk_render(title = "Partial correlations (age + sex controlled)")
 ```
 
-| Partial correlations (age + sex controlled) |                |     |        |       |
-|---------------------------------------------|----------------|-----|--------|-------|
-|                                             | Outcome        | n   | r      | p     |
-| All variables                               |                |     |        |       |
-| hdl                                         | tmt_time       | 270 | +0.190 | 0.008 |
-| glucose                                     | tmt_time       | 254 | -0.229 | 0.398 |
-| bmi                                         | tmt_time       | 290 | -0.086 | 0.013 |
-| waist                                       | tmt_time       | 253 | +0.279 | 0.002 |
-| systolic_bp                                 | tmt_time       | 242 | +0.195 | 0.379 |
-| bdi                                         | tmt_time       | 281 | +0.096 | 0.109 |
-| panas_neg                                   | tmt_time       | 289 | +0.157 | 0.006 |
-| life_satisfaction                           | tmt_time       | 293 | +0.247 | 0.117 |
-| hdl                                         | verbal_fluency | 282 | +0.078 | 0.072 |
-| glucose                                     | verbal_fluency | 276 | +0.216 | 0.003 |
-| bmi                                         | verbal_fluency | 291 | +0.022 | 0.207 |
-| waist                                       | verbal_fluency | 253 | +0.047 | 0.185 |
-| systolic_bp                                 | verbal_fluency | 293 | -0.105 | 0.077 |
-| bdi                                         | verbal_fluency | 264 | -0.176 | 0.070 |
-| panas_neg                                   | verbal_fluency | 265 | +0.232 | 0.117 |
-| life_satisfaction                           | verbal_fluency | 266 | +0.201 | 0.234 |
+| Partial correlations (age + sex controlled) |  |  |  |  |
+|----|----|----|----|----|
+|  | Outcome | n | r | p |
+| All variables |  |  |  |  |
+| hdl | tmt_time | 270 | +0.190 | = 0.008 |
+| glucose | tmt_time | 254 | -0.229 | = 0.008 |
+| bmi | tmt_time | 290 | -0.086 | = 0.008 |
+| waist | tmt_time | 253 | +0.279 | = 0.008 |
+| systolic_bp | tmt_time | 242 | +0.195 | = 0.008 |
+| bdi | tmt_time | 281 | +0.096 | = 0.008 |
+| panas_neg | tmt_time | 289 | +0.157 | = 0.008 |
+| life_satisfaction | tmt_time | 293 | +0.247 | = 0.008 |
+| hdl | verbal_fluency | 282 | +0.078 | = 0.008 |
+| glucose | verbal_fluency | 276 | +0.216 | = 0.008 |
+| bmi | verbal_fluency | 291 | +0.022 | = 0.008 |
+| waist | verbal_fluency | 253 | +0.047 | = 0.008 |
+| systolic_bp | verbal_fluency | 293 | -0.105 | = 0.008 |
+| bdi | verbal_fluency | 264 | -0.176 | = 0.008 |
+| panas_neg | verbal_fluency | 265 | +0.232 | = 0.008 |
+| life_satisfaction | verbal_fluency | 266 | +0.201 | = 0.008 |
 
 ## Domain grouping
 
@@ -117,28 +117,28 @@ tbl_correlation(
 #> invalid factor level, NA generated
 ```
 
-| Partial correlations (age + sex controlled) |                |     |        |       |
-|---------------------------------------------|----------------|-----|--------|-------|
-|                                             | Outcome        | n   | r      | p     |
-| Metabolic                                   |                |     |        |       |
-| hdl                                         | tmt_time       | 270 | +0.190 | 0.008 |
-| glucose                                     | tmt_time       | 254 | -0.229 | 0.398 |
-| bmi                                         | tmt_time       | 290 | -0.086 | 0.013 |
-| hdl                                         | verbal_fluency | 282 | +0.078 | 0.072 |
-| glucose                                     | verbal_fluency | 276 | +0.216 | 0.003 |
-| bmi                                         | verbal_fluency | 291 | +0.022 | 0.207 |
-| Anthropometric                              |                |     |        |       |
-| waist                                       | tmt_time       | 253 | +0.279 | 0.002 |
-| systolic_bp                                 | tmt_time       | 242 | +0.195 | 0.379 |
-| waist                                       | verbal_fluency | 253 | +0.047 | 0.185 |
-| systolic_bp                                 | verbal_fluency | 293 | -0.105 | 0.077 |
-| Mental health                               |                |     |        |       |
-| bdi                                         | tmt_time       | 281 | +0.096 | 0.109 |
-| panas_neg                                   | tmt_time       | 289 | +0.157 | 0.006 |
-| life_satisfaction                           | tmt_time       | 293 | +0.247 | 0.117 |
-| bdi                                         | verbal_fluency | 264 | -0.176 | 0.070 |
-| panas_neg                                   | verbal_fluency | 265 | +0.232 | 0.117 |
-| life_satisfaction                           | verbal_fluency | 266 | +0.201 | 0.234 |
+| Partial correlations (age + sex controlled) |  |  |  |  |
+|----|----|----|----|----|
+|  | Outcome | n | r | p |
+| Metabolic |  |  |  |  |
+| hdl | tmt_time | 270 | +0.190 | = 0.008 |
+| glucose | tmt_time | 254 | -0.229 | = 0.008 |
+| bmi | tmt_time | 290 | -0.086 | = 0.008 |
+| hdl | verbal_fluency | 282 | +0.078 | = 0.008 |
+| glucose | verbal_fluency | 276 | +0.216 | = 0.008 |
+| bmi | verbal_fluency | 291 | +0.022 | = 0.008 |
+| Anthropometric |  |  |  |  |
+| waist | tmt_time | 253 | +0.279 | = 0.008 |
+| systolic_bp | tmt_time | 242 | +0.195 | = 0.008 |
+| waist | verbal_fluency | 253 | +0.047 | = 0.008 |
+| systolic_bp | verbal_fluency | 293 | -0.105 | = 0.008 |
+| Mental health |  |  |  |  |
+| bdi | tmt_time | 281 | +0.096 | = 0.008 |
+| panas_neg | tmt_time | 289 | +0.157 | = 0.008 |
+| life_satisfaction | tmt_time | 293 | +0.247 | = 0.008 |
+| bdi | verbal_fluency | 264 | -0.176 | = 0.008 |
+| panas_neg | verbal_fluency | 265 | +0.232 | = 0.008 |
+| life_satisfaction | verbal_fluency | 266 | +0.201 | = 0.008 |
 
 ## FDR correction
 
@@ -163,22 +163,22 @@ tbl_correlation(
 |----|----|----|----|----|
 |  | Outcome | r | p | p (FDR) |
 | All variables |  |  |  |  |
-| hdl | tmt_time | +0.190 | 0.008 | 0.021 |
-| glucose | tmt_time | -0.229 | 0.398 | 0.398 |
-| bmi | tmt_time | -0.086 | 0.013 | 0.026 |
-| waist | tmt_time | +0.279 | 0.002 | 0.016 |
-| systolic_bp | tmt_time | +0.195 | 0.379 | 0.398 |
-| bdi | tmt_time | +0.096 | 0.109 | 0.156 |
-| panas_neg | tmt_time | +0.157 | 0.006 | 0.021 |
-| life_satisfaction | tmt_time | +0.247 | 0.117 | 0.156 |
-| hdl | verbal_fluency | +0.078 | 0.072 | 0.154 |
-| glucose | verbal_fluency | +0.216 | 0.003 | 0.024 |
-| bmi | verbal_fluency | +0.022 | 0.207 | 0.234 |
-| waist | verbal_fluency | +0.047 | 0.185 | 0.234 |
-| systolic_bp | verbal_fluency | -0.105 | 0.077 | 0.154 |
-| bdi | verbal_fluency | -0.176 | 0.070 | 0.154 |
-| panas_neg | verbal_fluency | +0.232 | 0.117 | 0.187 |
-| life_satisfaction | verbal_fluency | +0.201 | 0.234 | 0.234 |
+| hdl | tmt_time | +0.190 | = 0.008 | = 0.021 |
+| glucose | tmt_time | -0.229 | = 0.008 | ns |
+| bmi | tmt_time | -0.086 | = 0.008 | = 0.021 |
+| waist | tmt_time | +0.279 | = 0.008 | = 0.021 |
+| systolic_bp | tmt_time | +0.195 | = 0.008 | ns |
+| bdi | tmt_time | +0.096 | = 0.008 | ns |
+| panas_neg | tmt_time | +0.157 | = 0.008 | = 0.021 |
+| life_satisfaction | tmt_time | +0.247 | = 0.008 | ns |
+| hdl | verbal_fluency | +0.078 | = 0.008 | ns |
+| glucose | verbal_fluency | +0.216 | = 0.008 | = 0.021 |
+| bmi | verbal_fluency | +0.022 | = 0.008 | ns |
+| waist | verbal_fluency | +0.047 | = 0.008 | ns |
+| systolic_bp | verbal_fluency | -0.105 | = 0.008 | ns |
+| bdi | verbal_fluency | -0.176 | = 0.008 | ns |
+| panas_neg | verbal_fluency | +0.232 | = 0.008 | ns |
+| life_satisfaction | verbal_fluency | +0.201 | = 0.008 | ns |
 | FDR correction applied within each outcome (BH). |  |  |  |  |
 
 ## Wide (pivoted) format
@@ -210,16 +210,16 @@ tbl_correlation(
 |----|----|----|
 |  | tmt_time | verbal_fluency |
 | Metabolic |  |  |
-| hdl | +0.190 (0.032) | +0.078 (0.154) |
-| glucose | -0.229 (0.398) | +0.216 (0.024) |
-| bmi | -0.086 (0.042) | +0.022 (0.255) |
+| hdl | +0.190 (= 0.032) | +0.078 (ns) |
+| glucose | -0.229 (ns) | +0.216 (= 0.032) |
+| bmi | -0.086 (= 0.032) | +0.022 (ns) |
 | NA |  |  |
-| waist | +0.279 (0.024) | +0.047 (0.247) |
-| systolic_bp | +0.195 (0.398) | -0.105 (0.154) |
-| life_satisfaction | +0.247 (0.170) | +0.201 (0.267) |
+| waist | +0.279 (= 0.032) | +0.047 (ns) |
+| systolic_bp | +0.195 (ns) | -0.105 (ns) |
+| life_satisfaction | +0.247 (ns) | +0.201 (ns) |
 | Mental health |  |  |
-| bdi | +0.096 (0.170) | -0.176 (0.154) |
-| panas_neg | +0.157 (0.032) | +0.232 (0.170) |
+| bdi | +0.096 (ns) | -0.176 (ns) |
+| panas_neg | +0.157 (= 0.032) | +0.232 (ns) |
 | Values shown as r (p FDR). FDR-corrected p-value (BH). |  |  |
 
 ## Custom column names

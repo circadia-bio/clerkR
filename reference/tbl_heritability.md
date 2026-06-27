@@ -1,10 +1,10 @@
 # Heritability and variance components table
 
 Formats a tidy data frame of narrow-sense heritability estimates (h2)
-into a publication-ready table. Column-name defaults match the output of
-`R-itable::herit_batch()` directly.
-
-Column-name arguments accept **character strings** (quoted names).
+into a publication-ready table. Column-name defaults match
+`R-itable::herit_batch()` output directly. Formatting defaults inherited
+from
+[`clerk_options()`](https://clerkr.circadia-lab.uk/reference/clerk_options.md).
 
 ## Usage
 
@@ -22,8 +22,12 @@ tbl_heritability(
   domains = list(),
   fdr = FALSE,
   fdr_within = NULL,
-  digits = 2,
-  p_digits = 3,
+  r_digits = NULL,
+  p_digits = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
   output = c("gt", "html", "latex")
 )
 ```
@@ -36,43 +40,36 @@ tbl_heritability(
 
 - metric:
 
-  Character string. Name of the trait/phenotype column. Default
-  `"trait"` (matches `herit_batch()`).
+  Character string. Trait column name. Default `"trait"`.
 
 - h2:
 
-  Character string. Name of the h2 estimate column. Default `"h2"`.
+  Character string. h2 estimate column. Default `"h2"`.
 
 - ci_low:
 
-  Character string. Name of the lower 95% CI bound column. Default
-  `"ci_lo"` (matches `herit_batch()`).
+  Character string. Lower CI column. Default `"ci_lo"`.
 
 - ci_high:
 
-  Character string. Name of the upper 95% CI bound column. Default
-  `"ci_hi"` (matches `herit_batch()`).
+  Character string. Upper CI column. Default `"ci_hi"`.
 
 - p:
 
-  Character string. Name of the one-sided LRT p-value column. Default
-  `"pval"` (matches `herit_batch()`).
+  Character string. P-value column. Default `"pval"`.
 
 - sigma2_a:
 
-  Character string or `NULL`. Name of the additive genetic variance
-  column. Default `NULL`.
+  Character string or `NULL`. Additive genetic variance column.
 
 - sigma2_e:
 
-  Character string or `NULL`. Name of the residual variance column.
-  Default `NULL`.
+  Character string or `NULL`. Residual variance column.
 
 - model:
 
-  Character string or `NULL`. Name of a column identifying covariate
-  models. Pass `"covariates"` when using `herit_batch()` output. Default
-  `NULL`.
+  Character string or `NULL`. Covariate model column. Pass
+  `"covariates"` for `herit_batch()` output.
 
 - domains:
 
@@ -84,20 +81,35 @@ tbl_heritability(
 
 - fdr_within:
 
-  Character string or `NULL`. Column name to group FDR correction
-  within.
+  Character string or `NULL`. Column to group FDR within.
 
-- digits:
+- r_digits:
 
-  Integer. Decimal places for h2 and variance components (default `2`).
+  Integer. Decimal places for h2 and variance components.
 
 - p_digits:
 
-  Integer. Decimal places for p-values (default `3`).
+  Integer. Decimal places for p-values.
+
+- p_style:
+
+  Character. P-value style.
+
+- stars:
+
+  Logical. Append significance stars.
+
+- fdr_ns:
+
+  Logical. Replace non-surviving FDR p-values with `"ns"`.
+
+- fdr_alpha:
+
+  Numeric. Alpha level for FDR survival (BH-adjusted p).
 
 - output:
 
-  Character string. One of `"gt"` (default), `"html"`, or `"latex"`.
+  Character string. One of `"gt"`, `"html"`, or `"latex"`.
 
 ## Value
 
@@ -113,11 +125,11 @@ tbl_heritability(
   sigma2_e = "sigma2_e",
   fdr      = TRUE,
   output   = "gt"
-) |> clerk_render(title = "Heritability estimates for cortical shape metrics")
+) |> clerk_render(title = "Heritability estimates")
 
 
   
 
 
-Heritability estimates for cortical shape metrics
+Heritability estimates
 ```
