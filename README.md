@@ -1,4 +1,4 @@
-# 🧪 clerkR
+# 🧪 clerkR <img src="man/figures/logo.svg" align="right" height="140"/>
 
 **A clerk keeps tabs — `clerkR` keeps yours publication-ready.**
 
