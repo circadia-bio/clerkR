@@ -14,9 +14,9 @@
 #' @param r_digits Integer. Decimal places for correlation coefficients and h²
 #'   estimates (default `3`).
 #' @param p_digits Integer. Decimal places for p-values (default `3`).
-#' @param p_threshold Numeric. Raw p-values **below** this are shown as
-#'   `"< {threshold}"` rather than as a decimal (default `0.001`). Display
-#'   only — not a significance threshold.
+#' @param p_threshold Numeric. Raw p-values below this are shown as
+#'   `"< {threshold}"` (default `0.001`). Display only, not a significance
+#'   threshold.
 #' @param p_style Character string controlling p-value display style:
 #'   \describe{
 #'     \item{`"apa"`}{APA format: `= 0.032`, `< 0.001` (default).}
@@ -24,16 +24,13 @@
 #'     \item{`"stars"`}{Significance stars only, no numeric p.}
 #'     \item{`"stars_p"`}{Stars alongside numeric p.}
 #'   }
-#' @param stars Logical. Append significance stars (`*`/`**`/`***`) to p-value
-#'   cells (default `FALSE`).
-#' @param star_thresholds Numeric vector of length 3. P-value cutoffs for one,
-#'   two, and three stars respectively (default `c(0.05, 0.01, 0.001)`).
-#' @param fdr_ns Logical. Replace the FDR-corrected p-value cell with
-#'   `fdr_ns_label` when `p(FDR) >= fdr_alpha` (default `TRUE`). The raw
-#'   p-value column is unaffected.
-#' @param fdr_alpha Numeric. Alpha level applied to the **BH-adjusted**
-#'   p-value. Cells where `p(FDR) >= fdr_alpha` are labelled `fdr_ns_label`
-#'   (default `0.05`). Compared against the BH-adjusted p, not the raw p.
+#' @param stars Logical. Append significance stars (default `FALSE`).
+#' @param star_thresholds Numeric vector of length 3. Cutoffs for `*`, `**`,
+#'   `***` (default `c(0.05, 0.01, 0.001)`).
+#' @param fdr_ns Logical. Replace the FDR p-value cell with `fdr_ns_label`
+#'   when `p(FDR) >= fdr_alpha` (default `TRUE`).
+#' @param fdr_alpha Numeric. Alpha applied to the BH-adjusted p-value.
+#'   Cells where `p(FDR) >= fdr_alpha` show `fdr_ns_label` (default `0.05`).
 #' @param fdr_ns_label Character string for non-surviving FDR cells
 #'   (default `"ns"`).
 #' @param reset Logical. Restore factory defaults (default `FALSE`).
@@ -112,7 +109,6 @@ clerk_options <- function(digits          = NULL,
                           paste0("clerkR.", names(.clerk_defaults))))
 }
 
-#' Returns current clerk options, always falling back to built-in defaults.
 #' @keywords internal
 .get_clerk_options <- function() {
   lapply(
@@ -154,32 +150,21 @@ clerk_options <- function(digits          = NULL,
   threshold_str <- sprintf(paste0("%.", p_digits, "f"), p_threshold)
   plain_str     <- sprintf(paste0("%.", p_digits, "f"), x)
 
+  # p_style is scalar — use if/else, not ifelse, to avoid length-1 recycling
   formatted <- ifelse(
-    is.na(x), NA_character_,
-    ifelse(x < p_threshold, paste0("< ", threshold_str),
-    ifelse(p_style == "apa", paste0("= ", plain_str), plain_str))
+    is.na(x),
+    NA_character_,
+    ifelse(
+      x < p_threshold,
+      paste0("< ", threshold_str),
+      if (p_style == "apa") paste0("= ", plain_str) else plain_str
+    )
   )
 
   if (p_style == "stars") return(.p_stars(x, star_thresholds))
   if (isTRUE(stars) || p_style == "stars_p")
     formatted <- paste0(formatted, .p_stars(x, star_thresholds))
 
-  formatted
-}
-
-#' Apply fdr_ns replacement to already-formatted FDR p-value strings.
-#' x_raw: the numeric BH-adjusted p-values.
-#' formatted: character vector already produced by .fmt_p().
-#' @keywords internal
-.apply_fdr_ns <- function(x_raw, formatted, fdr_ns, fdr_alpha, fdr_ns_label) {
-  opts         <- .get_clerk_options()
-  fdr_ns       <- fdr_ns       %||% opts$fdr_ns
-  fdr_alpha    <- fdr_alpha    %||% opts$fdr_alpha
-  fdr_ns_label <- fdr_ns_label %||% opts$fdr_ns_label
-
-  if (isTRUE(fdr_ns))
-    formatted <- ifelse(!is.na(x_raw) & x_raw >= fdr_alpha,
-                        fdr_ns_label, formatted)
   formatted
 }
 
