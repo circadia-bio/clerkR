@@ -1,3 +1,173 @@
+url: https://clerkr.circadia-lab.uk
+
+template:
+  bootstrap: 5
+  bslib:
+    bg:              "#F7FAFA"
+    fg:              "#293681"
+    primary:         "#4274D9"
+    secondary:       "#95CCDD"
+    success:         "#4274D9"
+    info:            "#D0E7E6"
+    warning:         "#D4907E"
+    danger:          "#D4907E"
+    base_font:       {google: "DM Sans"}
+    heading_font:    {google: "DM Sans"}
+    code_font:       {google: "JetBrains Mono"}
+    font-size-base:  "1rem"
+    headings-font-weight: 700
+    card-bg:         "#FFFFFF"
+    card-border-color: "#D0E7E6"
+    card-border-radius: "0.75rem"
+    pre-bg:          "#293681"
+    pre-color:       "#D0E7E6"
+
+  includes:
+    in_header: |
+      <meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.png">
+      <meta property="og:image:width" content="1080">
+      <meta property="og:image:height" content="1080">
+      <meta property="og:image:type" content="image/png">
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://clerkr.circadia-lab.uk/logo.png">
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4274D9">
+      <meta name="msapplication-TileColor" content="#293681">
+      <meta name="theme-color" content="#293681">
+      <style>
+        .navbar {
+          background-color: #293681 !important;
+          border-bottom: 2px solid #95CCDD;
+        }
+        .navbar .navbar-brand,
+        .navbar-nav .nav-link,
+        .navbar-nav .nav-link:hover,
+        .navbar form .btn {
+          color: #D0E7E6 !important;
+        }
+        .navbar-nav .nav-link:hover { opacity: 0.8; }
+        .navbar-nav .nav-link.active {
+          color: #D0E7E6 !important;
+          border-bottom: 2px solid #95CCDD;
+        }
+        .navbar-brand img { height: 40px; width: auto; }
+        .page-header { border-bottom: none !important; }
+        .sidebar .nav-link, .sidebar a, #toc a, #toc .nav-link {
+          color: #293681 !important;
+        }
+        .sidebar .nav-link:hover, .sidebar a:hover, #toc a:hover {
+          color: #4274D9 !important;
+        }
+        .sidebar .nav-link.active, #toc .nav-link.active {
+          color: #4274D9 !important;
+          border-left: 2px solid #95CCDD;
+          font-weight: 600;
+        }
+        .sidebar { border-left: 3px solid #95CCDD; padding-left: 1rem; }
+        .reference-index h2 {
+          color: #4274D9;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        code { color: #293681; background: #D0E7E6; border-radius: 4px; padding: 0.1em 0.35em; }
+        a { color: #4274D9; }
+        a:hover { color: #293681; }
+        .footer { background: #293681; color: #D0E7E6; padding: 1.5rem 0; }
+        .footer a { color: #95CCDD; }
+        .btn-primary {
+          background-color: #4274D9 !important;
+          border-color: #4274D9 !important;
+          color: #ffffff !important;
+        }
+        .btn-primary:hover {
+          background-color: #293681 !important;
+          border-color: #293681 !important;
+        }
+        .text-muted { color: #4274D9 !important; }
+      </style>
+
+home:
+  title: "clerkR — Publication-ready tables for R"
+  description: >
+    An R package for transforming data frames into publication-ready tables
+    across common biomedical and neuroscience archetypes. Renders to gt
+    (Word/PDF), reactable (HTML), and LaTeX. Built by the Circadia Lab at
+    Northumbria University.
+  links:
+  - text: Circadia Lab
+    href: https://circadia-lab.uk
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/getting-started.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/circadia-bio/clerkR
+      aria-label: GitHub
+
+reference:
+- title: "Table constructors"
+  desc: "Build publication-ready tables from data frames."
+  contents:
+  - tbl_descriptive
+  - tbl_simple
+  - tbl_correlation
+  - tbl_regression
+  - tbl_heritability
+
+- title: "Render"
+  desc: "Render a clerk_tbl to gt, HTML, or LaTeX."
+  contents:
+  - clerk_render
+  - render_gt
+  - render_reactable
+  - render_latex
+
+- title: "Options"
+  desc: "Session-level formatting defaults — p-value style, decimal places, FDR display."
+  contents:
+  - clerk_options
+
+- title: "Theme & palette"
+  desc: "clerkR visual identity — colours, scales, and gt theme."
+  contents:
+  - clerk_theme
+  - clerk_palette
+  - clerk_colour
+  - clerk_diverging
+  - clerk_sequential
+
+- title: "Data"
+  desc: "Synthetic example datasets."
+  contents:
+  - clerk_example
+  - clerk_cor_example
+  - clerk_reg_example
+  - clerk_h2_example
+
+- title: "Package"
+  desc: "Package-level documentation."
+  contents:
+  - clerkR-package
+
+articles:
+- title: "Getting started"
+  navbar: ~
+  contents:
+  - getting-started
+
+- title: "Table archetypes"
+  navbar: "Archetypes"
+  contents:
+  - descriptive-table1
+  - simple-descriptive
   - correlation
   - regression
   - heritability-ritable
