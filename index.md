@@ -9,6 +9,14 @@ MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://clerkr.circad
 
 ------------------------------------------------------------------------
 
+> ⚠️ **clerkR is in early development and has not been formally
+> tested.** The API may change without notice, estimation results have
+> not yet been validated against a reference implementation, and the
+> package has not undergone peer review. Use with caution and verify
+> outputs independently before using in any research context.
+
+------------------------------------------------------------------------
+
 ## 📖 What is clerkR?
 
 `clerkR` transforms standard R data frames into publication-ready tables
