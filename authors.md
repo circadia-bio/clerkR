@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/circadia-bio/clerkR/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/circadia-bio/clerkR/blob/v0.1.2/DESCRIPTION)
 
 França L, Leocadio-Miguel M (2026). *clerkR: Publication-Ready Tables
 for Biomedical Research*. R package version 0.1.2,
