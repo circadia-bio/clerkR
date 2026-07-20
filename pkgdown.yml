@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   correlation: correlation.html
@@ -9,7 +9,7 @@ articles:
   heritability-ritable: heritability-ritable.html
   regression: regression.html
   simple-descriptive: simple-descriptive.html
-last_built: 2026-07-02T00:07Z
+last_built: 2026-07-20T15:58Z
 urls:
   reference: https://clerkr.circadia-lab.uk/reference
   article: https://clerkr.circadia-lab.uk/articles
