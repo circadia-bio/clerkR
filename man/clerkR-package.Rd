@@ -27,6 +27,13 @@ grouping.
 All constructors return a \code{clerk_tbl} S3 object. Pass to \code{clerk_render()}
 to dispatch to \code{gt} (Word/PDF), \code{reactable} (HTML), or LaTeX output.
 }
+
+\subsection{Options}{
+
+Formatting defaults (decimal places, p-value style, FDR display) are
+controlled via \code{clerk_options()}. Biomed/APA defaults are loaded
+automatically on package attach.
+}
 }
 \seealso{
 Useful links:
@@ -38,11 +45,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Lucas G. S. Franca \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
+\strong{Maintainer}: Lucas França \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
 
 Authors:
 \itemize{
-  \item Lucas G. S. Franca \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
+  \item Lucas França \email{lucas.franca@northumbria.ac.uk} (\href{https://orcid.org/0000-0003-0853-1319}{ORCID})
+  \item Mario Leocadio-Miguel \email{mario.miguel@northumbria.ac.uk} (\href{https://orcid.org/0000-0002-7248-3529}{ORCID})
 }
 
 }

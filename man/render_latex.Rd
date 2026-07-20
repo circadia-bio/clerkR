@@ -4,7 +4,14 @@
 \alias{render_latex}
 \title{Render a clerk_tbl as a LaTeX table}
 \usage{
-render_latex(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+render_latex(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  fdr_footnote = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{clerk_tbl} object.}
@@ -14,6 +21,9 @@ render_latex(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 \item{subtitle}{Optional subtitle appended to the caption.}
 
 \item{footnote}{Optional additional footnote.}
+
+\item{fdr_footnote}{Logical. Add an automatic FDR source note (default
+\code{TRUE}).}
 
 \item{...}{Reserved for future use.}
 }

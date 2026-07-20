@@ -8,11 +8,19 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+ritable_available <- requireNamespace("Ritable", quietly = TRUE)
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment  = "#>",
-  eval     = FALSE
+  eval     = ritable_available
 )
+```
+
+```{r not-available, eval=!ritable_available, echo=FALSE, results="asis"}
+cat("> **Note:** This vignette requires the `Ritable` package
+> (`remotes::install_github(\"circadia-bio/R-itable\")`).
+> Code is shown below but not executed in this build.")
 ```
 
 ## Overview
@@ -36,7 +44,7 @@ The covariate model column is `"covariates"` in `herit_batch()` output — pass
 
 Install both packages from GitHub if you haven't already:
 
-```{r install}
+```{r install, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("circadia-bio/R-itable")
 remotes::install_github("circadia-bio/clerkR")
@@ -48,6 +56,10 @@ library(clerkR)
 ```
 
 ## 1. Simulate a family cohort
+
+We simulate 80 nuclear families (2 parents + 3 offspring each) with three
+quantitative traits at different true h² values — BMI (~0.60), systolic blood
+pressure (~0.35), and HDL cholesterol (~0.50).
 
 ```{r simulate}
 set.seed(2026)
@@ -104,13 +116,15 @@ res <- herit_batch(
   )
 )
 
+# Inspect available covariate model labels
+unique(res$covariates)
 res
 ```
 
-## 3. Render the table
+## 3. Render the full table
 
-Pass `model = "covariates"` and optional variance component column names as
-strings:
+Pass column names as strings — defaults already match `herit_batch()` output,
+so only `model`, `sigma2_a`, and `sigma2_e` need to be specified:
 
 ```{r table}
 res |>
@@ -132,8 +146,9 @@ res |>
 ## Filtering to a single model
 
 ```{r filtered}
-res |>
-  subset(covariates == "cov2") |>
+adj_model <- unique(res$covariates)[length(unique(res$covariates))]
+
+res[res$covariates == adj_model, ] |>
   tbl_heritability(
     sigma2_a = "sigma2_a",
     sigma2_e = "sigma2_e",
@@ -141,7 +156,7 @@ res |>
     output   = "gt"
   ) |>
   clerk_render(
-    title    = "Heritability estimates (age + sex + age\u00b2)",
+    title    = paste0("Heritability estimates (", adj_model, ")"),
     footnote = "FDR correction applied across all traits (BH)."
   )
 ```
@@ -149,8 +164,7 @@ res |>
 ## HTML output
 
 ```{r html}
-res |>
-  subset(covariates == "cov2") |>
+res[res$covariates == adj_model, ] |>
   tbl_heritability(
     sigma2_a = "sigma2_a",
     sigma2_e = "sigma2_e",

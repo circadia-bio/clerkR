@@ -24,9 +24,18 @@ template:
 
   includes:
     in_header: |
+      <meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.png">
+      <meta property="og:image:width" content="1080">
+      <meta property="og:image:height" content="1080">
+      <meta property="og:image:type" content="image/png">
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://clerkr.circadia-lab.uk/logo.png">
       <!-- Fathom - beautiful, simple website analytics -->
       <script src="https://cdn.usefathom.com/script.js" data-site="NKUSHGRU" defer></script>
       <!-- / Fathom -->
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4274D9">
+      <meta name="msapplication-TileColor" content="#293681">
+      <meta name="theme-color" content="#293681">
       <style>
         .navbar {
           background-color: #293681 !important;
@@ -124,6 +133,11 @@ reference:
   - render_reactable
   - render_latex
 
+- title: "Options"
+  desc: "Session-level formatting defaults — p-value style, decimal places, FDR display."
+  contents:
+  - clerk_options
+
 - title: "Theme & palette"
   desc: "clerkR visual identity — colours, scales, and gt theme."
   contents:
@@ -161,9 +175,16 @@ articles:
   - regression
   - heritability-ritable
 
+- title: "Customisation"
+  navbar: "Customisation"
+  contents:
+  - formatting-options
+
 authors:
   Lucas França:
     href: https://orcid.org/0000-0003-0853-1319
+  Mario Leocadio-Miguel:
+    href: https://orcid.org/0000-0002-7248-3529
 
 footer:
   structure:
@@ -173,4 +194,4 @@ footer:
     package: >
       **clerkR** — Circadia Lab, Northumbria University.
     developed_by: >
-      Lucas França.
+      Lucas França & Mario Leocadio-Miguel.

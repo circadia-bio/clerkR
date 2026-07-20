@@ -21,9 +21,13 @@
 #' All constructors return a `clerk_tbl` S3 object. Pass to `clerk_render()`
 #' to dispatch to `gt` (Word/PDF), `reactable` (HTML), or LaTeX output.
 #'
+#' ## Options
+#'
+#' Formatting defaults (decimal places, p-value style, FDR display) are
+#' controlled via `clerk_options()`. Biomed/APA defaults are loaded
+#' automatically on package attach.
+#'
 #' @keywords internal
 "_PACKAGE"
 
-# Declare bare names used in tidy-eval contexts so R CMD CHECK does not flag
-# them as undefined globals.
-utils::globalVariables(c(".data"))
+utils::globalVariables(".data")

@@ -15,8 +15,14 @@ tbl_correlation(
   domains = list(),
   fdr = FALSE,
   fdr_within = NULL,
-  digits = 3,
-  p_digits = 3,
+  r_digits = NULL,
+  p_digits = NULL,
+  p_threshold = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
+  domain_other = NULL,
   pivot = FALSE,
   output = c("gt", "html", "latex")
 )
@@ -24,37 +30,46 @@ tbl_correlation(
 \arguments{
 \item{data}{A tidy data frame of correlation results.}
 
-\item{predictor}{Character string. Name of the predictor variable column.
-Default \code{"variable"}.}
+\item{predictor}{Character string. Predictor column name. Default
+\code{"variable"}.}
 
-\item{outcome}{Character string. Name of the outcome variable column.
-Default \code{"outcome"}.}
+\item{outcome}{Character string. Outcome column name. Default \code{"outcome"}.}
 
-\item{r}{Character string. Name of the correlation coefficient column.
-Default \code{"r"}.}
+\item{r}{Character string. Correlation coefficient column. Default \code{"r"}.}
 
-\item{p}{Character string. Name of the p-value column. Default \code{"p"}.}
+\item{p}{Character string. P-value column. Default \code{"p"}.}
 
-\item{n}{Character string or \code{NULL}. Name of the sample size column.
-Default \code{NULL} (omitted).}
+\item{n}{Character string or \code{NULL}. Sample size column. Default \code{NULL}.}
 
-\item{extra_cols}{Character vector of additional column names to carry
-through (e.g. \code{"hemisphere"}, \code{"lobe"}).}
+\item{extra_cols}{Character vector of additional columns to carry through.}
 
-\item{domains}{A named list mapping predictor variable names to
-domain/section labels.}
+\item{domains}{A named list mapping predictor names to domain/section
+labels.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Character string or \code{NULL}. Column name to group FDR
-correction within (e.g. \code{"outcome"}).}
+\item{fdr_within}{Character string or \code{NULL}. Column to group FDR within.}
 
-\item{digits}{Integer. Decimal places for r (default \code{3}).}
+\item{r_digits}{Integer. Decimal places for r.}
 
-\item{p_digits}{Integer. Decimal places for p-values (default \code{3}).}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{pivot}{Logical. Pivot to wide format with one column per outcome
-(default \code{FALSE}).}
+\item{p_threshold}{Numeric. P-values below this are shown as
+\code{"< {threshold}"}. Inherits from \code{clerk_options()$p_threshold} if \code{NULL}.}
+
+\item{p_style}{Character. P-value style.}
+
+\item{stars}{Logical. Append significance stars.}
+
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
+
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
+
+\item{pivot}{Logical. Pivot to wide format (default \code{FALSE}).}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}
@@ -64,12 +79,12 @@ A \code{clerk_tbl} object with type \code{"correlation"}.
 }
 \description{
 Formats a tidy data frame of (partial) correlation results into a
-publication-ready table. Expects pre-computed coefficients as a tidy data
-frame with one row per predictor x outcome pair.
+publication-ready table. Column-name arguments accept character strings.
+Defaults match a typical correlation results frame with columns named
+\code{variable}, \code{outcome}, \code{r}, and \code{p}.
 
-Column-name arguments accept \strong{character strings} (quoted names). Defaults
-match a typical correlation results frame with columns named \code{variable},
-\code{outcome}, \code{r}, and \code{p}.
+Formatting defaults are inherited from \code{clerk_options()} and can be
+overridden per call.
 }
 \examples{
 tbl_correlation(

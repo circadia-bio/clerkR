@@ -9,7 +9,8 @@ tbl_simple(
   vars = NULL,
   domains = list(),
   log_vars = character(0),
-  digits = 2,
+  digits = NULL,
+  domain_other = NULL,
   output = c("gt", "html", "latex")
 )
 }
@@ -23,7 +24,11 @@ include. Defaults to all columns.}
 
 \item{log_vars}{Character vector of log-transformed variable names.}
 
-\item{digits}{Integer. Decimal places for continuous variables (default \code{2}).}
+\item{digits}{Integer. Decimal places for continuous variables.}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
 
 \item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
 \code{"latex"}.}
@@ -32,17 +37,16 @@ include. Defaults to all columns.}
 A \code{clerk_tbl} object with type \code{"simple"}.
 }
 \description{
-Produces a concise descriptive summary of a data frame — mean ± SD for
-continuous variables and n (\%) for categorical variables — with no group
-comparisons or statistical tests.
+Produces a concise descriptive summary — mean ± SD for continuous variables
+and n (\%) for categorical variables — with no group comparisons or
+statistical tests. Formatting defaults inherited from \code{clerk_options()}.
 }
 \examples{
 tbl_simple(
   clerk_example,
-  domains = list(
-    "Metabolic"     = c("hdl", "glucose", "bmi"),
-    "Cognitive"     = c("tmt_time", "verbal_fluency"),
-    "Mental health" = c("bdi", "panas_neg", "life_satisfaction")
+  domains  = list(
+    "Metabolic"    = c("hdl", "glucose", "bmi"),
+    "Mental health"= c("bdi", "panas_neg")
   ),
   log_vars = "tmt_time",
   output   = "gt"

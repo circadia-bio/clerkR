@@ -1,10 +1,14 @@
-# 🧪 clerkR
+# 📋 clerkR <img src="man/figures/logo.svg" align="right" height="140"/>
 
 **A clerk keeps tabs — `clerkR` keeps yours publication-ready.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![R](https://img.shields.io/badge/R-%3E%3D4.1.0-276DC3)](https://cran.r-project.org/)
 [![pkgdown](https://img.shields.io/badge/docs-clerkr.circadia--lab.uk-4274D9)](https://clerkr.circadia-lab.uk)
+
+---
+
+> ⚠️ **clerkR is in early development and has not been formally tested.** The API may change without notice, estimation results have not yet been validated against a reference implementation, and the package has not undergone peer review. Use with caution and verify outputs independently before using in any research context.
 
 ---
 
@@ -38,27 +42,6 @@ grouping, footnote handling, and a unified rendering pipeline for Word/PDF
 | `tbl_regression()` | β, SE, 95% CI, p, FDR — accepts `broom::tidy()` | Linear/logistic models |
 | `tbl_heritability()` | h², 95% CI, LRT p, σ²a/σ²e — accepts `herit_batch()` | Heritability results |
 
-## 🗂️ Project Structure
-
-```
-clerkR/
-├── R/
-│   ├── clerkR-package.R
-│   ├── tbl_descriptive.R
-│   ├── tbl_simple.R
-│   ├── tbl_correlation.R
-│   ├── tbl_regression.R
-│   ├── tbl_heritability.R
-│   ├── render.R               # clerk_render(), render_gt(), render_reactable(), render_latex()
-│   └── theme.R                # clerk_theme(), clerk_palette(), clerk_colour(), clerk_diverging()
-├── data/                      # Synthetic example datasets
-├── data-raw/                  # Scripts to generate example data
-├── vignettes/                 # Workflow vignettes
-├── tests/testthat/
-├── DESCRIPTION
-└── NAMESPACE
-```
-
 ## 🚀 Getting Started
 
 ### Installation
@@ -72,8 +55,6 @@ remotes::install_github("circadia-bio/R-itable")
 ```
 
 ### The one-two pattern
-
-Every `clerkR` workflow follows the same pattern: construct → render.
 
 ```r
 library(clerkR)
@@ -94,25 +75,9 @@ tbl_descriptive(
   clerk_render(title = "Table 1. Sample characteristics by sex")
 ```
 
-### Correlation table
-
-```r
-tbl_correlation(
-  clerk_cor_example,
-  domains = list(
-    "Metabolic"    = c("hdl", "glucose", "bmi"),
-    "Mental health"= c("bdi", "panas_neg")
-  ),
-  fdr    = TRUE,
-  output = "gt"
-) |>
-  clerk_render(title = "Partial correlations (age + sex controlled)")
-```
-
 ### Heritability from R-itable
 
 ```r
-# herit_batch() output pipes straight in — no renaming needed
 herit_batch(traits, grm = A, data = dat, covs_list = covs_list) |>
   tbl_heritability(
     model    = "covariates",
@@ -132,14 +97,6 @@ clerk_diverging()   # terracotta → off-white → navy (9 steps)
 clerk_sequential()  # near-white → navy (7 steps)
 ```
 
-| Role | Hex |
-|---|---|
-| Header background | `#95CCDD` |
-| Header / body text | `#293681` |
-| Row group bar | `#D0E7E6` |
-| Mid blue | `#4274D9` |
-| Diverging warm pole | `#D4907E` |
-
 ## 📦 Dependencies
 
 | Package | Version | Purpose |
@@ -156,7 +113,8 @@ clerk_sequential()  # near-white → navy (7 steps)
 
 | Role | Name |
 |---|---|
-| Author, maintainer | [Lucas G. S. França](https://orcid.org/0000-0003-0853-1319) |
+| Author, maintainer | [Lucas França](https://orcid.org/0000-0003-0853-1319) |
+| Author | [Mario Leocadio-Miguel](https://orcid.org/0000-0002-7248-3529) |
 
 ## 🤝 Related Tools
 
@@ -171,4 +129,4 @@ clerk_sequential()  # near-white → navy (7 steps)
 
 Released under the [MIT License](./LICENSE).
 
-Copyright © Lucas G. S. França, 2026
+Copyright © Lucas França & Mario Leocadio-Miguel, 2026

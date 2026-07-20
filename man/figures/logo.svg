@@ -1,0 +1,49 @@
+<svg viewBox="0 0 340 380" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>clerkR hex sticker</title>
+<desc>Hex sticker with navy background, teal table rows, mid-blue ring and clerkR wordmark</desc>
+
+<polygon points="170,18 322,103 322,273 170,358 18,273 18,103" fill="#4274D9" stroke="none"/>
+<polygon points="170,30 310,110 310,266 170,346 30,266 30,110" fill="#293681" stroke="none"/>
+
+<!-- header row -->
+<rect x="102" y="90" width="136" height="24" rx="3" fill="#D4907E"/>
+<rect x="112" y="96" width="40" height="12" rx="2" fill="#FAD5CA" opacity="0.9"/>
+<rect x="162" y="96" width="26" height="12" rx="2" fill="#FAD5CA" opacity="0.6"/>
+<rect x="198" y="96" width="26" height="12" rx="2" fill="#FAD5CA" opacity="0.6"/>
+
+<!-- row 1 -->
+<rect x="102" y="120" width="136" height="17" rx="2" fill="#1e2d6b"/>
+<rect x="112" y="124" width="30" height="8" rx="1" fill="#95CCDD" opacity="0.8"/>
+<rect x="162" y="124" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+<rect x="198" y="124" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+
+<!-- row 2 -->
+<rect x="102" y="143" width="136" height="17" rx="2" fill="#293681"/>
+<rect x="112" y="147" width="35" height="8" rx="1" fill="#95CCDD" opacity="0.8"/>
+<rect x="162" y="147" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+<rect x="198" y="147" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+
+<!-- row 3 — terracotta ns highlight -->
+<rect x="102" y="166" width="136" height="17" rx="2" fill="#1e2d6b"/>
+<rect x="112" y="170" width="25" height="8" rx="1" fill="#D4907E" opacity="0.9"/>
+<rect x="162" y="170" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+<rect x="198" y="170" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+
+<!-- row 4 -->
+<rect x="102" y="189" width="136" height="17" rx="2" fill="#293681"/>
+<rect x="112" y="193" width="32" height="8" rx="1" fill="#95CCDD" opacity="0.8"/>
+<rect x="162" y="193" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+<rect x="198" y="193" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+
+<!-- row 5 -->
+<rect x="102" y="212" width="136" height="17" rx="2" fill="#1e2d6b"/>
+<rect x="112" y="216" width="28" height="8" rx="1" fill="#D4907E" opacity="0.75"/>
+<rect x="162" y="216" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+<rect x="198" y="216" width="18" height="8" rx="1" fill="#95CCDD" opacity="0.55"/>
+
+<!-- wordmark -->
+<text text-anchor="middle" x="170" y="284" font-family="Georgia, serif" font-size="32" font-weight="700" letter-spacing="1">
+  <tspan fill="#95CCDD">clerk</tspan><tspan fill="#D4907E">R</tspan>
+</text>
+
+</svg>

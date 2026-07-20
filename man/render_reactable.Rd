@@ -4,24 +4,33 @@
 \alias{render_reactable}
 \title{Render a clerk_tbl as an interactive HTML table}
 \usage{
-render_reactable(x, title = NULL, ...)
+render_reactable(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{clerk_tbl} object.}
 
-\item{title}{Optional character string displayed above the table.}
+\item{title}{Optional character string displayed as a heading above the
+table.}
+
+\item{subtitle}{Optional character string displayed as a subheading.}
+
+\item{footnote}{Optional character string displayed as a note below the
+table.}
 
 \item{...}{Passed to \code{reactable::reactable()}.}
 }
 \value{
-A \code{reactable} htmlwidget.
+An \code{htmltools::tagList} containing the title, reactable widget, and
+optional footnote, or a bare \code{reactable} if no title/subtitle/footnote
+are provided.
 }
 \description{
-Renders a \code{clerk_tbl} as a \code{reactable} interactive HTML table. Typically
-called indirectly via \code{clerk_render()}.
+Renders a \code{clerk_tbl} as a \code{reactable} interactive HTML table with optional
+title and subtitle rendered above the widget. Typically called indirectly
+via \code{clerk_render()}.
 }
 \examples{
-tbl_descriptive(clerk_example, group = sex, output = "html") |>
-  clerk_render()
+tbl_correlation(clerk_cor_example, output = "html") |>
+  clerk_render(title = "Partial correlations", subtitle = "age + sex controlled")
 
 }

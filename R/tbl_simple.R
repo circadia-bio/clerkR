@@ -1,16 +1,19 @@
 #' Simple descriptive summary table (no inferential tests)
 #'
 #' @description
-#' Produces a concise descriptive summary of a data frame — mean ± SD for
-#' continuous variables and n (%) for categorical variables — with no group
-#' comparisons or statistical tests.
+#' Produces a concise descriptive summary — mean ± SD for continuous variables
+#' and n (%) for categorical variables — with no group comparisons or
+#' statistical tests. Formatting defaults inherited from `clerk_options()`.
 #'
 #' @param data A data frame.
 #' @param vars <[`tidy-select`][dplyr::dplyr_tidy_select]> Variables to
 #'   include. Defaults to all columns.
 #' @param domains A named list mapping variable names to domain/section labels.
 #' @param log_vars Character vector of log-transformed variable names.
-#' @param digits Integer. Decimal places for continuous variables (default `2`).
+#' @param digits Integer. Decimal places for continuous variables.
+#' @param domain_other Character string. Label for variables not assigned to
+#'   any domain. Default `""` (blank). Inherits from
+#'   `clerk_options()$domain_other`.
 #' @param output Character string. One of `"gt"` (default), `"html"`, or
 #'   `"latex"`.
 #'
@@ -19,10 +22,9 @@
 #' @examples
 #' tbl_simple(
 #'   clerk_example,
-#'   domains = list(
-#'     "Metabolic"     = c("hdl", "glucose", "bmi"),
-#'     "Cognitive"     = c("tmt_time", "verbal_fluency"),
-#'     "Mental health" = c("bdi", "panas_neg", "life_satisfaction")
+#'   domains  = list(
+#'     "Metabolic"    = c("hdl", "glucose", "bmi"),
+#'     "Mental health"= c("bdi", "panas_neg")
 #'   ),
 #'   log_vars = "tmt_time",
 #'   output   = "gt"
@@ -30,13 +32,17 @@
 #'
 #' @export
 tbl_simple <- function(data,
-                       vars     = NULL,
-                       domains  = list(),
-                       log_vars = character(0),
-                       digits   = 2,
-                       output   = c("gt", "html", "latex")) {
+                       vars         = NULL,
+                       domains      = list(),
+                       log_vars     = character(0),
+                       digits       = NULL,
+                       domain_other = NULL,
+                       output       = c("gt", "html", "latex")) {
 
   output <- match.arg(output)
+
+  opts             <- .get_clerk_options()
+  domain_other_val <- domain_other %||% opts$domain_other
 
   if (rlang::quo_is_null(rlang::enquo(vars))) {
     var_nms <- names(data)
@@ -53,34 +59,25 @@ tbl_simple <- function(data,
 
     if (is_cat[[v]]) {
       tab     <- table(x, useNA = "no")
-      summary <- paste(
-        paste0(names(tab), ": ", tab,
-               " (", round(tab / sum(tab) * 100, 1), "%)"),
-        collapse = "; "
-      )
+      summary <- paste(paste0(names(tab), ": ", tab,
+                               " (", round(tab / sum(tab) * 100, 1), "%)"),
+                       collapse = "; ")
     } else {
-      m       <- mean(x, na.rm = TRUE)
-      s       <- stats::sd(x, na.rm = TRUE)
-      summary <- sprintf(paste0("%.", digits, "f \u00b1 %.", digits, "f"), m, s)
+      summary <- paste0(
+        .fmt_stat(mean(x, na.rm = TRUE), digits),
+        " \u00b1 ",
+        .fmt_stat(stats::sd(x, na.rm = TRUE), digits)
+      )
     }
 
-    data.frame(
-      variable = v, n = n_obs, summary = summary,
-      stringsAsFactors = FALSE
-    )
+    data.frame(variable = v, n = n_obs, summary = summary,
+               stringsAsFactors = FALSE)
   })
 
-  tbl <- dplyr::bind_rows(rows)
-
   structure(
-    list(
-      table    = tbl,
-      domains  = domains,
-      log_vars = log_vars,
-      type     = "simple",
-      group    = NULL,
-      output   = output
-    ),
+    list(table = dplyr::bind_rows(rows), domains = domains,
+         log_vars = log_vars, type = "simple", group = NULL,
+         domain_other = domain_other_val, output = output),
     class = "clerk_tbl"
   )
 }

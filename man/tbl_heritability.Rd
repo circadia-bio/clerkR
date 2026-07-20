@@ -17,63 +17,73 @@ tbl_heritability(
   domains = list(),
   fdr = FALSE,
   fdr_within = NULL,
-  digits = 2,
-  p_digits = 3,
+  r_digits = NULL,
+  p_digits = NULL,
+  p_threshold = NULL,
+  p_style = NULL,
+  stars = NULL,
+  fdr_ns = NULL,
+  fdr_alpha = NULL,
+  domain_other = NULL,
   output = c("gt", "html", "latex")
 )
 }
 \arguments{
 \item{data}{A tidy data frame with one row per trait x covariate model.}
 
-\item{metric}{Character string. Name of the trait/phenotype column.
-Default \code{"trait"} (matches \code{herit_batch()}).}
+\item{metric}{Character string. Trait column name. Default \code{"trait"}.}
 
-\item{h2}{Character string. Name of the h2 estimate column.
-Default \code{"h2"}.}
+\item{h2}{Character string. h2 estimate column. Default \code{"h2"}.}
 
-\item{ci_low}{Character string. Name of the lower 95\% CI bound column.
-Default \code{"ci_lo"} (matches \code{herit_batch()}).}
+\item{ci_low}{Character string. Lower CI column. Default \code{"ci_lo"}.}
 
-\item{ci_high}{Character string. Name of the upper 95\% CI bound column.
-Default \code{"ci_hi"} (matches \code{herit_batch()}).}
+\item{ci_high}{Character string. Upper CI column. Default \code{"ci_hi"}.}
 
-\item{p}{Character string. Name of the one-sided LRT p-value column.
-Default \code{"pval"} (matches \code{herit_batch()}).}
+\item{p}{Character string. P-value column. Default \code{"pval"}.}
 
-\item{sigma2_a}{Character string or \code{NULL}. Name of the additive genetic
-variance column. Default \code{NULL}.}
+\item{sigma2_a}{Character string or \code{NULL}. Additive genetic variance
+column.}
 
-\item{sigma2_e}{Character string or \code{NULL}. Name of the residual variance
-column. Default \code{NULL}.}
+\item{sigma2_e}{Character string or \code{NULL}. Residual variance column.}
 
-\item{model}{Character string or \code{NULL}. Name of a column identifying
-covariate models. Pass \code{"covariates"} when using \code{herit_batch()} output.
-Default \code{NULL}.}
+\item{model}{Character string or \code{NULL}. Covariate model column. Pass
+\code{"covariates"} for \code{herit_batch()} output.}
 
 \item{domains}{A named list mapping trait names to domain/section labels.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
-\item{fdr_within}{Character string or \code{NULL}. Column name to group FDR
-correction within.}
+\item{fdr_within}{Character string or \code{NULL}. Column to group FDR within.}
 
-\item{digits}{Integer. Decimal places for h2 and variance components
-(default \code{2}).}
+\item{r_digits}{Integer. Decimal places for h2 and variance components.}
 
-\item{p_digits}{Integer. Decimal places for p-values (default \code{3}).}
+\item{p_digits}{Integer. Decimal places for p-values.}
 
-\item{output}{Character string. One of \code{"gt"} (default), \code{"html"}, or
-\code{"latex"}.}
+\item{p_threshold}{Numeric. P-values below this are shown as
+\code{"< {threshold}"}. Inherits from \code{clerk_options()$p_threshold} if \code{NULL}.}
+
+\item{p_style}{Character. P-value style.}
+
+\item{stars}{Logical. Append significance stars.}
+
+\item{fdr_ns}{Logical. Replace non-surviving FDR p-values with \code{"ns"}.}
+
+\item{fdr_alpha}{Numeric. Alpha level for FDR survival (BH-adjusted p).}
+
+\item{domain_other}{Character string. Label for variables not assigned to
+any domain. Default \code{""} (blank). Inherits from
+\code{clerk_options()$domain_other}.}
+
+\item{output}{Character string. One of \code{"gt"}, \code{"html"}, or \code{"latex"}.}
 }
 \value{
 A \code{clerk_tbl} object with type \code{"heritability"}.
 }
 \description{
 Formats a tidy data frame of narrow-sense heritability estimates (h2) into
-a publication-ready table. Column-name defaults match the output of
-\code{R-itable::herit_batch()} directly.
-
-Column-name arguments accept \strong{character strings} (quoted names).
+a publication-ready table. Column-name defaults match
+\code{R-itable::herit_batch()} output directly. Formatting defaults inherited
+from \code{clerk_options()}.
 }
 \examples{
 tbl_heritability(
@@ -83,6 +93,6 @@ tbl_heritability(
   sigma2_e = "sigma2_e",
   fdr      = TRUE,
   output   = "gt"
-) |> clerk_render(title = "Heritability estimates for cortical shape metrics")
+) |> clerk_render(title = "Heritability estimates")
 
 }

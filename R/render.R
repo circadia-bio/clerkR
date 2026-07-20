@@ -9,19 +9,22 @@
 #' @param x A `clerk_tbl` object.
 #' @param title Optional character string for the table title.
 #' @param subtitle Optional character string for the table subtitle.
-#' @param footnote Optional additional footnote text.
+#' @param footnote Optional additional footnote text. Appended after any
+#'   automatic footnotes (log-transform, FDR).
+#' @param fdr_footnote Logical. Automatically add a source note explaining the
+#'   FDR correction when a `p_fdr` column is present (default `TRUE`).
 #' @param ... Passed to the underlying `render_gt()`, `render_reactable()`, or
 #'   `render_latex()`.
 #'
-#' @return A `gt_tbl`, `reactable`, or `knit_asis` object depending on the
-#'   `output` slot of `x`.
+#' @return A `gt_tbl`, `htmltools::tagList`, or `knit_asis` object depending
+#'   on the `output` slot of `x`.
 #'
 #' @examples
-#' tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+#' tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>
 #'   clerk_render(title = "Table 1")
 #'
 #' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   clerk_render()
+#'   clerk_render(title = "Sample characteristics")
 #'
 #' @importFrom utils stack
 #' @importFrom rlang .data
@@ -29,20 +32,23 @@
 #' @importFrom reactable reactable
 #' @export
 clerk_render <- function(x, title = NULL, subtitle = NULL,
-                         footnote = NULL, ...) {
+                         footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("clerk_render")
 }
 
 #' @export
 clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                   footnote = NULL, ...) {
+                                   footnote = NULL, fdr_footnote = TRUE, ...) {
   switch(
     x$output,
     gt    = render_gt(x,        title = title, subtitle = subtitle,
+                                footnote = footnote,
+                                fdr_footnote = fdr_footnote, ...),
+    html  = render_reactable(x, title = title, subtitle = subtitle,
                                 footnote = footnote, ...),
-    html  = render_reactable(x, title = title, ...),
     latex = render_latex(x,     title = title, subtitle = subtitle,
-                                footnote = footnote, ...)
+                                footnote = footnote,
+                                fdr_footnote = fdr_footnote, ...)
   )
 }
 
@@ -53,13 +59,15 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' @description
 #' Renders a `clerk_tbl` as a `gt` table with clerkR styling applied via
 #' `clerk_theme()`. Domain groupings become row-group labels; log-transformed
-#' variables receive an automatic footnote. Typically called indirectly via
-#' `clerk_render()`.
+#' variables receive an automatic footnote; FDR-corrected tables receive an
+#' automatic source note. Typically called indirectly via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title.
 #' @param subtitle Optional table subtitle.
 #' @param footnote Optional additional footnote.
+#' @param fdr_footnote Logical. Add an automatic FDR source note when a
+#'   `p_fdr` column is present (default `TRUE`).
 #' @param ... Reserved for future use.
 #'
 #' @return A `gt_tbl` object.
@@ -70,19 +78,20 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @export
 render_gt <- function(x, title = NULL, subtitle = NULL,
-                      footnote = NULL, ...) {
+                      footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("render_gt")
 }
 
 #' @export
 render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                footnote = NULL, ...) {
+                                footnote = NULL, fdr_footnote = TRUE, ...) {
 
-  tbl      <- x$table
-  domains  <- x$domains
-  log_vars <- x$log_vars
+  tbl          <- x$table
+  domains      <- x$domains
+  log_vars     <- x$log_vars
+  domain_other <- x$domain_other %||% ""
 
-  tbl        <- .attach_domains(tbl, domains)
+  tbl        <- .attach_domains(tbl, domains, domain_other)
   col_labels <- .clerk_col_labels(names(tbl), x$group)
 
   gt_tbl <- tbl |>
@@ -100,6 +109,12 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
       gt::tab_footnote(
         footnote  = "Log-transformed variables shown on raw scale.",
         locations = gt::cells_stub(rows = log_vars)
+      )
+
+  if (isTRUE(fdr_footnote) && "p_fdr" %in% names(tbl))
+    gt_tbl <- gt_tbl |>
+      gt::tab_source_note(
+        source_note = "p (FDR): Benjamini-Hochberg false discovery rate correction applied."
       )
 
   if (!is.null(footnote))
@@ -120,6 +135,8 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' @param title Optional table title (used as the `\caption{}`).
 #' @param subtitle Optional subtitle appended to the caption.
 #' @param footnote Optional additional footnote.
+#' @param fdr_footnote Logical. Add an automatic FDR source note (default
+#'   `TRUE`).
 #' @param ... Reserved for future use.
 #'
 #' @return A `knit_asis` character object containing the LaTeX table source.
@@ -130,15 +147,15 @@ render_gt.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'
 #' @export
 render_latex <- function(x, title = NULL, subtitle = NULL,
-                         footnote = NULL, ...) {
+                         footnote = NULL, fdr_footnote = TRUE, ...) {
   UseMethod("render_latex")
 }
 
 #' @export
 render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
-                                   footnote = NULL, ...) {
+                                   footnote = NULL, fdr_footnote = TRUE, ...) {
   gt_tbl    <- render_gt(x, title = title, subtitle = subtitle,
-                         footnote = footnote)
+                         footnote = footnote, fdr_footnote = fdr_footnote)
   latex_out <- gt::as_latex(gt_tbl)
   knitr::asis_output(as.character(latex_out))
 }
@@ -148,30 +165,40 @@ render_latex.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' Render a clerk_tbl as an interactive HTML table
 #'
 #' @description
-#' Renders a `clerk_tbl` as a `reactable` interactive HTML table. Typically
-#' called indirectly via `clerk_render()`.
+#' Renders a `clerk_tbl` as a `reactable` interactive HTML table with optional
+#' title and subtitle rendered above the widget. Typically called indirectly
+#' via `clerk_render()`.
 #'
 #' @param x A `clerk_tbl` object.
-#' @param title Optional character string displayed above the table.
+#' @param title Optional character string displayed as a heading above the
+#'   table.
+#' @param subtitle Optional character string displayed as a subheading.
+#' @param footnote Optional character string displayed as a note below the
+#'   table.
 #' @param ... Passed to `reactable::reactable()`.
 #'
-#' @return A `reactable` htmlwidget.
+#' @return An `htmltools::tagList` containing the title, reactable widget, and
+#'   optional footnote, or a bare `reactable` if no title/subtitle/footnote
+#'   are provided.
 #'
 #' @examples
-#' tbl_descriptive(clerk_example, group = sex, output = "html") |>
-#'   clerk_render()
+#' tbl_correlation(clerk_cor_example, output = "html") |>
+#'   clerk_render(title = "Partial correlations", subtitle = "age + sex controlled")
 #'
+#' @importFrom htmltools tagList tags
 #' @export
-render_reactable <- function(x, title = NULL, ...) {
+render_reactable <- function(x, title = NULL, subtitle = NULL,
+                             footnote = NULL, ...) {
   UseMethod("render_reactable")
 }
 
 #' @export
-render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
-  # Attach domains so groupBy has the column it needs
-  tbl <- .attach_domains(x$table, x$domains)
+render_reactable.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
+                                       footnote = NULL, ...) {
+  domain_other <- x$domain_other %||% ""
+  tbl          <- .attach_domains(x$table, x$domains, domain_other)
 
-  reactable::reactable(
+  widget <- reactable::reactable(
     tbl,
     groupBy    = if (length(x$domains) > 0) "domain" else NULL,
     searchable = TRUE,
@@ -181,6 +208,37 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
     compact    = TRUE,
     ...
   )
+
+  has_chrome <- !is.null(title) || !is.null(subtitle) || !is.null(footnote)
+  if (!has_chrome) return(widget)
+
+  htmltools::tagList(
+    if (!is.null(title))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:14px; font-weight:600; color:#293681;",
+          "margin:0 0 2px 0; font-family:'DM Sans',sans-serif;"
+        ),
+        title
+      ),
+    if (!is.null(subtitle))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:12px; color:#4274D9;",
+          "margin:0 0 8px 0; font-family:'DM Sans',sans-serif;"
+        ),
+        subtitle
+      ),
+    widget,
+    if (!is.null(footnote))
+      htmltools::tags$p(
+        style = paste0(
+          "font-size:11px; color:#888; margin:4px 0 0 0;",
+          "font-family:'DM Sans',sans-serif;"
+        ),
+        footnote
+      )
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -188,14 +246,14 @@ render_reactable.clerk_tbl <- function(x, title = NULL, ...) {
 # ------------------------------------------------------------------------------
 
 #' @keywords internal
-.attach_domains <- function(tbl, domains) {
+.attach_domains <- function(tbl, domains, domain_other = "") {
   if (length(domains) > 0) {
     domain_map <- utils::stack(lapply(domains, function(v) v))
     names(domain_map) <- c("variable", "domain")
     tbl <- dplyr::left_join(tbl, domain_map, by = "variable")
-    tbl[["domain"]][is.na(tbl[["domain"]])] <- "Other"
+    tbl[["domain"]][is.na(tbl[["domain"]])] <- domain_other
   } else {
-    tbl[["domain"]] <- "All variables"
+    tbl[["domain"]] <- rep(domain_other, nrow(tbl))
   }
   tbl
 }
