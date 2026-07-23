@@ -118,10 +118,10 @@ clerk_sequential()  # near-white → navy (7 steps)
 
 ## 🤝 Related Tools
 
-- 🕐 [**zeitR**](https://github.com/circadia-bio/zeitR) — actigraphy analysis and circadian metrics
-- 📓 [**slumbR**](https://github.com/circadia-bio/slumbR) — sleep diary processing
-- 📋 [**tallieR**](https://github.com/circadia-bio/tallieR) — questionnaire and sociodemographic data
-- 🔗 [**syncR**](https://github.com/circadia-bio/syncR) — integrates zeitR, slumbR, and tallieR
+- ⌚️ [**zeitR**](https://github.com/circadia-bio/zeitR) — actigraphy analysis and circadian metrics
+- 🛌 [**slumbR**](https://github.com/circadia-bio/slumbR) — sleep diary processing
+- 🧮 [**tallieR**](https://github.com/circadia-bio/tallieR) — questionnaire and sociodemographic data
+- 🔄 [**syncR**](https://github.com/circadia-bio/syncR) — integrates zeitR, slumbR, and tallieR
 - 🧬 [**R-itable**](https://github.com/circadia-bio/R-itable) — pedigree-based heritability estimation
 - 🔬 [**circadia-bio**](https://github.com/circadia-bio) — the Circadia Lab GitHub organisation
 
