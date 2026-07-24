@@ -1,5 +1,12 @@
 # clerkR NEWS
 
+## clerkR (development version)
+
+### 🐛 Bug fixes
+
+* Corrected hex sticker logo proportions to match the ecosystem-standard
+  aspect ratio, and regenerated favicons from the corrected logo.
+
 ## clerkR 0.1.2
 
 ### New features
