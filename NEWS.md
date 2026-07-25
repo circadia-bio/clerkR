@@ -1,6 +1,6 @@
 # clerkR NEWS
 
-## clerkR (development version)
+## clerkR 0.1.3
 
 ### ✨ New features
 
