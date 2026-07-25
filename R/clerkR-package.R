@@ -28,6 +28,7 @@
 #' automatically on package attach.
 #'
 #' @keywords internal
+#' @importFrom utils globalVariables
 "_PACKAGE"
 
 utils::globalVariables(".data")

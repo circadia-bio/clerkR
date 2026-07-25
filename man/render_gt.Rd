@@ -46,9 +46,11 @@ Domains may be nested (a named list of named lists) to express
 sub-sections within a domain, e.g. repeated timepoints within a
 "Mental health" domain. \code{gt} itself has no native support for two-level
 row-group headers, so a nested domain renders as a single compound row
-group labelled \code{"Domain — Subdomain"}. For a table with true
-expandable nested groups, use \code{output = "html"} instead (see
-\code{render_reactable()}).
+group: the domain and subdomain names joined with an em dash, e.g.
+\code{"Mental health"} + \code{"Baseline"} becomes one row group labelled
+\verb{Mental health - Baseline} (rendered with a true em dash, not a hyphen).
+For a table with true expandable nested groups, use \code{output = "html"}
+instead (see \code{render_reactable()}).
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex) |>

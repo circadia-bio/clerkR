@@ -73,9 +73,11 @@ clerk_render.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #' sub-sections within a domain, e.g. repeated timepoints within a
 #' "Mental health" domain. `gt` itself has no native support for two-level
 #' row-group headers, so a nested domain renders as a single compound row
-#' group labelled `"Domain — Subdomain"`. For a table with true
-#' expandable nested groups, use `output = "html"` instead (see
-#' `render_reactable()`).
+#' group: the domain and subdomain names joined with an em dash, e.g.
+#' `"Mental health"` + `"Baseline"` becomes one row group labelled
+#' `Mental health - Baseline` (rendered with a true em dash, not a hyphen).
+#' For a table with true expandable nested groups, use `output = "html"`
+#' instead (see `render_reactable()`).
 #'
 #' @param x A `clerk_tbl` object.
 #' @param title Optional table title.
@@ -307,10 +309,11 @@ render_reactable.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
 #'   - nested: list("Mental health" = list("Baseline"   = c("bdi_bl", ...),
 #'                                         "Follow-up 1" = c("bdi_fu1", ...)))
 #' A flat entry gets subdomain = "". A nested entry's subdomain is the name
-#' of its inner list element. `domain_group` is the compound label
-#' ("Domain — Subdomain", or just "Domain" when there's no subdomain)
-#' that gt uses as its single row-group column; reactable ignores it and
-#' groups on domain/subdomain directly for true nesting.
+#' of its inner list element. `domain_group` is the compound label used as
+#' gt's single row-group column -- the domain and subdomain names joined
+#' with an em dash when there's a subdomain, or just the domain name when
+#' there isn't. reactable ignores `domain_group` and groups on
+#' domain/subdomain directly for true nesting.
 #' Both `domain` and `domain_group` are returned as factors with levels in
 #' the order variables were supplied in `domains`, so row-group order in the
 #' rendered table always matches the order the user wrote them in, rather
@@ -332,7 +335,7 @@ render_reactable.clerk_tbl <- function(x, title = NULL, subtitle = NULL,
     if (is.list(entry)) {
       for (sname in names(entry)) {
         vars  <- entry[[sname]]
-        group <- paste0(dname, " — ", sname)
+        group <- paste0(dname, " \u2014 ", sname)
         rows[[length(rows) + 1]] <- data.frame(
           variable = vars, domain = dname, subdomain = sname,
           domain_group = group, stringsAsFactors = FALSE
