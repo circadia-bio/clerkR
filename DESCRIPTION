@@ -37,10 +37,12 @@ Imports:
     utils
 Suggests:
     testthat (>= 3.0.0),
-    rmarkdown
+    rmarkdown,
+    Ritable
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://clerkr.circadia-lab.uk, https://github.com/circadia-bio/clerkR
 BugReports: https://github.com/circadia-bio/clerkR/issues
 LazyData: true
+Additional_repositories: https://circadia-bio.r-universe.dev
 Config/roxygen2/version: 8.0.0
