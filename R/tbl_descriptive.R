@@ -8,7 +8,10 @@
 #' @param group <[`tidy-select`][dplyr::dplyr_tidy_select]> Grouping variable.
 #' @param vars <[`tidy-select`][dplyr::dplyr_tidy_select]> Variables to
 #'   include. Defaults to all columns except `group`.
-#' @param domains A named list mapping variable names to domain/section labels.
+#' @param domains A named list mapping variable names to domain/section
+#'   labels. An entry may itself be a named list to create a nested
+#'   sub-section within a domain (e.g. repeated timepoints) -- see
+#'   `vignette("formatting-options")`.
 #' @param log_vars Character vector of log-transformed variable names.
 #' @param digits Integer. Decimal places for continuous variables.
 #' @param p_digits Integer. Decimal places for p-values.

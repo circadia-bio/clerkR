@@ -14,6 +14,9 @@
 #' @param p Character string. P-value column. Default `"p.value"`.
 #' @param model Character string or `NULL`. Multiple-model column.
 #' @param domains A named list mapping term names to domain/section labels.
+#'   An entry may itself be a named list to create a nested sub-section
+#'   within a domain (e.g. repeated timepoints) -- see
+#'   `vignette("formatting-options")`.
 #' @param exponentiate Logical. Exponentiate estimates and CIs (default
 #'   `FALSE`).
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).

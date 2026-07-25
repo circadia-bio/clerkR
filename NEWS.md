@@ -2,10 +2,30 @@
 
 ## clerkR (development version)
 
+### ✨ New features
+
+* Nested domains: a `domains` entry can now be a named list instead of a
+  plain variable vector, to express sub-sections within a domain (e.g.
+  repeated timepoints within a "Mental health" domain). Flat and nested
+  entries can be mixed freely in the same `domains` list. For `output =
+  "html"`, this renders as genuine expandable/collapsible nested row
+  groups via `reactable`; `gt`/`latex` have no native two-level row-group
+  support, so there it renders as one row group per sub-domain with a
+  compound `"Domain — Subdomain"` label instead.
+* `clerk_render()`/`render_gt()`/`render_latex()` gain a `footnotes`
+  argument for notes attached to specific rows or columns, alongside the
+  existing `footnote` argument (now vectorised, for more than one blanket
+  note). See `vignette("formatting-options")`.
+
 ### 🐛 Bug fixes
 
 * Corrected hex sticker logo proportions to match the ecosystem-standard
   aspect ratio, and regenerated favicons from the corrected logo.
+
+### 📚 Documentation
+
+* `vignette("formatting-options")` gains "Nested domains" and "Custom
+  footnotes" sections.
 
 ## clerkR 0.1.2
 

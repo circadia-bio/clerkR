@@ -18,7 +18,9 @@
 #' @param n Character string or `NULL`. Sample size column. Default `NULL`.
 #' @param extra_cols Character vector of additional columns to carry through.
 #' @param domains A named list mapping predictor names to domain/section
-#'   labels.
+#'   labels. An entry may itself be a named list to create a nested
+#'   sub-section within a domain (e.g. repeated timepoints) -- see
+#'   `vignette("formatting-options")`.
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_within Character string or `NULL`. Column to group FDR within.
 #' @param r_digits Integer. Decimal places for r.

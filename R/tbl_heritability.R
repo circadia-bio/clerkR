@@ -18,6 +18,9 @@
 #' @param model Character string or `NULL`. Covariate model column. Pass
 #'   `"covariates"` for `herit_batch()` output.
 #' @param domains A named list mapping trait names to domain/section labels.
+#'   An entry may itself be a named list to create a nested sub-section
+#'   within a domain (e.g. repeated timepoints) -- see
+#'   `vignette("formatting-options")`.
 #' @param fdr Logical. Apply BH FDR correction (default `FALSE`).
 #' @param fdr_within Character string or `NULL`. Column to group FDR within.
 #' @param r_digits Integer. Decimal places for h2 and variance components.
