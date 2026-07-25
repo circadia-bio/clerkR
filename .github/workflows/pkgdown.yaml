@@ -30,15 +30,14 @@ jobs:
         with:
           extra-packages: any::pkgdown, any::covr, local::.
           needs: website
-
-      - name: Install GitHub-only vignette dependencies
-        run: |
-          for i in 1 2 3; do
-            Rscript -e "remotes::install_github('circadia-bio/R-itable', quiet = TRUE)" && break
-            echo "Attempt $i failed, retrying in 30s..."
-            sleep 30
-          done
-        shell: bash
+          # Ritable (Suggests, for the heritability vignette) lives on
+          # r-universe, not CRAN -- pak needs the URL explicitly, since it
+          # doesn't read DESCRIPTION's Additional_repositories field. This
+          # also makes the old manual "install R-itable from GitHub" retry
+          # step redundant: pak now resolves and installs it here directly.
+          repos: |
+            https://circadia-bio.r-universe.dev
+            https://cloud.r-project.org
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

@@ -43,6 +43,14 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+          # Ritable (Suggests, for the heritability vignette) lives on
+          # r-universe, not CRAN. Additional_repositories in DESCRIPTION is
+          # documentation-only -- pak's dependency solver (which this action
+          # uses) doesn't read it, so the r-universe URL has to be given
+          # explicitly here or pak fails to resolve Ritable entirely.
+          repos: |
+            https://circadia-bio.r-universe.dev
+            https://cloud.r-project.org
 
       - uses: r-lib/actions/check-r-package@v2
         with:
