@@ -47,11 +47,17 @@ grouping, footnote handling, and a unified rendering pipeline for Word/PDF
 ### Installation
 
 ```r
-# clerkR
-remotes::install_github("circadia-bio/clerkR")
+# clerkR, from r-universe
+install.packages("clerkR", repos = "https://circadia-bio.r-universe.dev")
 
-# For the heritability workflow, also install R-itable (also available via
-# r-universe: install.packages("Ritable", repos = "https://circadia-bio.r-universe.dev"))
+# For the heritability workflow, also install R-itable (same repo)
+install.packages("Ritable", repos = "https://circadia-bio.r-universe.dev")
+```
+
+Or from GitHub directly:
+
+```r
+remotes::install_github("circadia-bio/clerkR")
 remotes::install_github("circadia-bio/R-itable")
 ```
 
