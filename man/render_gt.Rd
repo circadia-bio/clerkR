@@ -9,6 +9,7 @@ render_gt(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -20,7 +21,12 @@ render_gt(
 
 \item{subtitle}{Optional table subtitle.}
 
-\item{footnote}{Optional additional footnote.}
+\item{footnote}{Optional character vector of blanket footnotes, one source
+note per element.}
+
+\item{footnotes}{Optional list of targeted footnotes. Each element is a
+list with \code{text} and either \code{rows} (variable names) or \code{cols} (column
+names).}
 
 \item{fdr_footnote}{Logical. Add an automatic FDR source note when a
 \code{p_fdr} column is present (default \code{TRUE}).}
@@ -35,6 +41,14 @@ Renders a \code{clerk_tbl} as a \code{gt} table with clerkR styling applied via
 \code{clerk_theme()}. Domain groupings become row-group labels; log-transformed
 variables receive an automatic footnote; FDR-corrected tables receive an
 automatic source note. Typically called indirectly via \code{clerk_render()}.
+
+Domains may be nested (a named list of named lists) to express
+sub-sections within a domain, e.g. repeated timepoints within a
+"Mental health" domain. \code{gt} itself has no native support for two-level
+row-group headers, so a nested domain renders as a single compound row
+group labelled \code{"Domain — Subdomain"}. For a table with true
+expandable nested groups, use \code{output = "html"} instead (see
+\code{render_reactable()}).
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex) |>

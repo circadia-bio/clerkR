@@ -9,6 +9,7 @@ clerk_render(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -20,8 +21,15 @@ clerk_render(
 
 \item{subtitle}{Optional character string for the table subtitle.}
 
-\item{footnote}{Optional additional footnote text. Appended after any
-automatic footnotes (log-transform, FDR).}
+\item{footnote}{Optional character vector of blanket footnote text,
+rendered as one source note per element, below the table. Appended
+after any automatic footnotes (log-transform, FDR).}
+
+\item{footnotes}{Optional list of targeted footnotes, each attached to
+specific rows or columns rather than the whole table. Each element is a
+list with a \code{text} string and either a \code{rows} (variable names, matched
+against the table stub) or \code{cols} (column names) character vector. See
+\code{vignette("formatting-options")} for examples.}
 
 \item{fdr_footnote}{Logical. Automatically add a source note explaining the
 FDR correction when a \code{p_fdr} column is present (default \code{TRUE}).}
@@ -36,8 +44,8 @@ on the \code{output} slot of \code{x}.
 \description{
 Dispatches to the correct renderer based on the \code{output} slot set at
 construction time (\code{tbl_descriptive(..., output = "gt"|"html"|"latex")}).
-All render arguments (\code{title}, \code{subtitle}, \code{footnote}) can be supplied here
-and are forwarded to the underlying renderer.
+All render arguments (\code{title}, \code{subtitle}, \code{footnote}, \code{footnotes}) can be
+supplied here and are forwarded to the underlying renderer.
 }
 \examples{
 tbl_descriptive(clerk_example, group = sex, output = "gt", fdr = TRUE) |>

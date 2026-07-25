@@ -9,6 +9,7 @@ render_latex(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -20,7 +21,9 @@ render_latex(
 
 \item{subtitle}{Optional subtitle appended to the caption.}
 
-\item{footnote}{Optional additional footnote.}
+\item{footnote}{Optional character vector of blanket footnotes.}
+
+\item{footnotes}{Optional list of targeted footnotes (see \code{render_gt()}).}
 
 \item{fdr_footnote}{Logical. Add an automatic FDR source note (default
 \code{TRUE}).}

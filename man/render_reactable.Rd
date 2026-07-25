@@ -4,7 +4,14 @@
 \alias{render_reactable}
 \title{Render a clerk_tbl as an interactive HTML table}
 \usage{
-render_reactable(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+render_reactable(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  footnotes = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{clerk_tbl} object.}
@@ -14,8 +21,13 @@ table.}
 
 \item{subtitle}{Optional character string displayed as a subheading.}
 
-\item{footnote}{Optional character string displayed as a note below the
-table.}
+\item{footnote}{Optional character vector of blanket footnote text,
+displayed as a note list below the table.}
+
+\item{footnotes}{Optional list of targeted footnotes (see \code{render_gt()}).
+\code{reactable} has no per-cell footnote-marker equivalent, so these are
+displayed alongside \code{footnote} as plain note text rather than attached
+to specific rows/columns.}
 
 \item{...}{Passed to \code{reactable::reactable()}.}
 }
@@ -28,6 +40,12 @@ are provided.
 Renders a \code{clerk_tbl} as a \code{reactable} interactive HTML table with optional
 title and subtitle rendered above the widget. Typically called indirectly
 via \code{clerk_render()}.
+
+Unlike \code{render_gt()}, nested domains (a named list of named lists) render
+as genuine two-level expandable/collapsible row groups here, via
+\code{reactable}'s \code{groupBy = c("domain", "subdomain")} -- this is the one
+output format where nested domains show as an actual hierarchy rather than
+a compound label.
 }
 \examples{
 tbl_correlation(clerk_cor_example, output = "html") |>

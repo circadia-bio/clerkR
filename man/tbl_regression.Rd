@@ -46,7 +46,10 @@ tbl_regression(
 
 \item{model}{Character string or \code{NULL}. Multiple-model column.}
 
-\item{domains}{A named list mapping term names to domain/section labels.}
+\item{domains}{A named list mapping term names to domain/section labels.
+An entry may itself be a named list to create a nested sub-section
+within a domain (e.g. repeated timepoints) -- see
+\code{vignette("formatting-options")}.}
 
 \item{exponentiate}{Logical. Exponentiate estimates and CIs (default
 \code{FALSE}).}

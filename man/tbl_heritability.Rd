@@ -49,7 +49,10 @@ column.}
 \item{model}{Character string or \code{NULL}. Covariate model column. Pass
 \code{"covariates"} for \code{herit_batch()} output.}
 
-\item{domains}{A named list mapping trait names to domain/section labels.}
+\item{domains}{A named list mapping trait names to domain/section labels.
+An entry may itself be a named list to create a nested sub-section
+within a domain (e.g. repeated timepoints) -- see
+\code{vignette("formatting-options")}.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 

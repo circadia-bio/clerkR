@@ -20,7 +20,10 @@ tbl_simple(
 \item{vars}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Variables to
 include. Defaults to all columns.}
 
-\item{domains}{A named list mapping variable names to domain/section labels.}
+\item{domains}{A named list mapping variable names to domain/section labels.
+An entry may itself be a named list to create a nested sub-section
+within a domain (e.g. repeated timepoints) -- see
+\code{vignette("formatting-options")}.}
 
 \item{log_vars}{Character vector of log-transformed variable names.}
 

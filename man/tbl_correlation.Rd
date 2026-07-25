@@ -44,7 +44,9 @@ tbl_correlation(
 \item{extra_cols}{Character vector of additional columns to carry through.}
 
 \item{domains}{A named list mapping predictor names to domain/section
-labels.}
+labels. An entry may itself be a named list to create a nested
+sub-section within a domain (e.g. repeated timepoints) -- see
+\code{vignette("formatting-options")}.}
 
 \item{fdr}{Logical. Apply BH FDR correction (default \code{FALSE}).}
 
