@@ -11,8 +11,11 @@ Domains may be nested (a named list of named lists) to express
 sub-sections within a domain, e.g. repeated timepoints within a "Mental
 health" domain. `gt` itself has no native support for two-level
 row-group headers, so a nested domain renders as a single compound row
-group labelled `"Domain — Subdomain"`. For a table with true expandable
-nested groups, use `output = "html"` instead (see
+group: the domain and subdomain names joined with an em dash, e.g.
+`"Mental health"` + `"Baseline"` becomes one row group labelled
+`Mental health - Baseline` (rendered with a true em dash, not a hyphen).
+For a table with true expandable nested groups, use `output = "html"`
+instead (see
 [`render_reactable()`](https://clerkr.circadia-lab.uk/reference/render_reactable.md)).
 
 ## Usage

@@ -34,9 +34,10 @@ output.
 - 🎨 **clerkR theme** — light teal headers, navy text, clean borders,
   consistent throughout
 - 🗂️ **Domain/section grouping** — organise rows under labelled section
-  headers
-- 📝 **Automatic footnotes** for log-transformed variables and FDR
-  correction
+  headers, with optional nested sub-sections (e.g. repeated timepoints
+  within a domain)
+- 📝 **Footnotes** — automatic notes for log-transformed variables and
+  FDR correction, plus your own blanket or row/column-targeted footnotes
 - 🖨️ **Three render targets** — `gt` for Word/PDF, `reactable` for HTML,
   LaTeX for manuscripts
 - 🔢 **Output baked in at construction** — set `output = "gt"` once,
@@ -62,10 +63,18 @@ output.
 
 ``` r
 
-# clerkR
-remotes::install_github("circadia-bio/clerkR")
+# clerkR, from r-universe
+install.packages("clerkR", repos = "https://circadia-bio.r-universe.dev")
 
-# For the heritability workflow, also install R-itable
+# For the heritability workflow, also install R-itable (same repo)
+install.packages("Ritable", repos = "https://circadia-bio.r-universe.dev")
+```
+
+Or from GitHub directly:
+
+``` r
+
+remotes::install_github("circadia-bio/clerkR")
 remotes::install_github("circadia-bio/R-itable")
 ```
 
@@ -106,6 +115,37 @@ herit_batch(traits, grm = A, data = dat, covs_list = covs_list) |>
   clerk_render(title = "Heritability estimates")
 ```
 
+### Nested domains & custom footnotes
+
+A domain can itself hold sub-sections — handy for repeated timepoints —
+and footnotes aren’t limited to one blanket note per table:
+
+``` r
+
+tbl_descriptive(
+  longitudinal_example,
+  group   = sex,
+  domains = list(
+    "Mental health" = list(
+      "Baseline"    = c("bdi_bl",  "panas_neg_bl"),
+      "Follow-up 1" = c("bdi_fu1", "panas_neg_fu1")
+    )
+  ),
+  output = "gt"
+) |>
+  clerk_render(
+    title     = "Mental health by timepoint",
+    footnote  = c("Data collected 2024-2025.", "Listwise exclusion applied."),
+    footnotes = list(list(text = "Self-report questionnaire.", rows = "bdi_bl"))
+  )
+```
+
+See
+[`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md)
+for the full write-up, including how nested domains render (compound
+row-group label for `gt`/`latex`, a true expandable tree for
+`output = "html"`).
+
 ## 🎨 Colour palette
 
 ``` r
@@ -117,15 +157,18 @@ clerk_sequential()  # near-white → navy (7 steps)
 
 ## 📦 Dependencies
 
-| Package     | Version  | Purpose                    |
-|-------------|----------|----------------------------|
-| `dplyr`     | ≥ 1.1.0  | Data manipulation          |
-| `tidyr`     | any      | Reshaping                  |
-| `rlang`     | any      | Tidy evaluation            |
-| `gt`        | ≥ 0.10.0 | Word/PDF table rendering   |
-| `reactable` | ≥ 0.4.0  | Interactive HTML rendering |
-| `knitr`     | any      | LaTeX output               |
-| `grDevices` | any      | Colour ramps               |
+| Package     | Version  | Purpose                                    |
+|-------------|----------|--------------------------------------------|
+| `dplyr`     | ≥ 1.1.0  | Data manipulation                          |
+| `tidyr`     | any      | Reshaping                                  |
+| `rlang`     | any      | Tidy evaluation                            |
+| `gt`        | ≥ 0.10.0 | Word/PDF table rendering                   |
+| `reactable` | ≥ 0.4.0  | Interactive HTML rendering                 |
+| `htmltools` | any      | Reactable title/footnote chrome            |
+| `knitr`     | any      | LaTeX output                               |
+| `grDevices` | any      | Colour ramps                               |
+| `stats`     | any      | t-test, ANOVA, chi-squared, FDR correction |
+| `utils`     | any      | Internal helpers                           |
 
 ## 👥 Authors
 

@@ -157,8 +157,8 @@
 <ul>
 <li>📋 <strong>Five table archetypes</strong> covering ~90% of what appears in a biomed paper</li>
 <li>🎨 <strong>clerkR theme</strong> — light teal headers, navy text, clean borders, consistent throughout</li>
-<li>🗂️ <strong>Domain/section grouping</strong> — organise rows under labelled section headers</li>
-<li>📝 <strong>Automatic footnotes</strong> for log-transformed variables and FDR correction</li>
+<li>🗂️ <strong>Domain/section grouping</strong> — organise rows under labelled section headers, with optional nested sub-sections (e.g. repeated timepoints within a domain)</li>
+<li>📝 <strong>Footnotes</strong> — automatic notes for log-transformed variables and FDR correction, plus your own blanket or row/column-targeted footnotes</li>
 <li>🖨️ <strong>Three render targets</strong> — <code>gt</code> for Word/PDF, <code>reactable</code> for HTML, LaTeX for manuscripts</li>
 <li>🔢 <strong>Output baked in at construction</strong> — set <code>output = "gt"</code> once, then just <code>|&gt; clerk_render()</code>
 </li>
@@ -219,16 +219,20 @@
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># clerkR</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># clerkR, from r-universe</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"clerkR"</span>, repos <span class="op">=</span> <span class="st">"https://circadia-bio.r-universe.dev"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># For the heritability workflow, also install R-itable</span></span>
+<span><span class="co"># For the heritability workflow, also install R-itable (same repo)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Ritable"</span>, repos <span class="op">=</span> <span class="st">"https://circadia-bio.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
+<p>Or from GitHub directly:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/clerkR"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"circadia-bio/R-itable"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-one-two-pattern">The one-two pattern<a class="anchor" aria-label="anchor" href="#the-one-two-pattern"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://clerkr.circadia-lab.uk">clerkR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tbl_descriptive.html">tbl_descriptive</a></span><span class="op">(</span></span>
@@ -249,7 +253,7 @@
 <div class="section level3">
 <h3 id="heritability-from-r-itable">Heritability from R-itable<a class="anchor" aria-label="anchor" href="#heritability-from-r-itable"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">herit_batch</span><span class="op">(</span><span class="va">traits</span>, grm <span class="op">=</span> <span class="va">A</span>, data <span class="op">=</span> <span class="va">dat</span>, covs_list <span class="op">=</span> <span class="va">covs_list</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/tbl_heritability.html">tbl_heritability</a></span><span class="op">(</span></span>
 <span>    model    <span class="op">=</span> <span class="st">"covariates"</span>,</span>
@@ -260,11 +264,34 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/clerk_render.html">clerk_render</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Heritability estimates"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="nested-domains--custom-footnotes">Nested domains &amp; custom footnotes<a class="anchor" aria-label="anchor" href="#nested-domains--custom-footnotes"></a>
+</h3>
+<p>A domain can itself hold sub-sections — handy for repeated timepoints — and footnotes aren’t limited to one blanket note per table:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tbl_descriptive.html">tbl_descriptive</a></span><span class="op">(</span></span>
+<span>  <span class="va">longitudinal_example</span>,</span>
+<span>  group   <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  domains <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Mental health"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Baseline"</span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bdi_bl"</span>,  <span class="st">"panas_neg_bl"</span><span class="op">)</span>,</span>
+<span>      <span class="st">"Follow-up 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bdi_fu1"</span>, <span class="st">"panas_neg_fu1"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"gt"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/clerk_render.html">clerk_render</a></span><span class="op">(</span></span>
+<span>    title     <span class="op">=</span> <span class="st">"Mental health by timepoint"</span>,</span>
+<span>    footnote  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Data collected 2024-2025."</span>, <span class="st">"Listwise exclusion applied."</span><span class="op">)</span>,</span>
+<span>    footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"Self-report questionnaire."</span>, rows <span class="op">=</span> <span class="st">"bdi_bl"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>See <code><a href="articles/formatting-options.html">vignette("formatting-options")</a></code> for the full write-up, including how nested domains render (compound row-group label for <code>gt</code>/<code>latex</code>, a true expandable tree for <code>output = "html"</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="art-colour-palette">🎨 Colour palette<a class="anchor" aria-label="anchor" href="#art-colour-palette"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/clerk_palette.html">clerk_palette</a></span><span class="op">(</span><span class="op">)</span>     <span class="co"># full named palette</span></span>
 <span><span class="fu"><a href="reference/clerk_diverging.html">clerk_diverging</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># terracotta → off-white → navy (9 steps)</span></span>
 <span><span class="fu"><a href="reference/clerk_sequential.html">clerk_sequential</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># near-white → navy (7 steps)</span></span></code></pre></div>
@@ -305,6 +332,11 @@
 <td>Interactive HTML rendering</td>
 </tr>
 <tr>
+<td><code>htmltools</code></td>
+<td>any</td>
+<td>Reactable title/footnote chrome</td>
+</tr>
+<tr>
 <td><code>knitr</code></td>
 <td>any</td>
 <td>LaTeX output</td>
@@ -313,6 +345,16 @@
 <td><code>grDevices</code></td>
 <td>any</td>
 <td>Colour ramps</td>
+</tr>
+<tr>
+<td><code>stats</code></td>
+<td>any</td>
+<td>t-test, ANOVA, chi-squared, FDR correction</td>
+</tr>
+<tr>
+<td><code>utils</code></td>
+<td>any</td>
+<td>Internal helpers</td>
 </tr>
 </tbody>
 </table>

@@ -4,10 +4,11 @@ flat:   list(&quot;Metabolic&quot; = c(&quot;hdl&quot;, &quot;glucose&quot;))
 nested: list(&quot;Mental health&quot; = list(&quot;Baseline&quot;   = c(&quot;bdi_bl&quot;, ...),
 &quot;Follow-up 1&quot; = c(&quot;bdi_fu1&quot;, ...)))
 A flat entry gets subdomain = &quot;&quot;. A nested entry's subdomain is the name
-of its inner list element. domain_group is the compound label
-(&quot;Domain — Subdomain&quot;, or just &quot;Domain&quot; when there's no subdomain)
-that gt uses as its single row-group column; reactable ignores it and
-groups on domain/subdomain directly for true nesting.
+of its inner list element. domain_group is the compound label used as
+gt's single row-group column – the domain and subdomain names joined
+with an em dash when there's a subdomain, or just the domain name when
+there isn't. reactable ignores domain_group and groups on
+domain/subdomain directly for true nesting.
 Both domain and domain_group are returned as factors with levels in
 the order variables were supplied in domains, so row-group order in the
 rendered table always matches the order the user wrote them in, rather
@@ -18,10 +19,11 @@ flat:   list(&quot;Metabolic&quot; = c(&quot;hdl&quot;, &quot;glucose&quot;))
 nested: list(&quot;Mental health&quot; = list(&quot;Baseline&quot;   = c(&quot;bdi_bl&quot;, ...),
 &quot;Follow-up 1&quot; = c(&quot;bdi_fu1&quot;, ...)))
 A flat entry gets subdomain = &quot;&quot;. A nested entry's subdomain is the name
-of its inner list element. domain_group is the compound label
-(&quot;Domain — Subdomain&quot;, or just &quot;Domain&quot; when there's no subdomain)
-that gt uses as its single row-group column; reactable ignores it and
-groups on domain/subdomain directly for true nesting.
+of its inner list element. domain_group is the compound label used as
+gt's single row-group column – the domain and subdomain names joined
+with an em dash when there's a subdomain, or just the domain name when
+there isn't. reactable ignores domain_group and groups on
+domain/subdomain directly for true nesting.
 Both domain and domain_group are returned as factors with levels in
 the order variables were supplied in domains, so row-group order in the
 rendered table always matches the order the user wrote them in, rather
@@ -131,10 +133,11 @@ than falling back to alphabetical.
 <li><p>nested: list("Mental health" = list("Baseline"   = c("bdi_bl", ...),
 "Follow-up 1" = c("bdi_fu1", ...)))
 A flat entry gets subdomain = "". A nested entry's subdomain is the name
-of its inner list element. <code>domain_group</code> is the compound label
-("Domain — Subdomain", or just "Domain" when there's no subdomain)
-that gt uses as its single row-group column; reactable ignores it and
-groups on domain/subdomain directly for true nesting.
+of its inner list element. <code>domain_group</code> is the compound label used as
+gt's single row-group column – the domain and subdomain names joined
+with an em dash when there's a subdomain, or just the domain name when
+there isn't. reactable ignores <code>domain_group</code> and groups on
+domain/subdomain directly for true nesting.
 Both <code>domain</code> and <code>domain_group</code> are returned as factors with levels in
 the order variables were supplied in <code>domains</code>, so row-group order in the
 rendered table always matches the order the user wrote them in, rather

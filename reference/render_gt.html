@@ -7,9 +7,11 @@ Domains may be nested (a named list of named lists) to express
 sub-sections within a domain, e.g. repeated timepoints within a
 "Mental health" domain. gt itself has no native support for two-level
 row-group headers, so a nested domain renders as a single compound row
-group labelled "Domain — Subdomain". For a table with true
-expandable nested groups, use output = "html" instead (see
-render_reactable()).'><meta property="og:description" content='Renders a clerk_tbl as a gt table with clerkR styling applied via
+group: the domain and subdomain names joined with an em dash, e.g.
+"Mental health" + "Baseline" becomes one row group labelled
+Mental health - Baseline (rendered with a true em dash, not a hyphen).
+For a table with true expandable nested groups, use output = "html"
+instead (see render_reactable()).'><meta property="og:description" content='Renders a clerk_tbl as a gt table with clerkR styling applied via
 clerk_theme(). Domain groupings become row-group labels; log-transformed
 variables receive an automatic footnote; FDR-corrected tables receive an
 automatic source note. Typically called indirectly via clerk_render().
@@ -17,9 +19,11 @@ Domains may be nested (a named list of named lists) to express
 sub-sections within a domain, e.g. repeated timepoints within a
 "Mental health" domain. gt itself has no native support for two-level
 row-group headers, so a nested domain renders as a single compound row
-group labelled "Domain — Subdomain". For a table with true
-expandable nested groups, use output = "html" instead (see
-render_reactable()).'><meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.svg"><!-- dependencies from examples --><meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.png"><meta property="og:image:width" content="1080"><meta property="og:image:height" content="1080"><meta property="og:image:type" content="image/png"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://clerkr.circadia-lab.uk/logo.png"><!-- Fathom - beautiful, simple website analytics --><script src="https://cdn.usefathom.com/script.js" data-site="NKUSHGRU" defer></script><!-- / Fathom --><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4274D9"><meta name="msapplication-TileColor" content="#293681"><meta name="theme-color" content="#293681"><style>
+group: the domain and subdomain names joined with an em dash, e.g.
+"Mental health" + "Baseline" becomes one row group labelled
+Mental health - Baseline (rendered with a true em dash, not a hyphen).
+For a table with true expandable nested groups, use output = "html"
+instead (see render_reactable()).'><meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.svg"><!-- dependencies from examples --><meta property="og:image" content="https://clerkr.circadia-lab.uk/logo.png"><meta property="og:image:width" content="1080"><meta property="og:image:height" content="1080"><meta property="og:image:type" content="image/png"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://clerkr.circadia-lab.uk/logo.png"><!-- Fathom - beautiful, simple website analytics --><script src="https://cdn.usefathom.com/script.js" data-site="NKUSHGRU" defer></script><!-- / Fathom --><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4274D9"><meta name="msapplication-TileColor" content="#293681"><meta name="theme-color" content="#293681"><style>
   .navbar {
     background-color: #293681 !important;
     border-bottom: 2px solid #95CCDD;
@@ -127,9 +131,11 @@ automatic source note. Typically called indirectly via <code><a href="clerk_rend
 sub-sections within a domain, e.g. repeated timepoints within a
 "Mental health" domain. <code>gt</code> itself has no native support for two-level
 row-group headers, so a nested domain renders as a single compound row
-group labelled <code>"Domain — Subdomain"</code>. For a table with true
-expandable nested groups, use <code>output = "html"</code> instead (see
-<code><a href="render_reactable.html">render_reactable()</a></code>).</p>
+group: the domain and subdomain names joined with an em dash, e.g.
+<code>"Mental health"</code> + <code>"Baseline"</code> becomes one row group labelled
+<code>Mental health - Baseline</code> (rendered with a true em dash, not a hyphen).
+For a table with true expandable nested groups, use <code>output = "html"</code>
+instead (see <code><a href="render_reactable.html">render_reactable()</a></code>).</p>
     </div>
 
     <div class="section level2">
