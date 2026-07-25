@@ -79,16 +79,11 @@ tbl_simple(
   output = "gt"
 ) |>
   clerk_render(title = "Sample characteristics")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 | Sample characteristics |     |                                        |
 |------------------------|-----|----------------------------------------|
 |                        | n   | Summary                                |
-| NA                     |     |                                        |
-| sex                    | 300 | Female: 193 (64.3%); Male: 107 (35.7%) |
-| age                    | 300 | 46.76 ± 14.15                          |
 | Metabolic              |     |                                        |
 | hdl                    | 300 | 46.81 ± 10.11                          |
 | glucose                | 300 | 91.68 ± 24.65                          |
@@ -103,6 +98,9 @@ tbl_simple(
 | bdi                    | 300 | 13.64 ± 9.26                           |
 | panas_neg              | 300 | 20.98 ± 7.48                           |
 | life_satisfaction      | 300 | 18.02 ± 4.23                           |
+|                        |     |                                        |
+| sex                    | 300 | Female: 193 (64.3%); Male: 107 (35.7%) |
+| age                    | 300 | 46.76 ± 14.15                          |
 
 ## Log-transformed variables
 
@@ -118,14 +116,15 @@ tbl_simple(
     title    = "Cognitive variables",
     footnote = "Values shown on raw scale."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 | Cognitive variables |  |  |
 |----|----|----|
 |  | n | Summary |
-| NA |  |  |
+| Cognitive |  |  |
+| tmt_time¹ | 300 | 129.24 ± 64.98 |
+| verbal_fluency | 300 | 14.98 ± 4.63 |
+|  |  |  |
 | sex | 300 | Female: 193 (64.3%); Male: 107 (35.7%) |
 | age | 300 | 46.76 ± 14.15 |
 | hdl | 300 | 46.81 ± 10.11 |
@@ -136,9 +135,6 @@ tbl_simple(
 | bdi | 300 | 13.64 ± 9.26 |
 | panas_neg | 300 | 20.98 ± 7.48 |
 | life_satisfaction | 300 | 18.02 ± 4.23 |
-| Cognitive |  |  |
-| tmt_time¹ | 300 | 129.24 ± 64.98 |
-| verbal_fluency | 300 | 14.98 ± 4.63 |
 | ¹ Log-transformed variables shown on raw scale. |  |  |
 | Values shown on raw scale. |  |  |
 
@@ -155,8 +151,6 @@ tbl_simple(
   output = "html"
 ) |>
   clerk_render()
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 ## When to use `tbl_simple()` vs `tbl_descriptive()`

@@ -140,15 +140,11 @@ tbl_descriptive(
   output   = "gt"
 ) |>
   clerk_render(title = "Table 1. Sample characteristics by sex")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 | Table 1. Sample characteristics by sex |  |  |  |  |  |  |  |
 |----|----|----|----|----|----|----|----|
 |  | n | Overall | Female | Male | Statistic | p | p (FDR) |
-| NA |  |  |  |  |  |  |  |
-| age | 300 | 46.76 ± 14.15 | 46.42 ± 13.63 | 47.35 ± 15.09 | t = -0.53 | = 0.599 | ns |
 | Metabolic |  |  |  |  |  |  |  |
 | hdl | 300 | 46.81 ± 10.11 | 48.32 ± 9.78 | 44.08 ± 10.18 | t = 3.50 | \< 0.001 | = 0.001 |
 | glucose | 300 | 91.68 ± 24.65 | 92.61 ± 24.49 | 90.01 ± 24.96 | t = 0.87 | = 0.386 | ns |
@@ -163,6 +159,8 @@ tbl_descriptive(
 | bdi | 300 | 13.64 ± 9.26 | 15.07 ± 8.97 | 11.05 ± 9.26 | t = 3.65 | \< 0.001 | = 0.001 |
 | panas_neg | 300 | 20.98 ± 7.48 | 22.50 ± 7.27 | 18.25 ± 7.09 | t = 4.92 | \< 0.001 | \< 0.001 |
 | life_satisfaction | 300 | 18.02 ± 4.23 | 17.40 ± 4.25 | 19.14 ± 3.99 | t = -3.54 | \< 0.001 | = 0.001 |
+|  |  |  |  |  |  |  |  |
+| age | 300 | 46.76 ± 14.15 | 46.42 ± 13.63 | 47.35 ± 15.09 | t = -0.53 | = 0.599 | ns |
 | ¹ Log-transformed variables shown on raw scale. |  |  |  |  |  |  |  |
 | p (FDR): Benjamini-Hochberg false discovery rate correction applied. |  |  |  |  |  |  |  |
 

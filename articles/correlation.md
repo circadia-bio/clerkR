@@ -113,8 +113,6 @@ tbl_correlation(
   output = "gt"
 ) |>
   clerk_render(title = "Partial correlations (age + sex controlled)")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 | Partial correlations (age + sex controlled) |  |  |  |  |
@@ -203,8 +201,6 @@ tbl_correlation(
     title    = "Partial correlations (age + sex controlled)",
     footnote = "Values shown as r (p FDR). FDR-corrected p-value (BH)."
   )
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```
 
 | Partial correlations (age + sex controlled) |  |  |
@@ -214,13 +210,13 @@ tbl_correlation(
 | hdl | +0.190 (= 0.032) | +0.078 (ns) |
 | glucose | -0.229 (ns) | +0.216 (= 0.024) |
 | bmi | -0.086 (= 0.042) | +0.022 (ns) |
-| NA |  |  |
-| waist | +0.279 (= 0.024) | +0.047 (ns) |
-| systolic_bp | +0.195 (ns) | -0.105 (ns) |
-| life_satisfaction | +0.247 (ns) | +0.201 (ns) |
 | Mental health |  |  |
 | bdi | +0.096 (ns) | -0.176 (ns) |
 | panas_neg | +0.157 (= 0.032) | +0.232 (ns) |
+|  |  |  |
+| waist | +0.279 (= 0.024) | +0.047 (ns) |
+| systolic_bp | +0.195 (ns) | -0.105 (ns) |
+| life_satisfaction | +0.247 (ns) | +0.201 (ns) |
 | Values shown as r (p FDR). FDR-corrected p-value (BH). |  |  |
 
 ## Custom column names
@@ -265,6 +261,4 @@ tbl_correlation(
   output = "html"
 ) |>
   clerk_render()
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = ""): invalid
-#> factor level, NA generated
 ```

@@ -3,8 +3,8 @@
 Dispatches to the correct renderer based on the `output` slot set at
 construction time
 (`tbl_descriptive(..., output = "gt"|"html"|"latex")`). All render
-arguments (`title`, `subtitle`, `footnote`) can be supplied here and are
-forwarded to the underlying renderer.
+arguments (`title`, `subtitle`, `footnote`, `footnotes`) can be supplied
+here and are forwarded to the underlying renderer.
 
 ## Usage
 
@@ -14,6 +14,7 @@ clerk_render(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -35,8 +36,18 @@ clerk_render(
 
 - footnote:
 
-  Optional additional footnote text. Appended after any automatic
+  Optional character vector of blanket footnote text, rendered as one
+  source note per element, below the table. Appended after any automatic
   footnotes (log-transform, FDR).
+
+- footnotes:
+
+  Optional list of targeted footnotes, each attached to specific rows or
+  columns rather than the whole table. Each element is a list with a
+  `text` string and either a `rows` (variable names, matched against the
+  table stub) or `cols` (column names) character vector. See
+  [`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md)
+  for examples.
 
 - fdr_footnote:
 

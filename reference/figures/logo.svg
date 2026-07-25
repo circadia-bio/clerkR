@@ -2,8 +2,8 @@
 <title>clerkR hex sticker</title>
 <desc>Hex sticker with navy background, teal table rows, mid-blue ring and clerkR wordmark</desc>
 
-<polygon points="170,18 322,103 322,273 170,358 18,273 18,103" fill="#4274D9" stroke="none"/>
-<polygon points="170,30 310,110 310,266 170,346 30,266 30,110" fill="#293681" stroke="none"/>
+<polygon points="170,18 317.2,103 317.2,273 170,358 22.8,273 22.8,103" fill="#4274D9" stroke="none"/>
+<polygon points="170,30 305.6,110 305.6,266 170,346 34.4,266 34.4,110" fill="#293681" stroke="none"/>
 
 <!-- header row -->
 <rect x="102" y="90" width="136" height="24" rx="3" fill="#D4907E"/>

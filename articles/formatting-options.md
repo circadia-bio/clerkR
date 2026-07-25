@@ -320,14 +320,16 @@ tbl_descriptive(
   output       = "gt"
 ) |>
   clerk_render(title = "Unassigned variables under 'Other'")
-#> Warning in `[<-.factor`(`*tmp*`, is.na(tbl[["domain"]]), value = "Other"):
-#> invalid factor level, NA generated
 ```
 
 | Unassigned variables under 'Other' |  |  |  |  |  |  |
 |----|----|----|----|----|----|----|
 |  | n | Overall | Female | Male | Statistic | p |
-| NA |  |  |  |  |  |  |
+| Metabolic |  |  |  |  |  |  |
+| hdl | 300 | 46.81 ± 10.11 | 48.32 ± 9.78 | 44.08 ± 10.18 | t = 3.50 | \< 0.001 |
+| glucose | 300 | 91.68 ± 24.65 | 92.61 ± 24.49 | 90.01 ± 24.96 | t = 0.87 | = 0.386 |
+| bmi | 300 | 26.15 ± 4.91 | 26.43 ± 4.84 | 25.64 ± 5.01 | t = 1.32 | = 0.190 |
+| Other |  |  |  |  |  |  |
 | age | 300 | 46.76 ± 14.15 | 46.42 ± 13.63 | 47.35 ± 15.09 | t = -0.53 | = 0.599 |
 | waist | 300 | 92.07 ± 11.56 | 92.14 ± 11.32 | 91.93 ± 12.03 | t = 0.15 | = 0.879 |
 | systolic_bp | 300 | 123.25 ± 17.77 | 120.36 ± 17.86 | 128.48 ± 16.45 | t = -3.97 | \< 0.001 |
@@ -336,10 +338,198 @@ tbl_descriptive(
 | bdi | 300 | 13.64 ± 9.26 | 15.07 ± 8.97 | 11.05 ± 9.26 | t = 3.65 | \< 0.001 |
 | panas_neg | 300 | 20.98 ± 7.48 | 22.50 ± 7.27 | 18.25 ± 7.09 | t = 4.92 | \< 0.001 |
 | life_satisfaction | 300 | 18.02 ± 4.23 | 17.40 ± 4.25 | 19.14 ± 3.99 | t = -3.54 | \< 0.001 |
-| Metabolic |  |  |  |  |  |  |
+
+------------------------------------------------------------------------
+
+## Nested domains (sub-sections within a domain)
+
+A `domains` entry can itself be a named list instead of a plain variable
+vector. This is useful when one domain naturally splits into repeated
+sub-sections — the most common case being the same measures collected at
+multiple timepoints. Here’s a small synthetic longitudinal example:
+three mental health measures, each collected at baseline and two
+follow-ups.
+
+``` r
+
+set.seed(1)
+longitudinal_example <- data.frame(
+  sex               = clerk_example$sex,
+  bdi_bl            = clerk_example$bdi,
+  panas_neg_bl      = clerk_example$panas_neg,
+  life_sat_bl       = clerk_example$life_satisfaction,
+  bdi_fu1           = clerk_example$bdi       + rnorm(300, -1, 3),
+  panas_neg_fu1     = clerk_example$panas_neg + rnorm(300, -1, 3),
+  life_sat_fu1      = clerk_example$life_satisfaction + rnorm(300, 1, 3),
+  bdi_fu2           = clerk_example$bdi       + rnorm(300, -2, 3),
+  panas_neg_fu2     = clerk_example$panas_neg + rnorm(300, -2, 3),
+  life_sat_fu2      = clerk_example$life_satisfaction + rnorm(300, 2, 3)
+)
+```
+
+Nest the three timepoints inside a single `"Mental health"` domain by
+supplying a named list instead of a character vector for that entry.
+Flat and nested entries can be mixed freely in the same `domains` list:
+
+``` r
+
+tbl_descriptive(
+  longitudinal_example,
+  group   = sex,
+  domains = list(
+    "Mental health" = list(
+      "Baseline"    = c("bdi_bl",  "panas_neg_bl",  "life_sat_bl"),
+      "Follow-up 1" = c("bdi_fu1", "panas_neg_fu1", "life_sat_fu1"),
+      "Follow-up 2" = c("bdi_fu2", "panas_neg_fu2", "life_sat_fu2")
+    )
+  ),
+  output = "gt"
+) |>
+  clerk_render(title = "Mental health by timepoint")
+```
+
+| Mental health by timepoint |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+|  | n | Overall | Female | Male | Statistic | p |
+| Mental health — Baseline |  |  |  |  |  |  |
+| bdi_bl | 300 | 13.64 ± 9.26 | 15.07 ± 8.97 | 11.05 ± 9.26 | t = 3.65 | \< 0.001 |
+| panas_neg_bl | 300 | 20.98 ± 7.48 | 22.50 ± 7.27 | 18.25 ± 7.09 | t = 4.92 | \< 0.001 |
+| life_sat_bl | 300 | 18.02 ± 4.23 | 17.40 ± 4.25 | 19.14 ± 3.99 | t = -3.54 | \< 0.001 |
+| Mental health — Follow-up 1 |  |  |  |  |  |  |
+| bdi_fu1 | 300 | 12.74 ± 9.64 | 13.91 ± 9.34 | 10.62 ± 9.86 | t = 2.81 | = 0.005 |
+| panas_neg_fu1 | 300 | 19.95 ± 8.40 | 21.50 ± 8.28 | 17.15 ± 7.91 | t = 4.49 | \< 0.001 |
+| life_sat_fu1 | 300 | 18.83 ± 5.45 | 18.34 ± 5.48 | 19.72 ± 5.31 | t = -2.14 | = 0.034 |
+| Mental health — Follow-up 2 |  |  |  |  |  |  |
+| bdi_fu2 | 300 | 11.48 ± 9.85 | 12.97 ± 9.80 | 8.79 ± 9.41 | t = 3.63 | \< 0.001 |
+| panas_neg_fu2 | 300 | 19.13 ± 8.20 | 20.60 ± 8.14 | 16.48 ± 7.65 | t = 4.37 | \< 0.001 |
+| life_sat_fu2 | 300 | 19.82 ± 5.20 | 19.24 ± 5.35 | 20.86 ± 4.78 | t = -2.71 | = 0.007 |
+
+**A `gt`/Word/PDF/LaTeX limitation, not a clerkR one:** `gt` has no
+native support for two-level row-group headers (there’s a long-standing
+open feature request upstream for it). So for `output = "gt"` and
+`output = "latex"`, a nested domain renders as one row group per
+sub-domain, labelled with a compound `"Domain — Subdomain"` string — you
+get the grouping, but not a shared header spanning all three
+sub-domains.
+
+If you need the domain and its sub-domains to render as a genuine
+expandable/collapsible two-level hierarchy, use `output = "html"`
+instead. `reactable` *does* support real nested grouping, so the same
+`domains` list produces an actual tree — click “Mental health” to expand
+into its three timepoints:
+
+``` r
+
+tbl_descriptive(
+  longitudinal_example,
+  group   = sex,
+  domains = list(
+    "Mental health" = list(
+      "Baseline"    = c("bdi_bl",  "panas_neg_bl",  "life_sat_bl"),
+      "Follow-up 1" = c("bdi_fu1", "panas_neg_fu1", "life_sat_fu1"),
+      "Follow-up 2" = c("bdi_fu2", "panas_neg_fu2", "life_sat_fu2")
+    )
+  ),
+  output = "html"
+) |>
+  clerk_render(title = "Mental health by timepoint (expandable)")
+```
+
+Mental health by timepoint (expandable)
+
+Row-group order always follows the order you write `domains` in — top to
+bottom, then sub-domain top to bottom within each — regardless of what
+order the variables happen to appear in the underlying data.
+
+------------------------------------------------------------------------
+
+## Custom footnotes
+
+Two automatic footnotes already appear without you asking for them: a
+log-transform note for any `log_vars`, and an FDR source note whenever
+`fdr = TRUE`. On top of those,
+[`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md)
+(and
+[`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md) /
+[`render_latex()`](https://clerkr.circadia-lab.uk/reference/render_latex.md)
+directly) takes two further arguments for your own notes.
+
+**`footnote`** — one or more blanket notes, shown below the whole table
+(pass a character vector for more than one):
+
+``` r
+
+tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+  clerk_render(
+    title    = "Table 1",
+    footnote = c(
+      "Data collected 2024-2025.",
+      "Missing data (< 5% per variable) excluded listwise."
+    )
+  )
+```
+
+| Table 1 |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+|  | n | Overall | Female | Male | Statistic | p |
+|  |  |  |  |  |  |  |
+| age | 300 | 46.76 ± 14.15 | 46.42 ± 13.63 | 47.35 ± 15.09 | t = -0.53 | = 0.599 |
 | hdl | 300 | 46.81 ± 10.11 | 48.32 ± 9.78 | 44.08 ± 10.18 | t = 3.50 | \< 0.001 |
 | glucose | 300 | 91.68 ± 24.65 | 92.61 ± 24.49 | 90.01 ± 24.96 | t = 0.87 | = 0.386 |
 | bmi | 300 | 26.15 ± 4.91 | 26.43 ± 4.84 | 25.64 ± 5.01 | t = 1.32 | = 0.190 |
+| waist | 300 | 92.07 ± 11.56 | 92.14 ± 11.32 | 91.93 ± 12.03 | t = 0.15 | = 0.879 |
+| systolic_bp | 300 | 123.25 ± 17.77 | 120.36 ± 17.86 | 128.48 ± 16.45 | t = -3.97 | \< 0.001 |
+| tmt_time | 300 | 129.24 ± 64.98 | 132.81 ± 66.77 | 122.81 ± 61.40 | t = 1.31 | = 0.192 |
+| verbal_fluency | 300 | 14.98 ± 4.63 | 15.08 ± 4.44 | 14.79 ± 4.97 | t = 0.52 | = 0.606 |
+| bdi | 300 | 13.64 ± 9.26 | 15.07 ± 8.97 | 11.05 ± 9.26 | t = 3.65 | \< 0.001 |
+| panas_neg | 300 | 20.98 ± 7.48 | 22.50 ± 7.27 | 18.25 ± 7.09 | t = 4.92 | \< 0.001 |
+| life_satisfaction | 300 | 18.02 ± 4.23 | 17.40 ± 4.25 | 19.14 ± 3.99 | t = -3.54 | \< 0.001 |
+| Data collected 2024-2025. |  |  |  |  |  |  |
+| Missing data (\< 5% per variable) excluded listwise. |  |  |  |  |  |  |
+
+**`footnotes`** — targeted notes attached to specific rows or columns,
+rather than the whole table. Each element is a list with a `text` string
+and either `rows` (variable names, matched against the table stub) or
+`cols` (column names):
+
+``` r
+
+tbl_descriptive(clerk_example, group = sex, output = "gt") |>
+  clerk_render(
+    title = "Table 1",
+    footnotes = list(
+      list(text = "Assessed via self-report questionnaire.",
+           rows = c("bdi", "panas_neg")),
+      list(text = "Age- and sex-adjusted.", cols = "overall")
+    )
+  )
+```
+
+| Table 1 |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+|  | n | Overall¹ | Female | Male | Statistic | p |
+|  |  |  |  |  |  |  |
+| age | 300 | 46.76 ± 14.15 | 46.42 ± 13.63 | 47.35 ± 15.09 | t = -0.53 | = 0.599 |
+| hdl | 300 | 46.81 ± 10.11 | 48.32 ± 9.78 | 44.08 ± 10.18 | t = 3.50 | \< 0.001 |
+| glucose | 300 | 91.68 ± 24.65 | 92.61 ± 24.49 | 90.01 ± 24.96 | t = 0.87 | = 0.386 |
+| bmi | 300 | 26.15 ± 4.91 | 26.43 ± 4.84 | 25.64 ± 5.01 | t = 1.32 | = 0.190 |
+| waist | 300 | 92.07 ± 11.56 | 92.14 ± 11.32 | 91.93 ± 12.03 | t = 0.15 | = 0.879 |
+| systolic_bp | 300 | 123.25 ± 17.77 | 120.36 ± 17.86 | 128.48 ± 16.45 | t = -3.97 | \< 0.001 |
+| tmt_time | 300 | 129.24 ± 64.98 | 132.81 ± 66.77 | 122.81 ± 61.40 | t = 1.31 | = 0.192 |
+| verbal_fluency | 300 | 14.98 ± 4.63 | 15.08 ± 4.44 | 14.79 ± 4.97 | t = 0.52 | = 0.606 |
+| bdi² | 300 | 13.64 ± 9.26 | 15.07 ± 8.97 | 11.05 ± 9.26 | t = 3.65 | \< 0.001 |
+| panas_neg² | 300 | 20.98 ± 7.48 | 22.50 ± 7.27 | 18.25 ± 7.09 | t = 4.92 | \< 0.001 |
+| life_satisfaction | 300 | 18.02 ± 4.23 | 17.40 ± 4.25 | 19.14 ± 3.99 | t = -3.54 | \< 0.001 |
+| ¹ Age- and sex-adjusted. |  |  |  |  |  |  |
+| ² Assessed via self-report questionnaire. |  |  |  |  |  |  |
+
+`footnote` and `footnotes` can be combined freely, and both stack with
+the automatic log-transform/FDR notes rather than replacing them.
+
+For `output = "html"`, `reactable` has no per-cell footnote-marker
+equivalent, so both `footnote` and any `footnotes[[i]]$text` are shown
+together as a plain note list underneath the widget rather than attached
+to specific cells.
 
 ------------------------------------------------------------------------
 

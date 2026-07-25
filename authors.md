@@ -14,13 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/circadia-bio/clerkR/blob/main/DESCRIPTION)
 
 França L, Leocadio-Miguel M (2026). *clerkR: Publication-Ready Tables
-for Biomedical Research*. R package version 0.1.2,
+for Biomedical Research*. R package version 0.1.3,
 <https://clerkr.circadia-lab.uk>.
 
     @Manual{,
       title = {clerkR: Publication-Ready Tables for Biomedical Research},
       author = {Lucas França and Mario Leocadio-Miguel},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.1.3},
       url = {https://clerkr.circadia-lab.uk},
     }

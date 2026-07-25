@@ -7,6 +7,14 @@ receive an automatic footnote; FDR-corrected tables receive an automatic
 source note. Typically called indirectly via
 [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md).
 
+Domains may be nested (a named list of named lists) to express
+sub-sections within a domain, e.g. repeated timepoints within a "Mental
+health" domain. `gt` itself has no native support for two-level
+row-group headers, so a nested domain renders as a single compound row
+group labelled `"Domain — Subdomain"`. For a table with true expandable
+nested groups, use `output = "html"` instead (see
+[`render_reactable()`](https://clerkr.circadia-lab.uk/reference/render_reactable.md)).
+
 ## Usage
 
 ``` r
@@ -15,6 +23,7 @@ render_gt(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -36,7 +45,13 @@ render_gt(
 
 - footnote:
 
-  Optional additional footnote.
+  Optional character vector of blanket footnotes, one source note per
+  element.
+
+- footnotes:
+
+  Optional list of targeted footnotes. Each element is a list with
+  `text` and either `rows` (variable names) or `cols` (column names).
 
 - fdr_footnote:
 

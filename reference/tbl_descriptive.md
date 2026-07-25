@@ -45,7 +45,10 @@ tbl_descriptive(
 
 - domains:
 
-  A named list mapping variable names to domain/section labels.
+  A named list mapping variable names to domain/section labels. An entry
+  may itself be a named list to create a nested sub-section within a
+  domain (e.g. repeated timepoints) – see
+  [`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md).
 
 - log_vars:
 
@@ -115,7 +118,6 @@ tbl_descriptive(
   log_vars = "tmt_time",
   output   = "gt"
 ) |> clerk_render(title = "Table 1. Sample characteristics by sex")
-#> Warning: invalid factor level, NA generated
 
 
   

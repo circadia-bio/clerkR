@@ -70,7 +70,10 @@ tbl_regression(
 
 - domains:
 
-  A named list mapping term names to domain/section labels.
+  A named list mapping term names to domain/section labels. An entry may
+  itself be a named list to create a nested sub-section within a domain
+  (e.g. repeated timepoints) – see
+  [`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md).
 
 - exponentiate:
 
@@ -142,7 +145,6 @@ tbl_regression(
   fdr    = TRUE,
   output = "gt"
 ) |> clerk_render(title = "Linear regression: TMT completion time")
-#> Warning: invalid factor level, NA generated
 
 
   

@@ -5,10 +5,25 @@ optional title and subtitle rendered above the widget. Typically called
 indirectly via
 [`clerk_render()`](https://clerkr.circadia-lab.uk/reference/clerk_render.md).
 
+Unlike
+[`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md),
+nested domains (a named list of named lists) render as genuine two-level
+expandable/collapsible row groups here, via `reactable`'s
+`groupBy = c("domain", "subdomain")` – this is the one output format
+where nested domains show as an actual hierarchy rather than a compound
+label.
+
 ## Usage
 
 ``` r
-render_reactable(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
+render_reactable(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  footnote = NULL,
+  footnotes = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -27,7 +42,16 @@ render_reactable(x, title = NULL, subtitle = NULL, footnote = NULL, ...)
 
 - footnote:
 
-  Optional character string displayed as a note below the table.
+  Optional character vector of blanket footnote text, displayed as a
+  note list below the table.
+
+- footnotes:
+
+  Optional list of targeted footnotes (see
+  [`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md)).
+  `reactable` has no per-cell footnote-marker equivalent, so these are
+  displayed alongside `footnote` as plain note text rather than attached
+  to specific rows/columns.
 
 - ...:
 
@@ -49,5 +73,5 @@ tbl_correlation(clerk_cor_example, output = "html") |>
 #> <p style="font-size:14px; font-weight:600; color:#293681;margin:0 0 2px 0; font-family:&#39;DM Sans&#39;,sans-serif;">Partial correlations</p>
 #> <p style="font-size:12px; color:#4274D9;margin:0 0 8px 0; font-family:&#39;DM Sans&#39;,sans-serif;">age + sex controlled</p>
 #> <div class="reactable html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:auto;height:auto;"></div>
-#> <script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction","hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction"],"outcome":["tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency"],"r":["+0.190","-0.229","-0.086","+0.279","+0.195","+0.096","+0.157","+0.247","+0.078","+0.216","+0.022","+0.047","-0.105","-0.176","+0.232","+0.201"],"p":["= 0.008","= 0.398","= 0.013","= 0.002","= 0.379","= 0.109","= 0.006","= 0.117","= 0.072","= 0.003","= 0.207","= 0.185","= 0.077","= 0.070","= 0.117","= 0.234"],"domain":["","","","","","","","","","","","","","","",""]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"outcome","name":"outcome","type":"character"},{"id":"r","name":"r","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"domain","name":"domain","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"47d4f166a5d7d8299ba0fae6e969ed5a"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+#> <script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"variable":["hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction","hdl","glucose","bmi","waist","systolic_bp","bdi","panas_neg","life_satisfaction"],"outcome":["tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","tmt_time","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency","verbal_fluency"],"r":["+0.190","-0.229","-0.086","+0.279","+0.195","+0.096","+0.157","+0.247","+0.078","+0.216","+0.022","+0.047","-0.105","-0.176","+0.232","+0.201"],"p":["= 0.008","= 0.398","= 0.013","= 0.002","= 0.379","= 0.109","= 0.006","= 0.117","= 0.072","= 0.003","= 0.207","= 0.185","= 0.077","= 0.070","= 0.117","= 0.234"],"domain":["","","","","","","","","","","","","","","",""],"subdomain":["","","","","","","","","","","","","","","",""],"domain_group":["","","","","","","","","","","","","","","",""]},"columns":[{"id":"variable","name":"variable","type":"character"},{"id":"outcome","name":"outcome","type":"character"},{"id":"r","name":"r","type":"character"},{"id":"p","name":"p","type":"character"},{"id":"domain","name":"domain","type":"character"},{"id":"subdomain","name":"subdomain","type":"character"},{"id":"domain_group","name":"domain_group","type":"character"}],"searchable":true,"highlight":true,"striped":true,"compact":true,"dataKey":"551160fb7123a08748d283e8924e3d2d"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 ```

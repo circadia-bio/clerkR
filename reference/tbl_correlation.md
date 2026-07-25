@@ -68,7 +68,10 @@ tbl_correlation(
 
 - domains:
 
-  A named list mapping predictor names to domain/section labels.
+  A named list mapping predictor names to domain/section labels. An
+  entry may itself be a named list to create a nested sub-section within
+  a domain (e.g. repeated timepoints) – see
+  [`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md).
 
 - fdr:
 
@@ -137,7 +140,6 @@ tbl_correlation(
   fdr    = TRUE,
   output = "gt"
 ) |> clerk_render(title = "Partial correlations (age + sex controlled)")
-#> Warning: invalid factor level, NA generated
 
 
   

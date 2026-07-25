@@ -13,6 +13,7 @@ render_latex(
   title = NULL,
   subtitle = NULL,
   footnote = NULL,
+  footnotes = NULL,
   fdr_footnote = TRUE,
   ...
 )
@@ -34,7 +35,12 @@ render_latex(
 
 - footnote:
 
-  Optional additional footnote.
+  Optional character vector of blanket footnotes.
+
+- footnotes:
+
+  Optional list of targeted footnotes (see
+  [`render_gt()`](https://clerkr.circadia-lab.uk/reference/render_gt.md)).
 
 - fdr_footnote:
 

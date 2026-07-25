@@ -60,7 +60,7 @@ called indirectly via clerk_render()."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,6 +112,7 @@ called indirectly via <code><a href="clerk_render.html">clerk_render()</a></code
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  footnote <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  footnotes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fdr_footnote <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -134,7 +135,11 @@ called indirectly via <code><a href="clerk_render.html">clerk_render()</a></code
 
 
 <dt id="arg-footnote">footnote<a class="anchor" aria-label="anchor" href="#arg-footnote"></a></dt>
-<dd><p>Optional additional footnote.</p></dd>
+<dd><p>Optional character vector of blanket footnotes.</p></dd>
+
+
+<dt id="arg-footnotes">footnotes<a class="anchor" aria-label="anchor" href="#arg-footnotes"></a></dt>
+<dd><p>Optional list of targeted footnotes (see <code><a href="render_gt.html">render_gt()</a></code>).</p></dd>
 
 
 <dt id="arg-fdr-footnote">fdr_footnote<a class="anchor" aria-label="anchor" href="#arg-fdr-footnote"></a></dt>

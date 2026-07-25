@@ -32,7 +32,10 @@ tbl_simple(
 
 - domains:
 
-  A named list mapping variable names to domain/section labels.
+  A named list mapping variable names to domain/section labels. An entry
+  may itself be a named list to create a nested sub-section within a
+  domain (e.g. repeated timepoints) – see
+  [`vignette("formatting-options")`](https://clerkr.circadia-lab.uk/articles/formatting-options.md).
 
 - log_vars:
 
@@ -67,7 +70,6 @@ tbl_simple(
   log_vars = "tmt_time",
   output   = "gt"
 ) |> clerk_render(title = "Descriptive statistics")
-#> Warning: invalid factor level, NA generated
 
 
   

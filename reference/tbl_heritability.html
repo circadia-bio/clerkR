@@ -64,7 +64,7 @@ from clerk_options()."><meta property="og:image" content="https://clerkr.circadi
 
     <a class="navbar-brand me-2" href="../index.html">clerkR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,7 +181,10 @@ column.</p></dd>
 
 
 <dt id="arg-domains">domains<a class="anchor" aria-label="anchor" href="#arg-domains"></a></dt>
-<dd><p>A named list mapping trait names to domain/section labels.</p></dd>
+<dd><p>A named list mapping trait names to domain/section labels.
+An entry may itself be a named list to create a nested sub-section
+within a domain (e.g. repeated timepoints) – see
+<code><a href="../articles/formatting-options.html">vignette("formatting-options")</a></code>.</p></dd>
 
 
 <dt id="arg-fdr">fdr<a class="anchor" aria-label="anchor" href="#arg-fdr"></a></dt>
